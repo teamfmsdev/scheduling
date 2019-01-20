@@ -1,6 +1,12 @@
 <template>
   <b-container>
-    <b-table :fields="fields" :items="items" class="table table-sm table-bordered"></b-table>
+    <b-table :fields="fields" :items="items" class="table table-sm table-bordered">
+      <!-- <template slot="show_details" slot-scope="row"></template> -->
+      <template slot="row-details" slot-scope="row">
+        {{row.item.day}}
+        {{row.item.date}}
+      </template>
+    </b-table>
   </b-container>
 </template>
 
@@ -10,14 +16,27 @@ export default {
   data() {
     return {
       fields: [
-        { key: "day", label: "Day", class: "align-middle", sortable: true },
-        { key: "date", label: "Date", class: "align-middle", sortable: true },
-        { key: "biActivities", label: "B&I Activities", class: "align-middle" },
-        { key: "permitToWork", label: "Permit To Work", class: "align-middle" },
+        { key: "day", label: "Day", thClass: "align-middle", sortable: false },
+        {
+          key: "date",
+          label: "Date",
+          thClass: "align-middle",
+          sortable: false
+        },
+        {
+          key: "biActivities",
+          label: "B&I Activities",
+          thClass: "align-middle"
+        },
+        {
+          key: "permitToWork",
+          label: "Permit To Work",
+          thClass: "align-middle"
+        },
         {
           key: "projectActivities",
           label: "Project Activities",
-          class: "align-middle"
+          thClass: "align-middle"
         },
         { key: "1", label: "1" },
         { key: "2", label: "2" },
@@ -81,8 +100,8 @@ export default {
       }
       this.fields.push({
         key: "contractorManagement",
-        label: "Contractor Management"
-        // class: "align-middle"
+        label: "Contractor Management",
+        thClass: "align-middle"
       });
       // let firstRow = document.querySelectorAll("thead tr:nth-child(1) th");
 
@@ -115,7 +134,23 @@ export default {
   created: function() {
     let days = this.getDays(2019, 0);
     for (let day of days) {
-      this.items.push({ day: day.day, date: day.date });
+      this.items.push({
+        day: day.day,
+        date: day.date,
+        biActivities: "",
+        permitToWork: "",
+        projectActivities: "",
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+        5: "",
+        6: "",
+        7: "",
+        8: "",
+        contractorManagement: ""
+        // _showDetails: true
+      });
     }
   },
   mounted: function() {
