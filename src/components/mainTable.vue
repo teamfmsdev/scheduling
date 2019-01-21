@@ -1,7 +1,14 @@
 <template>
   <b-container>
-    <b-table :fields="fields" :items="items" class="table table-sm table-bordered">
-      <!-- <template slot="show_details" slot-scope="row"></template> -->
+    <b-table
+      v-on:row-clicked="rowClicked"
+      :fields="fields"
+      :items="items"
+      class="table table-sm table-bordered"
+      caption-top
+    >
+      <template slot="table-caption"></template>
+
       <template slot="row-details" slot-scope="row">
         {{row.item.day}}
         {{row.item.date}}
@@ -9,7 +16,6 @@
     </b-table>
   </b-container>
 </template>
-
 
 <script>
 export default {
@@ -54,7 +60,7 @@ export default {
     };
   },
   methods: {
-    getDays: function getDays(year, month) {
+    getDays: function(year, month) {
       let date = new Date(year, month, 1);
       let days = [];
       while (date.getMonth() == month) {
@@ -129,6 +135,17 @@ export default {
         }
       }
       this.init = true;
+    },
+    rowClicked: function(item, index, event) {
+      // Expand row details
+      item._showDetails = !item._showDetails;
+      // Wait for DOM to re-render
+      this.$nextTick(function() {
+        // Add selected clas to row if it is expanded
+        item._showDetails == true
+          ? event.target.parentNode.classList.add("selected")
+          : "";
+      });
     }
   },
   created: function() {
@@ -148,8 +165,8 @@ export default {
         6: "",
         7: "",
         8: "",
-        contractorManagement: ""
-        // _showDetails: true
+        contractorManagement: "",
+        _showDetails: false
       });
     }
   },
@@ -172,3 +189,12 @@ table {
 }
 </style>
 
+<style>
+tbody > tr:hover {
+  background-color: rgb(0, 177, 169);
+}
+
+.selected {
+  background-color: rgb(0, 177, 169);
+}
+</style>
