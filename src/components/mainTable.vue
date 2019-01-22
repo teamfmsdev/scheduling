@@ -141,10 +141,10 @@ export default {
       item._showDetails = !item._showDetails;
       // Wait for DOM to re-render
       this.$nextTick(function() {
-        // Add selected clas to row if it is expanded
-        item._showDetails == true
-          ? event.target.parentNode.classList.add("selected")
-          : "";
+        if (item._showDetails) {
+          var detailRow = event.target.parentNode.nextSibling;
+          console.log(detailRow);
+        }
       });
     }
   },
