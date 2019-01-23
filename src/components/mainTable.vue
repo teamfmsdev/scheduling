@@ -10,14 +10,19 @@
       <template slot="table-caption"></template>
 
       <template slot="row-details" slot-scope="row">
-        {{row.item.day}}
-        {{row.item.date}}
+        <!-- {{row.item.day}}
+        {{row.item.date}}-->
       </template>
     </b-table>
   </b-container>
 </template>
 
 <script>
+import biActivitiesTable from "@/components/biActivitiesTable.vue";
+import ptwTable from "@/components/ptwTable.vue";
+import projectTable from "@/components/projectTable.vue";
+import Vue from "vue";
+
 export default {
   data() {
     return {
@@ -138,20 +143,71 @@ export default {
       this.init = true;
     },
     rowClicked: function(item, index, event) {
-      this.currentExpandedRow != null &&
-      this.currentExpandedRow._showDetails == true
-        ? (this.currentExpandedRow._showDetails = false)
-        : "";
-      // Expand row details
-      item._showDetails = !item._showDetails;
-      this.currentExpandedRow = item;
+      // 1.Check if the same row is clicked
+      if (
+        this.currentExpandedRow != null &&
+        this.currentExpandedRow.rowIndex == index
+      ) {
+        // Close the row detail and set curentExpanded row to be null
+        item._showDetails = !item._showDetails;
+        this.currentExpandedRow = null;
+      }
+      // 2.Check if different row is clicked while there is another row open
+      else if (
+        this.currentExpandedRow != null &&
+        this.currentExpandedRow._showDetails == true
+      ) {
+        // Close the currently expanded row details
+        this.currentExpandedRow._showDetails = false;
+        // Expand the clicked row element its row details
+        item._showDetails = true;
+        // Set the currently expanded row tracker variable as the clicked item
+        this.currentExpandedRow = item;
+        this.currentExpandedRow["rowIndex"] = index;
+      }
+      // 3.If there is no expanded row details
+      else {
+        // Expand the clicked row element its row details
+        item._showDetails = true;
+        // Set the currently expanded row tracker variable as the clicked item
+        this.currentExpandedRow = item;
+        this.currentExpandedRow["rowIndex"] = index;
+      }
       // Wait for DOM to re-render
       this.$nextTick(function() {
         if (item._showDetails) {
-          var detailRow = event.target.parentNode.nextSibling;
-          console.log(detailRow);
+          var rowDetails = event.target.parentNode.nextSibling;
+          this.modifyRowDetails(rowDetails);
         }
       });
+    },
+    modifyRowDetails: function(rowDetails) {
+      // console.log(rowDetails.childNodes[0]);
+      rowDetails.childNodes[0].setAttribute("colspan", 2);
+      // rowDetails.childNodes[0].innerHTML = "";
+      var newTd = document.createElement("td");
+
+      // rowDetails.append(newTd);
+      for (let x = 0; x < 3; x++) {
+        let clonedTd = newTd.cloneNode(true);
+        rowDetails.append(clonedTd);
+      }
+      let placeholder = document.createElement("div");
+      // mount biActivity table to mainTable
+      let biATableClass = Vue.extend(biActivitiesTable);
+      let biATableInstance = new biATableClass();
+      rowDetails.childNodes[1].append(placeholder);
+      biATableInstance.$mount(rowDetails.childNodes[1].childNodes[0]);
+      // Mount ptw Table
+      let ptwTableClass = Vue.extend(ptwTable);
+      let ptwTableInstance = new ptwTableClass();
+      rowDetails.childNodes[2].append(placeholder);
+      ptwTableInstance.$mount(rowDetails.childNodes[2].childNodes[0]);
+      // Mount project
+      let projectTableclass = Vue.extend(projectTable);
+      let projectTableInstance = new projectTableclass();
+      rowDetails.childNodes[3].append(placeholder);
+      projectTableInstance.$mount(rowDetails.childNodes[3].childNodes[0]);
     }
   },
   created: function() {
@@ -184,7 +240,8 @@ export default {
   },
   updated: function() {
     this.init == false ? this.modifyHeader() : "";
-  }
+  },
+  components: { biActivitiesTable, ptwTable }
 };
 </script>
 
@@ -202,5 +259,9 @@ tbody > tr:hover {
 
 .selected {
   background-color: rgb(0, 177, 169);
+}
+
+.b-table-details:hover {
+  background-color: white;
 }
 </style>
