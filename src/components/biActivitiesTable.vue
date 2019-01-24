@@ -1,7 +1,8 @@
 <template>
   <b-table class="m-0" :fields="fields" :items="items">
     <template slot="table-caption">
-      <input type="button" class="btn btn-primary rounded-circle" value="+">
+      <b-button size="sm" class="rounded-circle">+</b-button>
+      <!-- <input type="button" class="btn btn-primary rounded-circle" value="+"> -->
     </template>
   </b-table>
 </template>
@@ -23,10 +24,10 @@ export default {
         }
       ],
       items: [
-        { fmNo: "23", activity: "Hehe" },
-        { fmNo: "23", activity: "Hehe" },
-        { fmNo: "23", activity: "Hehe" },
-        { fmNo: "W", activity: "A" }
+        { fmNo: "23", activity: "Jack Ryan" },
+        { fmNo: "23", activity: "Police story 1" },
+        { fmNo: "23", activity: "Police story 2" },
+        { fmNo: "W", activity: "Men in black" }
       ]
     };
   }
