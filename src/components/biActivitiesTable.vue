@@ -1,7 +1,7 @@
 <template>
   <b-table class="m-0" :fields="fields" :items="items">
     <template slot="table-caption">
-      <b-button size="sm" class="rounded-circle">+</b-button>
+      <b-button @click.stop="addRow" size="sm" class="rounded-circle">+</b-button>
       <!-- <input type="button" class="btn btn-primary rounded-circle" value="+"> -->
     </template>
   </b-table>
@@ -30,6 +30,11 @@ export default {
         { fmNo: "W", activity: "Men in black" }
       ]
     };
+  },
+  methods:{
+    addRow:function(){
+      this.items.push({fmNo:"420",activity:"R O F L"})
+    }
   }
 };
 </script>

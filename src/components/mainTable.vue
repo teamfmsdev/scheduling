@@ -193,6 +193,7 @@ export default {
         rowDetails.append(clonedTd);
       }
       let placeholder = document.createElement("div");
+
       // mount biActivity table to mainTable
       let biATableClass = Vue.extend(biActivitiesTable);
       let biATableInstance = new biATableClass();
