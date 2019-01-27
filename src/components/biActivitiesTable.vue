@@ -2,7 +2,10 @@
   <b-table class="m-0" :fields="fields" :items="items">
     <template slot="table-caption">
       <b-button @click.stop="addRow" size="sm" class="rounded-circle">+</b-button>
-      <!-- <input type="button" class="btn btn-primary rounded-circle" value="+"> -->
+    </template>
+    <template slot="actionCol" slot-scope="data">
+      <b-button size="sm" class="rounded-circle">Edit</b-button>
+      <b-button size="sm" class="rounded-circle">Delete</b-button>
     </template>
   </b-table>
 </template>
@@ -21,6 +24,11 @@ export default {
           key: "activity",
           label: "Activity",
           thClass: "align-middle"
+        },
+        {
+          key: "actionCol",
+          label: "Action",
+          thClass: "align-middle"
         }
       ],
       items: [
@@ -31,9 +39,12 @@ export default {
       ]
     };
   },
-  methods:{
-    addRow:function(){
-      this.items.push({fmNo:"420",activity:"R O F L"})
+  methods: {
+    addRow: function() {
+      this.items.push({
+        fmNo: "420",
+        activity: "R O F L"
+      });
     }
   }
 };
