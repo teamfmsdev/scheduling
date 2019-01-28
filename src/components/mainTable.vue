@@ -115,18 +115,6 @@ export default {
         label: "Contractor Management",
         thClass: "align-middle"
       });
-      // let firstRow = document.querySelectorAll("thead tr:nth-child(1) th");
-
-      // for (let i of firstRow) {
-      //   switch (i.innerHTML) {
-      //     case "Contract Management":
-      //       i.setAttribute("colspan", "8");
-      //       break;
-      //     default:
-      //       i.setAttribute("rowspan", "2");
-      //   }
-      // }
-      // console.log(firstRow);
     },
     modifyHeader: function() {
       let firstRow = document.querySelectorAll("thead tr:nth-child(1) th");
