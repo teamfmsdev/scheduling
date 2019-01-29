@@ -26,12 +26,12 @@
       <tbody>
         <template v-for="(val,index) in items">
           <tr :id="index" @click.stop="rowClicked" :key="index">
-            <template v-for="(val,index) in items[index]">
-              <td :key="index" v-if="index!='rowDetails'">{{val}}</td>
+            <template v-for="(val,index) in items[index].mainDetails">
+              <td :key="index">{{val}}</td>
             </template>
           </tr>
           <tr :id="index" :key="index + ' detail'" v-if="val.rowDetails==true">
-            <template v-for="(val,index) in items[index]">
+            <template v-for="(val,index) in items[index].mainDetails">
               <td :key="index" v-if="index=='biActivities'">
                 <biActivitiesTable v-bind="biA"></biActivitiesTable>
               </td>
@@ -41,7 +41,7 @@
               <td :key="index" v-else-if="index=='projectActivities'">
                 <!-- <biActivitiesTable v-bind="childTable.pa"></biActivitiesTable> -->
               </td>
-              <td :key="index" v-else-if="index!='rowDetails'"></td>
+              <td :key="index" v-else></td>
             </template>
           </tr>
         </template>
@@ -162,12 +162,12 @@ export default {
       // Close all expanded rows except the one that matches rowId
       if (this.currentExpandedRow.length > 0) {
         this.currentExpandedRow.forEach(element => {
-          this.items[rowId].date != element.date
+          this.items[rowId].mainDetails.date != element.date
             ? (element.rowDetails = false)
             : "";
         });
       }
-
+      // console.log(this.items[rowId]);
       // Inverse the current clicked row its rowDetails var.
       this.items[rowId].rowDetails = !this.items[rowId].rowDetails;
     },
@@ -188,20 +188,22 @@ export default {
     let days = this.getDays(2019, 0);
     for (let day of days) {
       this.items.push({
-        day: day.day,
-        date: day.date,
-        biActivities: "",
-        permitToWork: "",
-        projectActivities: "",
-        n1: "",
-        n2: "",
-        n3: "",
-        n4: "",
-        n5: "",
-        n6: "",
-        n7: "",
-        n8: "",
-        contractorManagement: "",
+        mainDetails: {
+          day: day.day,
+          date: day.date,
+          biActivities: "",
+          permitToWork: "",
+          projectActivities: "",
+          n1: "",
+          n2: "",
+          n3: "",
+          n4: "",
+          n5: "",
+          n6: "",
+          n7: "",
+          n8: "",
+          contractorManagement: ""
+        },
         rowDetails: false
       });
     }
@@ -211,7 +213,7 @@ export default {
       get: function() {
         return this.items.filter(element => {
           if (element.rowDetails == true) {
-            return element.day;
+            return element;
           }
         });
       }
