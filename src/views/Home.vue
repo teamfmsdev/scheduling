@@ -5,23 +5,24 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-import mainTable from "@/components/mainTable.vue";
+
 import secTable from "@/components/secTable.vue";
 
 export default {
   name: "home",
   components: {
-    HelloWorld,
-    mainTable,
     secTable
   }
 };
 </script>
 
 
-<style>
+ <style scoped>
 body {
   background-color: rgb(36, 34, 34) !important;
 }
+tbody > tr:hover {
+  background-color: rgb(0, 177, 169);
+}
 </style>
+
