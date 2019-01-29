@@ -25,14 +25,23 @@
 
       <tbody>
         <template v-for="(val,index) in items">
-          <tr @click.stop="rowClicked" :key="index">
+          <tr :id="index" @click.stop="rowClicked" :key="index">
             <template v-for="(val,index) in items[index]">
               <td :key="index" v-if="index!='rowDetails'">{{val}}</td>
             </template>
           </tr>
-          <tr :key="index + ' detail'" v-if="val.rowDetails==true">
+          <tr :id="index" :key="index + ' detail'" v-if="val.rowDetails==true">
             <template v-for="(val,index) in items[index]">
-              <td :key="index" v-if="index!='rowDetails'">This is Row Details!</td>
+              <td :key="index" v-if="index=='biActivities'">
+                <biActivitiesTable v-bind="biA"></biActivitiesTable>
+              </td>
+              <td :key="index" v-else-if="index=='permitToWork'">
+                <biActivitiesTable v-bind="ptw"></biActivitiesTable>
+              </td>
+              <td :key="index" v-else-if="index=='projectActivities'">
+                <!-- <biActivitiesTable v-bind="childTable.pa"></biActivitiesTable> -->
+              </td>
+              <td :key="index" v-else-if="index!='rowDetails'"></td>
             </template>
           </tr>
         </template>
@@ -43,6 +52,9 @@
 
 
 <script>
+import biActivitiesTable from "@/components/biActivitiesTable.vue";
+import ptwTable from "@/components/ptwTable.vue";
+import projectTable from "@/components/projectTable.vue";
 export default {
   data() {
     return {
@@ -122,9 +134,43 @@ export default {
         label != "8"
       );
     },
-    rowClicked:function(event){
+    rowDetailsRender: function(index) {
+      if (index != "rowDetails") {
+        switch (index) {
+          case "biActivities":
+          case "permitToWork":
+          case "projectActivities":
+          case "n1":
+          case "n2":
+          case "n3":
+          case "n4":
+          case "n5":
+          case "n6":
+          case "n7":
+          case "n8":
+          case "contractorManagement":
+            return true;
+          default:
+            return false;
+        }
+      }
+    },
+    rowClicked: function(event) {
+      // Set the clicked row "Id" to a var that matches items index
+      let rowId = event.target.parentNode.id;
 
-    }
+      // Close all expanded rows except the one that matches rowId
+      if (this.currentExpandedRow.length > 0) {
+        this.currentExpandedRow.forEach(element => {
+          this.items[rowId].date != element.date
+            ? (element.rowDetails = false)
+            : "";
+        });
+      }
+
+      // Inverse the current clicked row its rowDetails var.
+      this.items[rowId].rowDetails = !this.items[rowId].rowDetails;
+    },
     getDays: function(year, month) {
       let date = new Date(year, month, 1);
       let days = [];
@@ -159,15 +205,30 @@ export default {
         rowDetails: false
       });
     }
-  }
+  },
+  computed: {
+    currentExpandedRow: {
+      get: function() {
+        return this.items.filter(element => {
+          if (element.rowDetails == true) {
+            return element.day;
+          }
+        });
+      }
+    },
+    biA: function() {
+      return this.$store.state.childTable.biA;
+    },
+    ptw: function() {
+      return this.$store.state.childTable.ptw;
+    }
+  },
+  components: { biActivitiesTable, ptwTable, projectTable }
 };
 </script>
 
 
 <style>
-body {
-  /* background-color: rgb(36, 34, 34); */
-}
 </style>
 
 
