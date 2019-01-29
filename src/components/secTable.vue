@@ -186,6 +186,31 @@ export default {
   },
   created: function() {
     let days = this.getDays(2019, 0);
+
+    for (let day of days) {
+      let tempObj = {
+        mainDetails: {
+          day: day.day,
+          date: day.date,
+          biActivities: "",
+          permitToWork: "",
+          projectActivities: "",
+          n1: "",
+          n2: "",
+          n3: "",
+          n4: "",
+          n5: "",
+          n6: "",
+          n7: "",
+          n8: "",
+          contractorManagement: ""
+        },
+        rowDetails: false
+      };
+
+      this.$store.dispatch("mainTableAddRow", tempObj);
+    }
+
     for (let day of days) {
       this.items.push({
         mainDetails: {
@@ -223,6 +248,9 @@ export default {
     },
     ptw: function() {
       return this.$store.state.childTable.ptw;
+    },
+    mainTableData: function() {
+      return this.$store.state.mainTableData;
     }
   },
   components: { biActivitiesTable, ptwTable, projectTable }
