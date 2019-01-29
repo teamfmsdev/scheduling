@@ -1,6 +1,4 @@
-<template>
-  <b-table class="m-0" :fields="fields" :items="items"></b-table>
-</template>
+<template></template>
 
 <script>
 export default {
