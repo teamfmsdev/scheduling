@@ -1,17 +1,4 @@
-<template>
-  <b-list-group>
-    <b-list-group-item class="p-1">Jojo adventure</b-list-group-item>
-    <b-list-group-item class="p-1">Naruto</b-list-group-item>
-    <b-list-group-item class="p-1">Bleach</b-list-group-item>
-  </b-list-group>
-  <!-- <ul>
-    <li>Naruto</li>
-    <li>Bleach</li>
-    <li>Kawasaki</li>
-    <li>Honda</li>
-  </ul>-->
-  <!-- <textarea class="m-0"></textarea> -->
-</template>
+<template></template>
 
 <script>
 export default {
