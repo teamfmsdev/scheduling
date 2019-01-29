@@ -9,18 +9,18 @@
 </template>
 
 <script>
-import "@/styles/globalStyle.css";
+// import "@/styles/globalStyle.css";
 export default {};
 </script>
 
 <style lang="scss">
 #app {
-  // background-color: rgb(36, 34, 34) !important;
+  background-color: rgb(36, 34, 34) !important;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: white;
 }
 #nav {
   padding: 30px;
