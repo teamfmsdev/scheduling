@@ -132,9 +132,9 @@ export default {
         { value: "Apr", text: "April" },
         { value: "May", text: "May" },
         { value: "Jun", text: "June" },
-        { value: "July", text: "July" },
+        { value: "Jul", text: "July" },
         { value: "Aug", text: "August" },
-        { value: "Sept", text: "September" },
+        { value: "Sep", text: "September" },
         { value: "Oct", text: "October" },
         { value: "Nov", text: "November" },
         { value: "Dec", text: "December" }
