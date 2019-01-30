@@ -250,6 +250,80 @@ export default {
         date.setDate(date.getDate() + 1);
       }
       return days;
+    },
+    generateDaysOfMonth: function() {
+      let date = new Date(this.currentSelectedDate);
+      let year = date.getFullYear();
+      let month = date.getMonth();
+      let days = this.getDays(year, month);
+      // Empty store MainData
+      // this.$store.dispatch("emptyMainData");
+      for (let day of days) {
+        let tempObj = {
+          month: date.toLocaleString("en-gb", { month: "short" }),
+          year: year,
+          mainTableData: {
+            mainDetails: {
+              day: day.day,
+              date: day.date,
+              biActivities: "",
+              permitToWork: "",
+              projectActivities: "",
+              n1: "",
+              n2: "",
+              n3: "",
+              n4: "",
+              n5: "",
+              n6: "",
+              n7: "",
+              n8: "",
+              contractorManagement: ""
+            },
+            childTable: {
+              biA: {
+                tableName: "biA",
+                fields: {
+                  fmNo: "FM NO",
+                  activities: "Activities",
+                  buttons: "Actions"
+                },
+                items: [
+                  { fmNo: "2", activities: "What the DDD" },
+                  { fmNo: "4", activities: "DUDE" },
+                  { fmNo: "7", activities: "Weed" }
+                ]
+              },
+              ptw: {
+                tableName: "ptw",
+                fields: {
+                  fmNo: "FM NO",
+                  activities: "Activities",
+                  buttons: "Actions"
+                },
+                items: [
+                  { fmNo: "2", activities: "What the DDD" },
+                  { fmNo: "4", activities: "DUDE" },
+                  { fmNo: "777", activities: "TowTruck" }
+                ]
+              },
+              pa: {
+                tableName: "pa",
+                fields: { fmNo: "FM NO", activities: "Activities" },
+                items: [
+                  { fmNo: "2", activities: "What the DDD" },
+                  { fmNo: "4", activities: "DUDE" }
+                ]
+              }
+            },
+            rowDetails: false
+          }
+        };
+
+        this.$store.dispatch("realSimulationTableDataInit", tempObj);
+      }
+    },
+    dataRequest: function() {
+      return this.mainTableData;
     }
   },
   created: function() {
