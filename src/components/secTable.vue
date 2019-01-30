@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <b-form-select @change="dateChange" v-model="selectedMonths" :options="monthOptions"/>
-    <b-form-select v-model="selectedYear" :options="yearOptions"/>
+    <b-form-select @change="dateChange" v-model="selectedYear" :options="yearOptions"/>
     <table class="table table-dark table-sm table-bordered">
       <thead>
         <tr>
