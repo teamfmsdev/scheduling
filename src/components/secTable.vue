@@ -39,10 +39,10 @@
               v-for="(val,index) in mainTableData[rowIndex]['mainTableData']['mainDetails']"
             >
               <td :key="index" v-if="index=='biActivities'">
-                <biActivitiesTable v-bind="biA"></biActivitiesTable>
+                <biActivitiesTable v-bind="biA" :mainTableData="mainTableData"></biActivitiesTable>
               </td>
               <td :key="index" v-else-if="index=='permitToWork'">
-                <biActivitiesTable v-bind="ptw"></biActivitiesTable>
+                <biActivitiesTable v-bind="ptw" :mainTableData="mainTableData"></biActivitiesTable>
               </td>
               <td :key="index" v-else-if="index=='projectActivities'">
                 <!-- <biActivitiesTable v-bind="childTable.pa"></biActivitiesTable> -->
