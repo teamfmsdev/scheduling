@@ -190,30 +190,53 @@ export default {
     rowClicked: function(event) {
       // Set the clicked row "Id" to a var that matches items index
       let clickedRowId = event.target.parentNode.id;
-      this.biA = this.getRowDetails(clickedRowId, "biA");
-      this.ptw = this.getRowDetails(clickedRowId, "ptw");
+      let clickedRowData = this.mainTableData[clickedRowId];
+      this.biA = this.getRowDetails(clickedRowData, "biA");
+      this.ptw = this.getRowDetails(clickedRowData, "ptw");
 
       let currentExpandedRow = this.$store.getters.currentExpandedRow;
       if (currentExpandedRow.length > 0) {
         currentExpandedRow.forEach(element => {
-          let expandedRowId = element.mainTableData.mainDetails.date - 1;
+          // set the date-1 of the expandedRow to be the id to be submitted as array.
+          // let expandedRowId = element.mainTableData.mainDetails.date - 1;
 
-          clickedRowId != expandedRowId
-            ? this.$store.dispatch("toggleRowDetails", expandedRowId)
+          // console.log(element);
+          element.year != clickedRowData.year ||
+          element.month != clickedRowData.month ||
+          element.mainTableData.mainDetails.date !=
+            clickedRowData.mainTableData.mainDetails.date
+            ? this.$store.dispatch("toggleRowDetails", element)
             : "";
         });
       }
 
-      this.$store.dispatch("toggleRowDetails", clickedRowId);
+      this.$store.dispatch("toggleRowDetails", clickedRowData);
+      console.log("rowClickedCalled Done");
+      // console.log(clickedRowData);
     },
-    getRowDetails: function(rowId, tName) {
-      return this.$store.state.realSimulationTableData[rowId].mainTableData
-        .childTable[tName];
+    getRowDetails: function(rowData, tName) {
+      let resultData = this.$store.getters.realSimulationTableData.find(
+        element => {
+          return (
+            element.year == rowData.year &&
+            element.month == rowData.month &&
+            element.mainTableData.mainDetails.date ==
+              rowData.mainTableData.mainDetails.date
+          );
+        }
+      );
+      return resultData.mainTableData.childTable[tName];
+      // return this.$store.getters.realSimulationTableData.mainTableData
+      //   .childTable[tName];
     },
     dateChange: function() {
       this.$nextTick(function() {
-        console.log(this.selectedMonths);
-        console.log(this.selectedYear);
+        // console.log(this.mainTableData.length);
+        if (this.mainTableData.length == 0) {
+          // console.log("mainTableDataLength= " + this.mainTableData.length);
+          this.generateDaysOfMonth();
+          // console.log("mainTableDataLength= " + this.mainTableData.length);
+        }
       });
     },
     getDays: function(year, month) {
