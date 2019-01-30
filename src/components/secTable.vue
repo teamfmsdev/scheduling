@@ -1,5 +1,7 @@
 <template>
   <b-container>
+    <b-form-select @change="dateChange" v-model="selectedMonths" :options="monthOptions"/>
+    <b-form-select v-model="selectedYear" :options="yearOptions"/>
     <table class="table table-dark table-sm table-bordered">
       <thead>
         <tr>
@@ -24,14 +26,18 @@
       </thead>
 
       <tbody>
-        <template v-for="(val,index) in items">
-          <tr :id="index" @click.stop="rowClicked" :key="index">
-            <template v-for="(val,index) in items[index].mainDetails">
-              <td :key="index">{{val}}</td>
+        <template v-for="(val,rowIndex) in mainTableData">
+          <tr :id="rowIndex" @click.stop="rowClicked" :key="rowIndex">
+            <template
+              v-for="(val,dataIndex) in mainTableData[rowIndex]['mainTableData']['mainDetails']"
+            >
+              <td :key="dataIndex">{{val}}</td>
             </template>
           </tr>
-          <tr :id="index" :key="index + ' detail'" v-if="val.rowDetails==true">
-            <template v-for="(val,index) in items[index].mainDetails">
+          <tr :id="rowIndex" :key="rowIndex + ' detail'" v-if="val.mainTableData.rowDetails==true">
+            <template
+              v-for="(val,index) in mainTableData[rowIndex]['mainTableData']['mainDetails']"
+            >
               <td :key="index" v-if="index=='biActivities'">
                 <biActivitiesTable v-bind="biA"></biActivitiesTable>
               </td>
@@ -117,7 +123,33 @@ export default {
           span: ""
         }
       ],
-      items: []
+      items: [],
+      selectedMonths: "Jan",
+      monthOptions: [
+        { value: "Jan", text: "January" },
+        { value: "Feb", text: "February" },
+        { value: "Mar", text: "March" },
+        { value: "Apr", text: "April" },
+        { value: "May", text: "May" },
+        { value: "Jun", text: "June" },
+        { value: "July", text: "July" },
+        { value: "Aug", text: "August" },
+        { value: "Sept", text: "September" },
+        { value: "Oct", text: "October" },
+        { value: "Nov", text: "November" },
+        { value: "Dec", text: "December" }
+      ],
+      selectedYear: "2019",
+      yearOptions: [
+        { value: "2019", text: "2019" },
+        { value: "2020", text: "2020" },
+        { value: "2021", text: "2021" },
+        { value: "2022", text: "2022" },
+        { value: "2023", text: "2023" }
+      ],
+      selectedDate: new Date(),
+      bia: "",
+      ptw: ""
     };
   },
 
@@ -157,19 +189,32 @@ export default {
     },
     rowClicked: function(event) {
       // Set the clicked row "Id" to a var that matches items index
-      let rowId = event.target.parentNode.id;
+      let clickedRowId = event.target.parentNode.id;
+      this.biA = this.getRowDetails(clickedRowId, "biA");
+      this.ptw = this.getRowDetails(clickedRowId, "ptw");
 
-      // Close all expanded rows except the one that matches rowId
-      if (this.currentExpandedRow.length > 0) {
-        this.currentExpandedRow.forEach(element => {
-          this.items[rowId].mainDetails.date != element.date
-            ? (element.rowDetails = false)
+      let currentExpandedRow = this.$store.getters.currentExpandedRow;
+      if (currentExpandedRow.length > 0) {
+        currentExpandedRow.forEach(element => {
+          let expandedRowId = element.mainTableData.mainDetails.date - 1;
+
+          clickedRowId != expandedRowId
+            ? this.$store.dispatch("toggleRowDetails", expandedRowId)
             : "";
         });
       }
-      // console.log(this.items[rowId]);
-      // Inverse the current clicked row its rowDetails var.
-      this.items[rowId].rowDetails = !this.items[rowId].rowDetails;
+
+      this.$store.dispatch("toggleRowDetails", clickedRowId);
+    },
+    getRowDetails: function(rowId, tName) {
+      return this.$store.state.realSimulationTableData[rowId].mainTableData
+        .childTable[tName];
+    },
+    dateChange: function() {
+      this.$nextTick(function() {
+        console.log(this.selectedMonths);
+        console.log(this.selectedYear);
+      });
     },
     getDays: function(year, month) {
       let date = new Date(year, month, 1);
@@ -185,72 +230,98 @@ export default {
     }
   },
   created: function() {
-    let days = this.getDays(2019, 0);
+    this.selectedDate = new Date(
+      `${this.selectedMonths},1,${this.selectedYear}`
+    );
+    let month = this.selectedDate.toLocaleString("en-gb", { month: "short" });
+    let year = this.selectedDate.getFullYear();
 
-    for (let day of days) {
-      let tempObj = {
-        mainDetails: {
-          day: day.day,
-          date: day.date,
-          biActivities: "",
-          permitToWork: "",
-          projectActivities: "",
-          n1: "",
-          n2: "",
-          n3: "",
-          n4: "",
-          n5: "",
-          n6: "",
-          n7: "",
-          n8: "",
-          contractorManagement: ""
-        },
-        rowDetails: false
-      };
+    let data = this.$store.getters.realSimulationTableData.filter(
+      element => element.month == month
+    );
 
-      this.$store.dispatch("mainTableAddRow", tempObj);
-    }
+    month = this.selectedDate.getMonth();
+    // Initialize store state if its empty
+    if (data.length == 0) {
+      let days = this.getDays(year, month);
 
-    for (let day of days) {
-      this.items.push({
-        mainDetails: {
-          day: day.day,
-          date: day.date,
-          biActivities: "",
-          permitToWork: "",
-          projectActivities: "",
-          n1: "",
-          n2: "",
-          n3: "",
-          n4: "",
-          n5: "",
-          n6: "",
-          n7: "",
-          n8: "",
-          contractorManagement: ""
-        },
-        rowDetails: false
-      });
+      for (let day of days) {
+        let tempObj = {
+          month: this.selectedDate.toLocaleString("en-gb", { month: "short" }),
+          year: year,
+          mainTableData: {
+            mainDetails: {
+              day: day.day,
+              date: day.date,
+              biActivities: "",
+              permitToWork: "",
+              projectActivities: "",
+              n1: "",
+              n2: "",
+              n3: "",
+              n4: "",
+              n5: "",
+              n6: "",
+              n7: "",
+              n8: "",
+              contractorManagement: ""
+            },
+            childTable: {
+              biA: {
+                tableName: "biA",
+                fields: {
+                  fmNo: "FM NO",
+                  activities: "Activities",
+                  buttons: "Actions"
+                },
+                items: [
+                  { fmNo: "2", activities: "What the DDD" },
+                  { fmNo: "4", activities: "DUDE" },
+                  { fmNo: "7", activities: "Weed" }
+                ]
+              },
+              ptw: {
+                tableName: "ptw",
+                fields: {
+                  fmNo: "FM NO",
+                  activities: "Activities",
+                  buttons: "Actions"
+                },
+                items: [
+                  { fmNo: "2", activities: "What the DDD" },
+                  { fmNo: "4", activities: "DUDE" },
+                  { fmNo: "777", activities: "TowTruck" }
+                ]
+              },
+              pa: {
+                tableName: "pa",
+                fields: { fmNo: "FM NO", activities: "Activities" },
+                items: [
+                  { fmNo: "2", activities: "What the DDD" },
+                  { fmNo: "4", activities: "DUDE" }
+                ]
+              }
+            },
+            rowDetails: false
+          }
+        };
+
+        this.$store.dispatch("realSimulationTableDataInit", tempObj);
+      }
     }
   },
   computed: {
-    currentExpandedRow: {
-      get: function() {
-        return this.items.filter(element => {
-          if (element.rowDetails == true) {
-            return element;
-          }
-        });
-      }
-    },
-    biA: function() {
-      return this.$store.state.childTable.biA;
-    },
-    ptw: function() {
-      return this.$store.state.childTable.ptw;
+    currentSelectedDate: function() {
+      let month = this.selectedDate.getMonth();
+      let year = this.selectedDate.getFullYear();
+      return `${this.selectedMonths},1,${this.selectedYear}`;
     },
     mainTableData: function() {
-      return this.$store.state.mainTableData;
+      return this.$store.getters.realSimulationTableData.filter(
+        element =>
+          element.month == this.selectedMonths &&
+          element.year == this.selectedYear
+      );
     }
   },
   components: { biActivitiesTable, ptwTable, projectTable }
