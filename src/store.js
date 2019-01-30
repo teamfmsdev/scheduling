@@ -1,58 +1,173 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    childTable: {
-      biA: {
-        tableName: 'biA',
-        fields: { fmNo: 'FM NO', activities: 'Activities', buttons: 'Actions' },
-        items: [{ fmNo: '2', activities: 'What the DDD' }, { fmNo: '4', activities: 'DUDE' }, { fmNo: '7', activities: 'Weed' }]
-      },
-      ptw: {
-        tableName: 'ptw',
-        fields: { fmNo: 'FM NO', activities: 'Activities', buttons: 'Actions' },
-        items: [{ fmNo: '2', activities: 'What the DDD' }, { fmNo: '4', activities: 'DUDE' }, { fmNo: '777', activities: 'TowTruck' }]
-      },
-      pa: {
-        tableName: 'pa',
-        fields: { fmNo: 'FM NO', activities: 'Activities' },
-        items: [{ fmNo: '2', activities: 'What the DDD' }, { fmNo: '4', activities: 'DUDE' }]
+    simulatedComplete: [
+      {
+        month: "Apr",
+        year: "2018",
+        mainTableData: [
+          {
+            mainDetails: {
+              day: "Fri",
+              date: "2",
+              biActivities: "",
+              permitToWork: "",
+              projectActivities: "",
+              n1: "",
+              n2: "",
+              n3: "",
+              n4: "",
+              n5: "",
+              n6: "",
+              n7: "",
+              n8: "",
+              contractorManagement: ""
+            },
+            childTable: {
+              biA: {
+                tableName: "biA",
+                fields: {
+                  fmNo: "FM NO",
+                  activities: "Activities",
+                  buttons: "Actions"
+                },
+                items: [
+                  { fmNo: "2", activities: "What the DDD" },
+                  { fmNo: "4", activities: "DUDE" },
+                  { fmNo: "7", activities: "Weed" }
+                ]
+              },
+              ptw: {
+                tableName: "ptw",
+                fields: {
+                  fmNo: "FM NO",
+                  activities: "Activities",
+                  buttons: "Actions"
+                },
+                items: [
+                  { fmNo: "2", activities: "What the DDD" },
+                  { fmNo: "4", activities: "DUDE" },
+                  { fmNo: "777", activities: "TowTruck" }
+                ]
+              },
+              pa: {
+                tableName: "pa",
+                fields: { fmNo: "FM NO", activities: "Activities" },
+                items: [
+                  { fmNo: "2", activities: "What the DDD" },
+                  { fmNo: "4", activities: "DUDE" }
+                ]
+              }
+            },
+            rowDetails: false
+          },
+          {
+            mainDetails: {
+              day: "Fri",
+              date: "2",
+              biActivities: "",
+              permitToWork: "",
+              projectActivities: "",
+              n1: "",
+              n2: "",
+              n3: "",
+              n4: "",
+              n5: "",
+              n6: "",
+              n7: "",
+              n8: "",
+              contractorManagement: ""
+            },
+            childTable: {
+              biA: {
+                tableName: "biA",
+                fields: {
+                  fmNo: "FM NO",
+                  activities: "Activities",
+                  buttons: "Actions"
+                },
+                items: [
+                  { fmNo: "2", activities: "What the DDD" },
+                  { fmNo: "4", activities: "DUDE" },
+                  { fmNo: "7", activities: "Weed" }
+                ]
+              },
+              ptw: {
+                tableName: "ptw",
+                fields: {
+                  fmNo: "FM NO",
+                  activities: "Activities",
+                  buttons: "Actions"
+                },
+                items: [
+                  { fmNo: "2", activities: "What the DDD" },
+                  { fmNo: "4", activities: "DUDE" },
+                  { fmNo: "777", activities: "TowTruck" }
+                ]
+              },
+              pa: {
+                tableName: "pa",
+                fields: { fmNo: "FM NO", activities: "Activities" },
+                items: [
+                  { fmNo: "2", activities: "What the DDD" },
+                  { fmNo: "4", activities: "DUDE" }
+                ]
+              }
+            },
+            rowDetails: false
+          }
+        ]
       }
-    },
-    mainTableData: []
+    ],
+    realSimulationTableData: []
   },
   getters: {
-    biA: state => {
-      return state.childTable.biA
+    realSimulationTableData: state => {
+      return state.realSimulationTableData;
     },
-    ptw: state => {
-      return state.childTable.ptw
+    simulatedCompleteData: state => {
+      return state.simulatedComplete;
     },
-    pa: state => {
-      return state.childTable.pa
-    },
-    mainTableData: state => {
-      return state.mainTableData
+    currentExpandedRow: state => {
+      return state.realSimulationTableData.filter(element => {
+        return element.mainTableData.rowDetails == true;
+      });
     }
   },
   mutations: {
     addRow: (state, payload) => {
       // console.log(payload);
-      state.childTable[payload.table].items.push(payload['data'])
+      state.realSimulationTableData[payload.rowId].mainTableData.childTable[
+        payload.table
+      ].items.push(payload["data"]);
     },
     mainTableAddRow: (state, payload) => {
-      state.mainTableData.push(payload)
+      state.mainTableData.push(payload);
+    },
+    realSimulationTableDataInit: (state, payload) => {
+      state.realSimulationTableData.push(payload);
+    },
+    toggleRowDetails: (state, payload) => {
+      state.realSimulationTableData[payload].mainTableData.rowDetails = !state
+        .realSimulationTableData[payload].mainTableData.rowDetails;
     }
   },
   actions: {
     addRow: (context, payload) => {
-      context.commit('addRow', payload)
+      context.commit("addRow", payload);
     },
     mainTableAddRow: (context, payload) => {
-      context.commit('mainTableAddRow', payload)
+      context.commit("mainTableAddRow", payload);
+    },
+    realSimulationTableDataInit: (context, payload) => {
+      context.commit("realSimulationTableDataInit", payload);
+    },
+    toggleRowDetails: (context, payload) => {
+      context.commit("toggleRowDetails", payload);
     }
   }
-})
+});
