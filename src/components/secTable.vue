@@ -148,7 +148,7 @@ export default {
         { value: "2023", text: "2023" }
       ],
       selectedDate: new Date(),
-      bia: "",
+      biA: "",
       ptw: ""
     };
   },
