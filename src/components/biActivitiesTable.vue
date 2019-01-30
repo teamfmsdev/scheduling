@@ -19,7 +19,12 @@
 
 <script>
 export default {
-  props: { fields: Object, items: Array, tableName: String },
+  props: {
+    fields: Object,
+    items: Array,
+    tableName: String,
+    mainTableData: Array
+  },
 
   data() {
     return {
@@ -28,9 +33,11 @@ export default {
   },
   methods: {
     addRow: function(event) {
+      let rowId = event.target.parentNode.parentNode.parentNode.parentNode.id;
+      let rowData = this.mainTableData[rowId];
       let newRow = {
         // Id for row
-        rowId: event.target.parentNode.parentNode.parentNode.parentNode.id,
+        rowData: rowData,
         table: this.tableName,
         data: { fmNo: "420", activity: "R O F L" }
       };
