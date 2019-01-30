@@ -27,8 +27,10 @@ export default {
     };
   },
   methods: {
-    addRow: function() {
+    addRow: function(event) {
       let newRow = {
+        // Id for row
+        rowId: event.target.parentNode.parentNode.parentNode.parentNode.id,
         table: this.tableName,
         data: { fmNo: "420", activity: "R O F L" }
       };
