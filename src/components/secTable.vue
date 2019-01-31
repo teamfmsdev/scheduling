@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container fluid>
     <b-form-select @change="dateChange" v-model="selectedMonths" :options="monthOptions"/>
     <b-form-select @change="dateChange" v-model="selectedYear" :options="yearOptions"/>
     <table class="table table-dark table-sm table-bordered">
@@ -211,7 +211,7 @@ export default {
       }
 
       this.$store.dispatch("toggleRowDetails", clickedRowData);
-      console.log("rowClickedCalled Done");
+      // console.log("rowClickedCalled Done");
       // console.log(clickedRowData);
     },
     getRowDetails: function(rowData, tName) {
@@ -287,11 +287,7 @@ export default {
                   activities: "Activities",
                   buttons: "Actions"
                 },
-                items: [
-                  { fmNo: "2", activities: "What the DDD" },
-                  { fmNo: "4", activities: "DUDE" },
-                  { fmNo: "7", activities: "Weed" }
-                ]
+                items: []
               },
               ptw: {
                 tableName: "ptw",
@@ -300,19 +296,12 @@ export default {
                   activities: "Activities",
                   buttons: "Actions"
                 },
-                items: [
-                  { fmNo: "2", activities: "What the DDD" },
-                  { fmNo: "4", activities: "DUDE" },
-                  { fmNo: "777", activities: "TowTruck" }
-                ]
+                items: []
               },
               pa: {
                 tableName: "pa",
                 fields: { fmNo: "FM NO", activities: "Activities" },
-                items: [
-                  { fmNo: "2", activities: "What the DDD" },
-                  { fmNo: "4", activities: "DUDE" }
-                ]
+                items: []
               }
             },
             rowDetails: false
@@ -371,11 +360,7 @@ export default {
                   activities: "Activities",
                   buttons: "Actions"
                 },
-                items: [
-                  { fmNo: "2", activities: "What the DDD" },
-                  { fmNo: "4", activities: "DUDE" },
-                  { fmNo: "7", activities: "Weed" }
-                ]
+                items: []
               },
               ptw: {
                 tableName: "ptw",
@@ -384,19 +369,12 @@ export default {
                   activities: "Activities",
                   buttons: "Actions"
                 },
-                items: [
-                  { fmNo: "2", activities: "What the DDD" },
-                  { fmNo: "4", activities: "DUDE" },
-                  { fmNo: "777", activities: "TowTruck" }
-                ]
+                items: []
               },
               pa: {
                 tableName: "pa",
                 fields: { fmNo: "FM NO", activities: "Activities" },
-                items: [
-                  { fmNo: "2", activities: "What the DDD" },
-                  { fmNo: "4", activities: "DUDE" }
-                ]
+                items: []
               }
             },
             rowDetails: false
