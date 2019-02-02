@@ -6,16 +6,15 @@
 <script>
 // @ is an alias to /src
 
-import secTable from "@/components/secTable.vue";
+import secTable from '@/components/secTable.vue'
 
 export default {
-  name: "home",
+  name: 'home',
   components: {
     secTable
   }
-};
+}
 </script>
-
 
  <style scoped>
 body {
@@ -25,4 +24,3 @@ tbody > tr:hover {
   background-color: rgb(0, 177, 169);
 }
 </style>
-

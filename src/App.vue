@@ -10,7 +10,7 @@
 
 <script>
 // import "@/styles/globalStyle.css";
-export default {};
+export default {}
 </script>
 
 <style lang="scss">

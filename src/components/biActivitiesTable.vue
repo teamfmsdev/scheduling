@@ -5,7 +5,14 @@
     </thead>
     <tbody>
       <tr :id="rowKey" :key="rowKey" v-for="(value,rowKey) in items">
-        <td @click="editRow(tdVal,$event)" :key="key" v-for="(tdVal,key) in items[rowKey]">{{tdVal}}</td>
+        <td
+          :key="key"
+          v-for="(tdVal,key) in items[rowKey]"
+          v-text="tdVal"
+          :id="key == 'fmNo'? 'fmNo':'activities'"
+          :contenteditable="true"
+          @blur="editRow(tdVal,$event)"
+        ></td>
         <td>
           <input type="button" @click.stop="editRow" value="*">
           <input type="button" @click.stop="deleteRow" value="-">
@@ -15,7 +22,6 @@
     </tbody>
   </table>
 </template>
-
 
 <script>
 export default {
@@ -44,7 +50,7 @@ export default {
       this.$store.dispatch("addRow", newRow);
     },
     deleteRow: function(event) {
-      //Parent tr id
+      // Parent tr id
       let rowId =
         event.target.parentNode.parentNode.parentNode.parentNode.parentNode
           .parentNode.id;
@@ -61,9 +67,27 @@ export default {
       this.$store.dispatch("deleteChildTableRow", deletedRow);
     },
     editRow: function(currentVal, event) {
-      // let childTableRow = event.target.parentNode.parentNode;
-      console.log(currentVal);
-      console.log(event);
+      event.preventDefault();
+      // console.log("called");
+
+      let rowId =
+        event.target.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+
+      // child table tr id
+      let childTableRowId = event.target.parentNode.id;
+
+      // Whole data for parent tr
+      let rowData = this.mainTableData[rowId];
+      let dataType = event.target.id;
+      let newValue = event.target.innerText;
+      let newData = {
+        rowData: rowData,
+        table: this.tableName,
+        affectedRow: childTableRowId,
+        data: { newValue: newValue, dataType: dataType }
+      };
+
+      this.$store.dispatch("editChildTableData", newData);
     }
   }
 };

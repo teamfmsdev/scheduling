@@ -1,7 +1,7 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
@@ -9,15 +9,15 @@ export default new Vuex.Store({
   },
   getters: {
     realSimulationTableData: state => {
-      return state.realSimulationTableData;
+      return state.realSimulationTableData
     },
     simulatedCompleteData: state => {
-      return state.simulatedComplete;
+      return state.simulatedComplete
     },
     currentExpandedRow: state => {
       return state.realSimulationTableData.filter(element => {
-        return element.mainTableData.rowDetails == true;
-      });
+        return element.mainTableData.rowDetails == true
+      })
     }
   },
   mutations: {
@@ -26,14 +26,11 @@ export default new Vuex.Store({
         return (
           element.year == payload.rowData.year &&
           element.month == payload.rowData.month &&
-          element.mainTableData.mainDetails.date ==
-            payload.rowData.mainTableData.mainDetails.date
-        );
-      });
+          element.mainTableData.mainDetails.date == payload.rowData.mainTableData.mainDetails.date
+        )
+      })
 
-      resultData.mainTableData.childTable[payload.table].items.push(
-        payload.data
-      );
+      resultData.mainTableData.childTable[payload.table].items.push(payload.data)
     },
     deleteChildTableRow: (state, payload) => {
       // console.log(payload);
@@ -41,56 +38,64 @@ export default new Vuex.Store({
         return (
           element.year == payload.rowData.year &&
           element.month == payload.rowData.month &&
-          element.mainTableData.mainDetails.date ==
-            payload.rowData.mainTableData.mainDetails.date
-        );
-      });
-      resultData.mainTableData.childTable[payload.table].items.splice(
-        [payload.data["childTableRowId"]],
-        1
-      );
+          element.mainTableData.mainDetails.date == payload.rowData.mainTableData.mainDetails.date
+        )
+      })
+      resultData.mainTableData.childTable[payload.table].items.splice([payload.data['childTableRowId']], 1)
     },
     mainTableAddRow: (state, payload) => {
-      state.mainTableData.push(payload);
+      state.mainTableData.push(payload)
     },
     realSimulationTableDataInit: (state, payload) => {
-      state.realSimulationTableData.push(payload);
+      state.realSimulationTableData.push(payload)
     },
     toggleRowDetails: (state, payload) => {
       let resultData = state.realSimulationTableData.find(element => {
         return (
           element.year == payload.year &&
           element.month == payload.month &&
-          element.mainTableData.mainDetails.date ==
-            payload.mainTableData.mainDetails.date
-        );
-      });
+          element.mainTableData.mainDetails.date == payload.mainTableData.mainDetails.date
+        )
+      })
 
-      resultData.mainTableData.rowDetails = !resultData.mainTableData
-        .rowDetails;
+      resultData.mainTableData.rowDetails = !resultData.mainTableData.rowDetails
     },
     emptyMainData: (state, payload) => {
-      state.realSimulationTableData = [];
+      state.realSimulationTableData = []
+    },
+    editChildTableData: (state, payload) => {
+      let resultData = state.realSimulationTableData.find(element => {
+        return (
+          element.year == payload.rowData.year &&
+          element.month == payload.rowData.month &&
+          element.mainTableData.mainDetails.date == payload.rowData.mainTableData.mainDetails.date
+        )
+      })
+      // console.log(payload)
+      resultData.mainTableData.childTable[payload.table].items[payload.affectedRow][payload.data.dataType] = payload.data.newValue
     }
   },
   actions: {
     addRow: (context, payload) => {
-      context.commit("addRow", payload);
+      context.commit('addRow', payload)
     },
     mainTableAddRow: (context, payload) => {
-      context.commit("mainTableAddRow", payload);
+      context.commit('mainTableAddRow', payload)
     },
     realSimulationTableDataInit: (context, payload) => {
-      context.commit("realSimulationTableDataInit", payload);
+      context.commit('realSimulationTableDataInit', payload)
     },
     toggleRowDetails: (context, payload) => {
-      context.commit("toggleRowDetails", payload);
+      context.commit('toggleRowDetails', payload)
     },
     emptyMainData: (context, payload) => {
-      context.commit("emptyMainData");
+      context.commit('emptyMainData')
     },
     deleteChildTableRow: (context, payload) => {
-      context.commit("deleteChildTableRow", payload);
+      context.commit('deleteChildTableRow', payload)
+    },
+    editChildTableData: (context, payload) => {
+      context.commit('editChildTableData', payload)
     }
   }
-});
+})

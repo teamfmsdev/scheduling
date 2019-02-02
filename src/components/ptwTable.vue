@@ -2,30 +2,29 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       fields: [
         {
-          key: "ptwNo",
-          label: "#PTW",
-          thClass: "align-middle"
+          key: 'ptwNo',
+          label: '#PTW',
+          thClass: 'align-middle'
         },
         {
-          key: "activity",
-          label: "Activity",
-          thClass: "align-middle"
+          key: 'activity',
+          label: 'Activity',
+          thClass: 'align-middle'
         }
       ],
       items: [
-        { ptwNo: "50", activity: "RRRR" },
-        { ptwNo: "5", activity: "RRRR" },
-        { ptwNo: "50", activity: "RRRR" }
+        { ptwNo: '50', activity: 'RRRR' },
+        { ptwNo: '5', activity: 'RRRR' },
+        { ptwNo: '50', activity: 'RRRR' }
       ]
-    };
+    }
   }
-};
+}
 </script>
-
 
 <style scoped>
 </style>
