@@ -1,256 +1,345 @@
 <template>
-  <b-container>
-    <b-table
-      v-on:row-clicked="rowClicked"
-      :fields="fields"
-      :items="items"
-      class="table table-sm table-bordered"
-      caption-top
-    >
-      <template slot="table-caption"></template>
+  <b-container fluid>
+    <b-form-select @change="dateChange" v-model="selectedMonths" :options="monthOptions"/>
+    <b-form-select @change="dateChange" v-model="selectedYear" :options="yearOptions"/>
+    <table class="table table-dark table-sm table-bordered">
+      <thead>
+        <tr>
+          <template v-for="field in fields">
+            <template v-if="headerRender(field.label)">
+              <th
+                :key="field.key"
+                v-if="field.label !='Contract Management'"
+                :rowspan="2"
+              >{{field.label}}</th>
+              <th :key="field.key" v-else :colspan="8">{{field.label}}</th>
+            </template>
+          </template>
+        </tr>
+        <tr>
+          <template v-for="field in fields">
+            <template v-if="!headerRender(field.label)">
+              <th :key="field.key">{{field.label}}</th>
+            </template>
+          </template>
+        </tr>
+      </thead>
 
-      <template slot="row-details" slot-scope="row">
-        <!-- {{row.item.day}}
-        {{row.item.date}}-->
-      </template>
-    </b-table>
+      <tbody>
+        <template v-for="(val,rowIndex) in mainData">
+          <tr :id="rowIndex" @click.stop="rowClicked" :key="rowIndex">
+            <template v-for="(val,dataIndex) in mainData[rowIndex]['mainTable']">
+              <!-- Do a loop LATER -->
+              <td :key="dataIndex" v-if="dataIndex == 'day'">{{val}}</td>
+              <td :key="dataIndex" v-else-if="dataIndex == 'date'">{{val}}</td>
+              <td :key="dataIndex" v-else-if="dataIndex == 'biActivities'">{{val}}</td>
+              <td :key="dataIndex" v-else-if="dataIndex == 'permitToWork'">{{val}}</td>
+              <td :key="dataIndex" v-else-if="dataIndex == 'projectActivities'">{{val}}</td>
+              <td :key="dataIndex" v-else-if="dataIndex == 'contractorManagement'">{{val}}</td>
+              <td :key="dataIndex" v-else-if="dataIndex == 'day'">{{val}}</td>
+              <td :key="dataIndex" v-else></td>
+            </template>
+          </tr>
+          <transition :key="rowIndex + 'anim'" name="fade">
+            <tr :id="rowIndex" :key="rowIndex + ' detail'" v-if="val.rowDetails==true">
+              <template v-for="(val,index) in mainData[rowIndex]['mainTable']">
+                <td :key="index" v-if="index=='biActivities'">
+                  <childTable class="mx-auto" v-bind="biA" :mainTable="mainData"></childTable>
+                </td>
+                <td class :key="index" v-else-if="index=='permitToWork'">
+                  <childTable class="mx-auto" v-bind="ptw" :mainTable="mainData"></childTable>
+                </td>
+                <!-- <td :key="index" v-else-if="index=='projectActivities'"> -->
+                <!-- <childList v-bind="pa" :mainTable="mainData"></childList> -->
+                <!-- </td> -->
+                <td class="align-middle" :key="index" :contentEditable="true" v-else></td>
+              </template>
+            </tr>
+          </transition>
+        </template>
+      </tbody>
+    </table>
   </b-container>
 </template>
 
 <script>
-import biActivitiesTable from '@/components/biActivitiesTable.vue'
-import ptwTable from '@/components/ptwTable.vue'
-import projectTable from '@/components/projectTable.vue'
-import Vue from 'vue'
+import childTable from "@/components/childTable.vue";
+import childList from "@/components/childList.vue";
 
 export default {
-  data () {
+  data() {
     return {
       fields: [
-        { key: 'day', label: 'Day', thClass: 'align-middle', sortable: false },
         {
-          key: 'date',
-          label: 'Date',
-          thClass: 'align-middle',
+          key: "day",
+          label: "Day",
+          thClass: "align-middle",
+          attr: "",
+          span: "",
           sortable: false
         },
         {
-          key: 'biActivities',
-          label: 'B&I Activities',
-          thClass: 'align-middle'
+          key: "date",
+          label: "Date",
+          thClass: "align-middle",
+          attr: "",
+          span: "",
+          sortable: false
         },
         {
-          key: 'permitToWork',
-          label: 'Permit To Work',
-          thClass: 'align-middle'
+          key: "biActivities",
+          label: "B&I Activities",
+          attr: "",
+          span: "",
+          thClass: "align-middle"
         },
         {
-          key: 'projectActivities',
-          label: 'Project Activities',
-          thClass: 'align-middle'
+          key: "permitToWork",
+          label: "Permit To Work",
+          attr: "",
+          span: "",
+          thClass: "align-middle"
         },
-        { key: '1', label: '1' },
-        { key: '2', label: '2' },
-        { key: '3', label: '3' },
-        { key: '4', label: '4' },
-        { key: '5', label: '5' },
-        { key: '6', label: '6' },
-        { key: '7', label: '7' },
-        { key: '8', label: '8' }
-        // { key: "contractManagement", label: "Contract Management" },
-        // { key: "contractorManagement", label: "Contractor Management" }
+        {
+          key: "projectActivities",
+          label: "Project Activities",
+          attr: "",
+          span: "",
+          thClass: "align-middle"
+        },
+        { key: "1", label: "1", attr: "", span: "" },
+        { key: "2", label: "2", attr: "", span: "" },
+        { key: "3", label: "3", attr: "", span: "" },
+        { key: "4", label: "4", attr: "", span: "" },
+        { key: "5", label: "5", attr: "", span: "" },
+        { key: "6", label: "6", attr: "", span: "" },
+        { key: "7", label: "7", attr: "", span: "" },
+        { key: "8", label: "8", attr: "", span: "" },
+        {
+          key: "contractManagement",
+          label: "Contract Management",
+          attr: "",
+          span: ""
+        },
+        {
+          key: "contractorManagement",
+          label: "Contractor Management",
+          attr: "",
+          span: ""
+        }
       ],
       items: [],
-      init: false,
-      currentExpandedRow: null
-    }
+      selectedMonths: "Jan",
+      monthOptions: [
+        { value: "Jan", text: "January" },
+        { value: "Feb", text: "February" },
+        { value: "Mar", text: "March" },
+        { value: "Apr", text: "April" },
+        { value: "May", text: "May" },
+        { value: "Jun", text: "June" },
+        { value: "Jul", text: "July" },
+        { value: "Aug", text: "August" },
+        { value: "Sep", text: "September" },
+        { value: "Oct", text: "October" },
+        { value: "Nov", text: "November" },
+        { value: "Dec", text: "December" }
+      ],
+      selectedYear: "2019",
+      yearOptions: [
+        { value: "2019", text: "2019" },
+        { value: "2020", text: "2020" },
+        { value: "2021", text: "2021" },
+        { value: "2022", text: "2022" },
+        { value: "2023", text: "2023" }
+      ],
+      selectedDate: new Date(),
+      biA: "",
+      ptw: "",
+      pa: ""
+    };
   },
+
   methods: {
-    getDays: function (year, month) {
-      let date = new Date(year, month, 1)
-      let days = []
+    headerRender: function(label) {
+      return (
+        label != "1" &&
+        label != "2" &&
+        label != "3" &&
+        label != "4" &&
+        label != "5" &&
+        label != "6" &&
+        label != "7" &&
+        label != "8"
+      );
+    },
+    rowDetailsRender: function(index) {
+      if (index != "rowDetails") {
+        switch (index) {
+          case "biActivities":
+          case "permitToWork":
+          case "projectActivities":
+          case "n1":
+          case "n2":
+          case "n3":
+          case "n4":
+          case "n5":
+          case "n6":
+          case "n7":
+          case "n8":
+          case "contractorManagement":
+            return true;
+          default:
+            return false;
+        }
+      }
+    },
+    rowClicked: function(event) {
+      // console.log("ROW CLICKED CALL");
+      // Set the clicked row "Id" attribute as a var to match mainData index
+      let clickedRowId = event.target.parentNode.id;
+      // Row data from vuex store mainData with index that matches clickedRowId
+      let clickedRowData = this.mainData[clickedRowId];
+      // Set the props to be pass to childTableComponents
+      this.biA = this.getRowDetails(clickedRowData, "biA");
+      this.ptw = this.getRowDetails(clickedRowData, "ptw");
+      this.pa = this.getRowDetails(clickedRowData, "pa");
+      // Get row data with rowDetails = true from vuex
+      let currentExpandedRow = this.$store.getters.currentExpandedRow;
+
+      if (currentExpandedRow.length > 0) {
+        currentExpandedRow.forEach(row => {
+          // Close all currently expanded rows
+          row.year != clickedRowData.year ||
+          row.month != clickedRowData.month ||
+          row.mainTable.date != clickedRowData.mainTable.date
+            ? this.$store.dispatch("toggleRowDetails", row)
+            : "";
+        });
+      }
+      // Toggle/inverse current clicked row its rowDetails prop
+      this.$store.dispatch("toggleRowDetails", clickedRowData);
+    },
+    getRowDetails: function(rowData, tName) {
+      // Find affected mainData row
+      let affectedData = this.$store.state.mainData.find(element => {
+        return (
+          element.year == rowData.year &&
+          element.month == rowData.month &&
+          element.mainTable.date == rowData.mainTable.date
+        );
+      });
+      // Return the mainData childTable with key that matches tName
+      return affectedData.childTable[tName];
+    },
+    dateChange: function() {
+      this.$nextTick(function() {
+        // If existing data for month/year is 0
+        if (this.mainData.length == 0) {
+          this.generateDaysOfMonth();
+        }
+      });
+    },
+    getDays: function(year, month) {
+      let date = new Date(year, month, 1);
+      let days = [];
       while (date.getMonth() == month) {
         days.push({
-          day: date.toLocaleString('en-gb', { weekday: 'short' }),
+          day: date.toLocaleString("en-gb", { weekday: "short" }),
           date: date.getDate()
-        })
-        date.setDate(date.getDate() + 1)
+        });
+        date.setDate(date.getDate() + 1);
       }
-      return days
+      return days;
     },
-    modifyTable: function () {
-      var thead = document.querySelector('thead')
-      var newRow = document.createElement('tr')
-      thead.append(newRow)
-      var toBeCloneTh = document.querySelectorAll('th')
-      var newTh = []
-      for (let i of toBeCloneTh) {
-        switch (i.innerHTML) {
-          case '1':
-          case '2':
-          case '3':
-          case '4':
-          case '5':
-          case '6':
-          case '7':
-          case '8':
-            newTh.push(i)
-            break
-          default:
-            break
-        }
-      }
-      let cM = document.createElement('th')
-      cM.innerHTML = 'Contract Management'
-      document.querySelector('thead tr:nth-child(1)').appendChild(cM)
+    generateDaysOfMonth: function() {
+      this.selectedDate = new Date(this.currentSelectedDate);
+      let year = this.selectedDate.getFullYear();
+      let month = this.selectedDate.getMonth();
+      let days = this.getDays(year, month);
+      // Empty store MainData
+      // this.$store.dispatch("emptyMainData");
+      for (let day of days) {
+        let tempObj = {
+          month: this.selectedDate.toLocaleString("en-gb", { month: "short" }),
+          year: year,
+          mainTable: {
+            day: day.day,
+            date: day.date,
+            biActivities: "",
+            permitToWork: "",
+            projectActivities: "",
+            n1: false,
+            n2: false,
+            n3: false,
+            n4: false,
+            n5: false,
+            n6: false,
+            n7: false,
+            n8: false,
+            contractorManagement: ""
+          },
+          childTable: {
+            biA: {
+              tableName: "biA",
+              fields: {
+                fmNo: "FM NO",
+                activities: "Activities",
+                buttons: "Actions"
+              },
+              items: []
+            },
+            ptw: {
+              tableName: "ptw",
+              fields: {
+                fmNo: "FM NO",
+                activities: "Activities",
+                buttons: "Actions"
+              },
+              items: []
+            },
+            pa: {
+              tableName: "pa",
+              // fields: { fmNo: "FM NO", activities: "Activities" },
+              items: []
+            }
+          },
+          rowDetails: false
+        };
 
-      newRow = document.querySelector('thead tr:nth-child(2)')
-
-      // Append to 2nd row
-      for (let i of newTh) {
-        newRow.appendChild(i)
+        this.$store.dispatch("mainDataInit", tempObj);
       }
-      this.fields.push({
-        key: 'contractorManagement',
-        label: 'Contractor Management',
-        thClass: 'align-middle'
-      })
+    }
+    // dataRequest: function() {
+    //   return this.;
+    // }
+  },
+  created: function() {
+    this.generateDaysOfMonth();
+  },
+  computed: {
+    currentSelectedDate: function() {
+      let month = this.selectedDate.getMonth();
+      let year = this.selectedDate.getFullYear();
+      return `${this.selectedMonths},1,${this.selectedYear}`;
     },
-    modifyHeader: function () {
-      let firstRow = document.querySelectorAll('thead tr:nth-child(1) th')
-      for (let i of firstRow) {
-        switch (i.innerHTML) {
-          case 'Contract Management':
-            i.setAttribute('colspan', '8')
-            break
-          default:
-            // i.classList.add("align-middle");
-            i.setAttribute('rowspan', '2')
-        }
-      }
-      this.init = true
-    },
-    rowClicked: function (item, index, event) {
-      // 1.Check if the same row is clicked
-      if (
-        this.currentExpandedRow != null &&
-        this.currentExpandedRow.rowIndex == index
-      ) {
-        // Close the row detail and set curentExpanded row to be null
-        item._showDetails = !item._showDetails
-        this.currentExpandedRow = null
-      }
-      // 2.Check if different row is clicked while there is another row open
-      else if (
-        this.currentExpandedRow != null &&
-        this.currentExpandedRow._showDetails == true
-      ) {
-        // Close the currently expanded row details
-        this.currentExpandedRow._showDetails = false
-        // Expand the clicked row element its row details
-        item._showDetails = true
-        // Set the currently expanded row tracker variable as the clicked item
-        this.currentExpandedRow = item
-        this.currentExpandedRow['rowIndex'] = index
-      }
-      // 3.If there is no expanded row details
-      else {
-        // Expand the clicked row element its row details
-        item._showDetails = true
-        // Set the currently expanded row tracker variable as the clicked item
-        this.currentExpandedRow = item
-        this.currentExpandedRow['rowIndex'] = index
-      }
-      // Wait for DOM to re-render
-      this.$nextTick(function () {
-        if (item._showDetails) {
-          var rowDetails = event.target.parentNode.nextSibling
-          this.modifyRowDetails(rowDetails)
-        }
-      })
-    },
-    modifyRowDetails: function (rowDetails) {
-      // console.log(rowDetails.childNodes[0]);
-      rowDetails.childNodes[0].setAttribute('colspan', 2)
-      // rowDetails.childNodes[0].innerHTML = "";
-      var newTd = document.createElement('td')
-
-      // rowDetails.append(newTd);
-      for (let x = 0; x < 3; x++) {
-        let clonedTd = newTd.cloneNode(true)
-        rowDetails.append(clonedTd)
-      }
-      let placeholder = document.createElement('div')
-
-      // mount biActivity table to mainTable
-      let biATableClass = Vue.extend(biActivitiesTable)
-      let biATableInstance = new biATableClass()
-      rowDetails.childNodes[1].append(placeholder)
-      biATableInstance.$mount(rowDetails.childNodes[1].childNodes[0])
-      // Mount ptw Table
-      let ptwTableClass = Vue.extend(ptwTable)
-      let ptwTableInstance = new ptwTableClass()
-      rowDetails.childNodes[2].append(placeholder)
-      ptwTableInstance.$mount(rowDetails.childNodes[2].childNodes[0])
-      // Mount project
-      let projectTableclass = Vue.extend(projectTable)
-      let projectTableInstance = new projectTableclass()
-      rowDetails.childNodes[3].append(placeholder)
-      projectTableInstance.$mount(rowDetails.childNodes[3].childNodes[0])
+    mainData() {
+      return this.$store.state.mainData.filter(
+        element =>
+          element.month == this.selectedMonths &&
+          element.year == this.selectedYear
+      );
     }
   },
-  created: function () {
-    let days = this.getDays(2019, 0)
-    for (let day of days) {
-      this.items.push({
-        day: day.day,
-        date: day.date,
-        biActivities: '',
-        permitToWork: '',
-        projectActivities: '',
-        1: '',
-        2: '',
-        3: '',
-        4: '',
-        5: '',
-        6: '',
-        7: '',
-        8: '',
-        contractorManagement: '',
-        _showDetails: false
-      })
-    }
-  },
-  mounted: function () {
-    // Wait for all to render the modifyTable()
-    this.$nextTick(function () {
-      this.modifyTable()
-    })
-  },
-  updated: function () {
-    this.init == false ? this.modifyHeader() : ''
-  },
-  components: { biActivitiesTable, ptwTable }
-}
+  components: { childTable, childList }
+};
 </script>
 
-<style scoped>
-table {
-  background-color: white;
-  color: black !important;
-}
-</style>
-
 <style>
-tbody > tr:hover {
-  background-color: rgb(0, 177, 169);
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
-
-.selected {
-  background-color: rgb(0, 177, 169);
-}
-
-.b-table-details:hover {
-  background-color: white;
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
