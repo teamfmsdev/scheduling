@@ -1,19 +1,19 @@
 <template>
   <!-- <mainTable></mainTable> -->
-  <secTable></secTable>
+  <mainTable></mainTable>
 </template>
 
 <script>
 // @ is an alias to /src
 
-import secTable from '@/components/secTable.vue'
+import mainTable from "@/components/mainTable.vue";
 
 export default {
-  name: 'home',
+  name: "home",
   components: {
-    secTable
+    mainTable
   }
-}
+};
 </script>
 
  <style scoped>
