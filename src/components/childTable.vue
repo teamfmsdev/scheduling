@@ -1,0 +1,116 @@
+<template>
+  <table>
+    <thead>
+      <th :key="key" v-for="(value,key) in fields">{{value}}</th>
+    </thead>
+    <tbody>
+      <tr :id="rowKey" :key="rowKey" v-for="(value,rowKey) in items">
+        <td
+          :key="key"
+          v-for="(tdVal,key) in items[rowKey]"
+          v-text="tdVal"
+          :id="key == 'fmNo'? 'fmNo':'activities'"
+          :contenteditable="true"
+          @blur="editRow(tdVal,$event)"
+        ></td>
+        <td>
+          <input
+            type="button"
+            class="btn btn-sm btn-outline-primary"
+            @click.stop="editRow"
+            value="*"
+          >
+          <input
+            type="button"
+            class="btn btn-sm btn-outline-primary"
+            @click.stop="deleteRow"
+            value="-"
+          >
+        </td>
+      </tr>
+      <input
+        type="button"
+        value="+"
+        class="btn btn-sm btn-outline-primary"
+        @click.stop="addChildTableRow"
+      >
+    </tbody>
+  </table>
+</template>
+
+<script>
+export default {
+  props: {
+    fields: Object,
+    items: Array,
+    tableName: String,
+    mainTable: Array
+  },
+
+  data() {
+    return {
+      // tableName: this.tableName
+    };
+  },
+  methods: {
+    addChildTableRow: function(event) {
+      // mainTable row Id
+      let rowId = event.target.parentNode.parentNode.parentNode.parentNode.id;
+      // mainTable data from prop
+      let rowData = this.mainTable[rowId];
+      // New row to be added to vuex store
+      let newRow = {
+        // Id for row
+        rowData: rowData,
+        table: this.tableName,
+        data: { fmNo: "420", activities: "R O F L" }
+      };
+      this.$store.dispatch("addChildTableRow", newRow);
+    },
+    deleteRow: function(event) {
+      // mainTable row Id
+      let rowId =
+        event.target.parentNode.parentNode.parentNode.parentNode.parentNode
+          .parentNode.id;
+      // childTable row Id
+      let childTableRowId = event.target.parentNode.parentNode.id;
+      // Whole data for parent row
+      let rowData = this.mainTable[rowId];
+
+      let deletedRow = {
+        rowData: rowData,
+        table: this.tableName,
+        data: { childTableRowId: childTableRowId }
+      };
+      console.log(deletedRow);
+      this.$store.dispatch("deleteChildTableRow", deletedRow);
+    },
+    editRow: function(currentVal, event) {
+      // mainTable data that matches event target row Id
+      let rowId =
+        event.target.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+
+      // Affected childTable row Id
+      let childTableRowId = event.target.parentNode.id;
+
+      // Whole data for mainTable row
+      let rowData = this.mainTable[rowId];
+      // To diffrentiate which childTable <td> is
+      // affected
+      let dataType = event.target.id;
+      // User typed data in <td> to be updated in
+      // vuex store
+      let newValue = event.target.innerText;
+      // To be send to vuex mutations
+      let newData = {
+        rowData: rowData,
+        table: this.tableName,
+        affectedRow: childTableRowId,
+        data: { newValue: newValue, dataType: dataType }
+      };
+
+      this.$store.dispatch("editChildTableData", newData);
+    }
+  }
+};
+</script>
