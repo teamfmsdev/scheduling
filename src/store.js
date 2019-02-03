@@ -1,101 +1,109 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    realSimulationTableData: []
+    mainData: []
   },
   getters: {
-    realSimulationTableData: state => {
-      return state.realSimulationTableData
-    },
-    simulatedCompleteData: state => {
-      return state.simulatedComplete
-    },
     currentExpandedRow: state => {
-      return state.realSimulationTableData.filter(element => {
-        return element.mainTableData.rowDetails == true
-      })
+      return state.mainData.filter(element => {
+        return element.rowDetails == true;
+      });
     }
   },
   mutations: {
-    addRow: (state, payload) => {
-      let resultData = state.realSimulationTableData.find(element => {
+    addChildTableRow: (state, payload) => {
+      let { rowData, table: childTableName, data } = payload;
+      let affectedData = state.mainData.find(element => {
         return (
-          element.year == payload.rowData.year &&
-          element.month == payload.rowData.month &&
-          element.mainTableData.mainDetails.date == payload.rowData.mainTableData.mainDetails.date
-        )
-      })
-
-      resultData.mainTableData.childTable[payload.table].items.push(payload.data)
+          element.year == rowData.year &&
+          element.month == rowData.month &&
+          element.mainTable.date == rowData.mainTable.date
+        );
+      });
+      let { childTable } = affectedData;
+      childTable[childTableName].items.push(data);
     },
     deleteChildTableRow: (state, payload) => {
-      // console.log(payload);
-      let resultData = state.realSimulationTableData.find(element => {
+      // Destructure
+      let { rowData, table: childTableName, data } = payload;
+      // Find rows that are affected
+      let affectedData = state.mainData.find(element => {
         return (
-          element.year == payload.rowData.year &&
-          element.month == payload.rowData.month &&
-          element.mainTableData.mainDetails.date == payload.rowData.mainTableData.mainDetails.date
-        )
-      })
-      resultData.mainTableData.childTable[payload.table].items.splice([payload.data['childTableRowId']], 1)
+          element.year == rowData.year &&
+          element.month == rowData.month &&
+          element.mainTable.date == rowData.mainTable.date
+        );
+      });
+
+      let { childTable } = affectedData;
+      // Splice childTable items with index that match // childTableRowId
+      childTable[childTableName].items.splice(data.childTableRowId, 1);
+    },
+    editChildTableData: (state, payload) => {
+      // Destructuring
+      let { rowData, table, affectedRow, data } = payload;
+      // Finding affected mainData
+      let affectedData = state.mainData.find(element => {
+        return (
+          element.year == rowData.year &&
+          element.month == rowData.month &&
+          element.mainTable.date == rowData.mainTable.date
+        );
+      });
+      // Destructuring
+      let { childTable } = affectedData;
+      // Assigning new value to affected childTable
+      // column
+      childTable[table].items[affectedRow][data.dataType] = data.newValue;
     },
     mainTableAddRow: (state, payload) => {
-      state.mainTableData.push(payload)
+      state.push(payload);
     },
-    realSimulationTableDataInit: (state, payload) => {
-      state.realSimulationTableData.push(payload)
+    mainDataInit: (state, payload) => {
+      state.mainData.push(payload);
     },
     toggleRowDetails: (state, payload) => {
-      let resultData = state.realSimulationTableData.find(element => {
+      // Affected mainData row
+      let affectedData = state.mainData.find(element => {
         return (
           element.year == payload.year &&
           element.month == payload.month &&
-          element.mainTableData.mainDetails.date == payload.mainTableData.mainDetails.date
-        )
-      })
+          element.mainTable.date == payload.mainTable.date
+        );
+      });
 
-      resultData.mainTableData.rowDetails = !resultData.mainTableData.rowDetails
+      // Inverse rowDetails
+      affectedData.rowDetails = !affectedData.rowDetails;
     },
     emptyMainData: (state, payload) => {
-      state.realSimulationTableData = []
-    },
-    editChildTableData: (state, payload) => {
-      let resultData = state.realSimulationTableData.find(element => {
-        return (
-          element.year == payload.rowData.year &&
-          element.month == payload.rowData.month &&
-          element.mainTableData.mainDetails.date == payload.rowData.mainTableData.mainDetails.date
-        )
-      })
-      // console.log(payload)
-      resultData.mainTableData.childTable[payload.table].items[payload.affectedRow][payload.data.dataType] = payload.data.newValue
+      state.mainData = [];
     }
   },
   actions: {
-    addRow: (context, payload) => {
-      context.commit('addRow', payload)
+    addChildTableRow: (context, payload) => {
+      context.commit("addChildTableRow", payload);
     },
     mainTableAddRow: (context, payload) => {
-      context.commit('mainTableAddRow', payload)
+      context.commit("mainTableAddRow", payload);
     },
-    realSimulationTableDataInit: (context, payload) => {
-      context.commit('realSimulationTableDataInit', payload)
+    mainDataInit: (context, payload) => {
+      context.commit("mainDataInit", payload);
     },
     toggleRowDetails: (context, payload) => {
-      context.commit('toggleRowDetails', payload)
+      context.commit("toggleRowDetails", payload);
     },
     emptyMainData: (context, payload) => {
-      context.commit('emptyMainData')
+      context.commit("emptyMainData");
     },
     deleteChildTableRow: (context, payload) => {
-      context.commit('deleteChildTableRow', payload)
+      context.commit("deleteChildTableRow", payload);
     },
     editChildTableData: (context, payload) => {
-      context.commit('editChildTableData', payload)
+      context.commit("editChildTableData", payload);
     }
   }
-})
+});
