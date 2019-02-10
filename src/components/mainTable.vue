@@ -2,8 +2,8 @@
   <b-container fluid>
     <b-form-select @change="dateChange" v-model="selectedMonths" :options="monthOptions"/>
     <b-form-select @change="dateChange" v-model="selectedYear" :options="yearOptions"/>
-    <table class="table table-dark table-sm table-bordered">
-      <thead>
+    <table class="table table-sm table-bordered">
+      <thead class>
         <tr>
           <template v-for="field in fields">
             <template v-if="headerRender(field.label)">
