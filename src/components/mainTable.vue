@@ -379,10 +379,16 @@ export default {
 
         this.$store.dispatch("mainDataInit", tempObj);
       }
+    },
+    childTableLength: function(rowIndex, cTable) {
+      if (this.mainData[rowIndex].childTable[cTable].items.length == 0) {
+        return "";
+      } else {
+        return `${
+          this.mainData[rowIndex].childTable[cTable].items.length
+        } Activities`;
+      }
     }
-    // dataRequest: function() {
-    //   return this.;
-    // }
   },
   created: function() {
     this.generateDaysOfMonth();
