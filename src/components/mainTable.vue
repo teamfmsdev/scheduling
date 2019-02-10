@@ -63,10 +63,48 @@
                 <td class :key="index" v-else-if="index=='permitToWork'">
                   <childTable class="mx-auto" v-bind="ptw" :mainTable="mainData"></childTable>
                 </td>
-                <!-- <td :key="index" v-else-if="index=='projectActivities'"> -->
-                <!-- <childList v-bind="pa" :mainTable="mainData"></childList> -->
-                <!-- </td> -->
-                <td class="align-middle" :key="index" :contentEditable="true" v-else></td>
+                <td
+                  :id="index"
+                  class="align-middle"
+                  :key="index"
+                  @blur="editRow(val,$event)"
+                  :contentEditable="true"
+                  v-else-if="index =='day'"
+                ></td>
+                <td
+                  :id="index"
+                  class="align-middle"
+                  :key="index"
+                  @blur="editRow(val,$event)"
+                  :contentEditable="true"
+                  v-else-if="index =='date'"
+                ></td>
+                <td
+                  :id="index"
+                  v-text="val"
+                  class="align-middle"
+                  :key="index"
+                  @blur="editRow(val,$event)"
+                  :contentEditable="true"
+                  v-else-if="index =='projectActivities'"
+                ></td>
+                <td
+                  :id="index"
+                  v-text="val"
+                  class="align-middle"
+                  :key="index"
+                  @blur="editRow(val,$event)"
+                  :contentEditable="true"
+                  v-else-if="index =='contractorManagement'"
+                ></td>
+                <td
+                  :id="index"
+                  class="align-middle"
+                  :class="{active:val}"
+                  :key="index"
+                  @click="editRow(val,$event)"
+                  v-else
+                ></td>
               </template>
             </tr>
           </transition>
