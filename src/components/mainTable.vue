@@ -11,6 +11,7 @@
                 :key="field.key"
                 v-if="field.label !='Contract Management'"
                 :rowspan="2"
+                class="align-middle"
               >{{field.label}}</th>
               <th :key="field.key" v-else :colspan="8">{{field.label}}</th>
             </template>
