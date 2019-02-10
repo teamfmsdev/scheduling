@@ -28,21 +28,34 @@
 
       <tbody>
         <template v-for="(val,rowIndex) in mainData">
-          <tr :id="rowIndex" @click.stop="rowClicked" :key="rowIndex">
+          <tr class="parentRow" :id="rowIndex" @click.stop="rowClicked" :key="rowIndex">
             <template v-for="(val,dataIndex) in mainData[rowIndex]['mainTable']">
               <!-- Do a loop LATER -->
               <td :key="dataIndex" v-if="dataIndex == 'day'">{{val}}</td>
               <td :key="dataIndex" v-else-if="dataIndex == 'date'">{{val}}</td>
-              <td :key="dataIndex" v-else-if="dataIndex == 'biActivities'">{{val}}</td>
-              <td :key="dataIndex" v-else-if="dataIndex == 'permitToWork'">{{val}}</td>
+              <td
+                :key="dataIndex"
+                v-text="childTableLength(rowIndex,'biA')"
+                v-else-if="dataIndex == 'biActivities'"
+              ></td>
+              <td
+                :key="dataIndex"
+                v-text="childTableLength(rowIndex,'ptw')"
+                v-else-if="dataIndex == 'permitToWork'"
+              ></td>
               <td :key="dataIndex" v-else-if="dataIndex == 'projectActivities'">{{val}}</td>
               <td :key="dataIndex" v-else-if="dataIndex == 'contractorManagement'">{{val}}</td>
               <td :key="dataIndex" v-else-if="dataIndex == 'day'">{{val}}</td>
-              <td :key="dataIndex" v-else></td>
+              <td :key="dataIndex" :class="{active:val}" v-else></td>
             </template>
           </tr>
           <transition :key="rowIndex + 'anim'" name="fade">
-            <tr :id="rowIndex" :key="rowIndex + ' detail'" v-if="val.rowDetails==true">
+            <tr
+              class="childRow"
+              :id="rowIndex"
+              :key="rowIndex + ' detail'"
+              v-if="val.rowDetails==true"
+            >
               <template v-for="(val,index) in mainData[rowIndex]['mainTable']">
                 <td :key="index" v-if="index=='biActivities'">
                   <childTable class="mx-auto" v-bind="biA" :mainTable="mainData"></childTable>
