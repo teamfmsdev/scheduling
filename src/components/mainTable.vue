@@ -271,6 +271,25 @@ export default {
       // Toggle/inverse current clicked row its rowDetails prop
       this.$store.dispatch("toggleRowDetails", clickedRowData);
     },
+    editRow: function(currentVal, event) {
+      //rowId that matches mainTable
+      let rowId = event.target.parentNode.id;
+      // console.log(rowId);
+
+      // Whole data for mainTable row that matches rowId
+      let rowData = this.mainData[rowId];
+
+      // User typed data in <td> to be updated in vuex store
+      let newValue = event.target.innerText;
+
+      let newData = {
+        rowData: rowData,
+        tData: event.target.id,
+        data: newValue
+      };
+
+      this.$store.dispatch("mainTableEditRow", newData);
+    },
     getRowDetails: function(rowData, tName) {
       // Find affected mainData row
       let affectedData = this.$store.state.mainData.find(element => {
