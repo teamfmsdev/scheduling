@@ -110,7 +110,50 @@ export default {
       };
 
       this.$store.dispatch("editChildTableData", newData);
+    },
+    reValidate: function(event) {
+      // mainTable row Id
+      let rowId =
+        event.target.parentNode.parentNode.parentNode.parentNode.parentNode
+          .parentNode.id;
+      // childTable row Id
+      let childTableRowId = event.target.parentNode.parentNode.id;
+      // mainTable data from prop
+      let rowData = this.mainTable[rowId];
+
+      let newData = {
+        rowData: rowData,
+        table: this.tableName,
+        affectedRow: childTableRowId
+      };
+      this.$store.dispatch("reValidateRow", newData);
     }
   }
 };
 </script>
+
+
+<style lang="scss" scoped>
+td {
+  white-space: pre-wrap;
+}
+
+th,
+tr {
+  height: 1%;
+}
+tr:hover {
+  background-color: rgb(0, 177, 169);
+}
+
+th:nth-child(1) {
+  width: 15%;
+}
+th:nth-child(2) {
+  width: 65%;
+}
+th:nth-child(3) {
+  width: 20%;
+}
+</style>
+
