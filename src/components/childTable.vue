@@ -63,7 +63,7 @@ export default {
         // Id for row
         rowData: rowData,
         table: this.tableName,
-        data: { fmNo: "420", activities: "R O F L" }
+        data: { fmNo: "", activities: "" }
       };
       this.$store.dispatch("addChildTableRow", newRow);
     },
@@ -82,7 +82,7 @@ export default {
         table: this.tableName,
         data: { childTableRowId: childTableRowId }
       };
-      console.log(deletedRow);
+
       this.$store.dispatch("deleteChildTableRow", deletedRow);
     },
     editRow: function(currentVal, event) {
