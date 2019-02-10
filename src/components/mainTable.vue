@@ -411,12 +411,64 @@ export default {
 };
 </script>
 
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
+
+
+<style lang="scss" scoped>
+.active {
+  background-color: #074a4f;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
+select {
+  width: 25%;
+}
+
+td,
+th {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+th {
+  background-color: rgb(0, 177, 169);
+}
+
+table {
+  width: 100%;
+  height: 100%;
+  table-layout: fixed;
+}
+
+.parentRow {
+  td {
+    height: 37px;
+    max-height: 37px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+.parentRow:hover {
+  background-color: rgb(0, 177, 169);
+}
+
+thead {
+  tr:nth-child(1) {
+    th:nth-child(1),
+    th:nth-child(2) {
+      width: 2.5%;
+    }
+    th:nth-child(3),
+    th:nth-child(4) {
+      width: 20%;
+    }
+    th:nth-child(5) {
+      width: 15%;
+    }
+    th:nth-child(6) {
+      width: 10%;
+    }
+    th:nth-child(7) {
+      width: 15%;
+    }
+  }
 }
 </style>
