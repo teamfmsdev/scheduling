@@ -17,14 +17,14 @@
           <input
             type="button"
             class="btn btn-sm btn-outline-primary"
-            @click.stop="editRow"
-            value="*"
+            @click.stop="deleteRow"
+            value="-"
           >
           <input
             type="button"
             class="btn btn-sm btn-outline-primary"
-            @click.stop="deleteRow"
-            value="-"
+            @click.stop="reValidate"
+            value="R"
           >
         </td>
       </tr>
