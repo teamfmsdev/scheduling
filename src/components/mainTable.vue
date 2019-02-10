@@ -353,8 +353,8 @@ export default {
             biA: {
               tableName: "biA",
               fields: {
-                fmNo: "FM NO",
-                activities: "Activities",
+                fmNo: "FM#",
+                activities: "Activity",
                 buttons: "Actions"
               },
               items: []
@@ -362,8 +362,8 @@ export default {
             ptw: {
               tableName: "ptw",
               fields: {
-                fmNo: "FM NO",
-                activities: "Activities",
+                fmNo: "PTW#",
+                activities: "Activity",
                 buttons: "Actions"
               },
               items: []
