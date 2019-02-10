@@ -14,12 +14,12 @@ export default {};
 
 <style lang="scss">
 #app {
-  background-color: rgb(36, 34, 34) !important;
+  // background-color: rgb(36, 34, 34) !important;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: white;
+  // color: white;
 }
 #nav {
   padding: 30px;
