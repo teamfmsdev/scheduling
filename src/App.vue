@@ -1,14 +1,15 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link>|
+      <h1>CCFM Monthly Schedule</h1>
+      <!-- <router-link to="/">Home</router-link>| -->
     </div>
     <router-view/>
   </div>
 </template>
 
 <script>
-// import "@/styles/globalStyle.css";
+import "@/styles/globalStyle.css";
 export default {};
 </script>
 
@@ -22,7 +23,9 @@ export default {};
   // color: white;
 }
 #nav {
-  padding: 30px;
+  margin-bottom: 2%;
+  background-color: #00b1a9;
+  padding: 1rem;
   a {
     font-weight: bold;
     color: #2c3e50;
