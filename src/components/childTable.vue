@@ -64,7 +64,7 @@ export default {
   methods: {
     addChildTableRow: function(event) {
       // mainTable row Id
-      let rowId = event.target.parentNode.parentNode.parentNode.parentNode.id;
+      let rowId = event.target.parentNode.parentNode.parentNode.id;
       // mainTable data from prop
       let rowData = this.mainTable[rowId];
       // New row to be added to vuex store
@@ -78,10 +78,12 @@ export default {
     },
     deleteRow: function(event) {
       // mainTable row Id
+
       let rowId =
         event.target.parentNode.parentNode.parentNode.parentNode.parentNode
-          .parentNode.id;
-      // childTable row Id
+          .parentNode.parentNode.id;
+      // console.log(rowId);
+
       let childTableRowId = event.target.parentNode.parentNode.id;
       // Whole data for parent row
       let rowData = this.mainTable[rowId];
@@ -97,7 +99,8 @@ export default {
     editRow: function(currentVal, event) {
       // mainTable data that matches event target row Id
       let rowId =
-        event.target.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+        event.target.parentNode.parentNode.parentNode.parentNode.parentNode
+          .parentNode.id;
 
       // Affected childTable row Id
       let childTableRowId = event.target.parentNode.id;
@@ -124,7 +127,7 @@ export default {
       // mainTable row Id
       let rowId =
         event.target.parentNode.parentNode.parentNode.parentNode.parentNode
-          .parentNode.id;
+          .parentNode.parentNode.id;
       // childTable row Id
       let childTableRowId = event.target.parentNode.parentNode.id;
       // mainTable data from prop
