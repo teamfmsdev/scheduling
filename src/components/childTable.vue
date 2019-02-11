@@ -1,41 +1,50 @@
 <template>
-  <table>
-    <thead>
-      <th :key="key" v-for="(value,key) in fields">{{value}}</th>
-    </thead>
-    <tbody>
-      <tr :id="rowKey" :key="rowKey" v-for="(value,rowKey) in items">
-        <td
-          :key="key"
-          v-for="(tdVal,key) in items[rowKey]"
-          v-text="tdVal"
-          :id="key == 'fmNo'? 'fmNo':'activities'"
-          :contenteditable="true"
-          @blur="editRow(tdVal,$event)"
-        ></td>
-        <td>
-          <input
-            type="button"
-            class="btn btn-sm btn-outline-primary"
-            @click.stop="deleteRow"
-            value="-"
-          >
-          <input
-            type="button"
-            class="btn btn-sm btn-outline-primary"
-            @click.stop="reValidate"
-            value="R"
-          >
-        </td>
-      </tr>
-      <input
-        type="button"
-        value="+"
-        class="btn btn-sm btn-outline-primary"
-        @click.stop="addChildTableRow"
-      >
-    </tbody>
-  </table>
+  <div>
+    <table class="mx-auto">
+      <thead>
+        <th :key="key" v-for="(value,key) in fields">{{value}}</th>
+      </thead>
+      <tbody>
+        <tr :id="rowKey" :key="rowKey" v-for="(value,rowKey) in items">
+          <td
+            :key="key"
+            v-for="(tdVal,key) in items[rowKey]"
+            v-text="tdVal"
+            :id="key == 'fmNo'? 'fmNo':'activities'"
+            :contenteditable="true"
+            @blur="editRow(tdVal,$event)"
+          ></td>
+          <td>
+            <input
+              type="button"
+              class="btn btn-sm btn-outline-primary"
+              @click.stop="deleteRow"
+              value="-"
+            >
+            <input
+              type="button"
+              class="btn btn-sm btn-outline-primary"
+              @click.stop="reValidate"
+              value="R"
+            >
+          </td>
+        </tr>
+        <!-- <input
+          type="button"
+          value="+"
+          class="btn btn-sm btn-outline-primary"
+          @click.stop="addChildTableRow"
+        >-->
+      </tbody>
+    </table>
+    <input
+      id="addButton"
+      type="button"
+      value="+"
+      class="btn btn-sm btn-outline-primary w-25 my-3"
+      @click.stop="addChildTableRow"
+    >
+  </div>
 </template>
 
 <script>
