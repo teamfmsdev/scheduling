@@ -370,7 +370,7 @@ export default {
             pa: {
               tableName: "pa",
               // fields: { fmNo: "FM NO", activities: "Activities" },
-              items: []
+              items: [{ activities: "DUDUDU" }, { activities: "SSSS" }]
             }
           },
           rowDetails: false
@@ -382,6 +382,10 @@ export default {
     childTableLength: function(rowIndex, cTable) {
       if (this.mainData[rowIndex].childTable[cTable].items.length == 0) {
         return "";
+      } else if (this.mainData[rowIndex].childTable[cTable].items.length == 1) {
+        return `${
+          this.mainData[rowIndex].childTable[cTable].items.length
+        } Activity`;
       } else {
         return `${
           this.mainData[rowIndex].childTable[cTable].items.length
