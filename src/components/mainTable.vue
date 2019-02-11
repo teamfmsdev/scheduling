@@ -248,6 +248,7 @@ export default {
       // console.log("ROW CLICKED CALL");
       // Set the clicked row "Id" attribute as a var to match mainData index
       let clickedRowId = event.target.parentNode.id;
+      // console.log(clickedRowId);
       // Row data from vuex store mainData with index that matches clickedRowId
       let clickedRowData = this.mainData[clickedRowId];
       // Set the props to be pass to childTableComponents
@@ -422,12 +423,17 @@ export default {
 }
 select {
   width: 25%;
+  margin-bottom: 1%;
 }
 
 td,
 th {
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+td:focus {
+  border: 2px solid rgb(19, 146, 140);
 }
 
 th {
@@ -441,6 +447,8 @@ table {
 }
 
 .parentRow {
+  // color: white;
+  background-color: white;
   td {
     height: 37px;
     max-height: 37px;
@@ -451,6 +459,12 @@ table {
 
 .parentRow:hover {
   background-color: rgb(0, 177, 169);
+}
+
+.childRow {
+  background-color: white;
+  // color: white;
+  border: 2px solid rgb(2, 233, 221);
 }
 
 thead {
