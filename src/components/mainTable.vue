@@ -49,65 +49,64 @@
               <td :key="dataIndex" :class="{active:val}" v-else></td>
             </template>
           </tr>
-          <transition :key="rowIndex + 'anim'" name="fade">
-            <tr
-              class="childRow"
-              :id="rowIndex"
-              :key="rowIndex + ' detail'"
-              v-if="val.rowDetails==true"
-            >
-              <template v-for="(val,index) in mainData[rowIndex]['mainTable']">
-                <td :key="index" v-if="index=='biActivities'">
-                  <childTable class="mx-auto" v-bind="biA" :mainTable="mainData"></childTable>
-                </td>
-                <td class :key="index" v-else-if="index=='permitToWork'">
-                  <childTable class="mx-auto" v-bind="ptw" :mainTable="mainData"></childTable>
-                </td>
-                <td
-                  :id="index"
-                  class="align-middle"
-                  :key="index"
-                  @blur="editRow(val,$event)"
-                  :contentEditable="true"
-                  v-else-if="index =='day'"
-                ></td>
-                <td
-                  :id="index"
-                  class="align-middle"
-                  :key="index"
-                  @blur="editRow(val,$event)"
-                  :contentEditable="true"
-                  v-else-if="index =='date'"
-                ></td>
-                <td
-                  :id="index"
-                  v-text="val"
-                  class="align-middle"
-                  :key="index"
-                  @blur="editRow(val,$event)"
-                  :contentEditable="true"
-                  v-else-if="index =='projectActivities'"
-                ></td>
-                <td
-                  :id="index"
-                  v-text="val"
-                  class="align-middle"
-                  :key="index"
-                  @blur="editRow(val,$event)"
-                  :contentEditable="true"
-                  v-else-if="index =='contractorManagement'"
-                ></td>
-                <td
-                  :id="index"
-                  class="align-middle"
-                  :class="{active:val}"
-                  :key="index"
-                  @click="editRow(val,$event)"
-                  v-else
-                ></td>
-              </template>
-            </tr>
-          </transition>
+
+          <tr
+            class="childRow"
+            :id="rowIndex"
+            :key="rowIndex + ' detail'"
+            v-if="val.rowDetails==true"
+          >
+            <template v-for="(val,index) in mainData[rowIndex]['mainTable']">
+              <td :key="index" v-if="index=='biActivities'">
+                <childTable class="mx-auto" v-bind="biA" :mainTable="mainData"></childTable>
+              </td>
+              <td class :key="index" v-else-if="index=='permitToWork'">
+                <childTable class="mx-auto" v-bind="ptw" :mainTable="mainData"></childTable>
+              </td>
+              <td
+                :id="index"
+                class="align-middle"
+                :key="index"
+                v-else-if="index =='projectActivities'"
+              >
+                <childList v-bind="pa" :mainTable="mainData"></childList>
+              </td>
+              <td
+                :id="index"
+                class="align-middle"
+                :key="index"
+                style="border:none;"
+                v-else-if="index =='day' || index=='date'"
+              ></td>
+
+              <!-- <td
+                :id="index"
+                v-text="val"
+                class="align-middle"
+                :key="index"
+                @blur="editRow(val,$event)"
+                :contentEditable="true"
+                v-else-if="index =='projectActivities'"
+              ></td>-->
+              <td
+                :id="index"
+                v-text="val"
+                class="align-middle"
+                :key="index"
+                @blur="editRow(val,$event)"
+                :contentEditable="true"
+                v-else-if="index =='contractorManagement'"
+              ></td>
+              <td
+                :id="index"
+                class="align-middle"
+                :class="{active:val}"
+                :key="index"
+                @click="editRow(val,$event)"
+                v-else
+              ></td>
+            </template>
+          </tr>
         </template>
       </tbody>
     </table>
