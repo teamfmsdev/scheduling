@@ -146,8 +146,15 @@ export default {
 
 
 <style lang="scss" scoped>
+#addButton {
+}
+
 td {
   white-space: pre-wrap;
+}
+
+td:focus {
+  border: 2px solid rgb(19, 146, 140);
 }
 
 th,
@@ -155,7 +162,7 @@ tr {
   height: 1%;
 }
 tr:hover {
-  background-color: rgb(0, 177, 169);
+  background-color: rgba(0, 177, 168, 0.678);
 }
 
 th:nth-child(1) {
