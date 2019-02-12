@@ -153,10 +153,18 @@ export default {
 
 td {
   white-space: pre-wrap;
+  word-wrap: break-all;
 }
 
 td:focus {
   border: 2px solid rgb(19, 146, 140);
+}
+
+table {
+  width: 100%;
+  white-space: pre-wrap;
+  word-wrap: break-all;
+  word-break:break-all
 }
 
 th,
