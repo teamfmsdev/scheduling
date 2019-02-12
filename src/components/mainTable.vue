@@ -31,8 +31,8 @@
           <tr class="parentRow" :id="rowIndex" @click.stop="rowClicked" :key="rowIndex">
             <template v-for="(val,dataIndex) in mainData[rowIndex]['mainTable']">
               <!-- Do a loop LATER -->
-              <td :key="dataIndex" v-if="dataIndex == 'day'">{{val}}</td>
-              <td :key="dataIndex" v-else-if="dataIndex == 'date'">{{val}}</td>
+              <td :key="dataIndex" v-if="dataIndex == 'day'" v-text="val"></td>
+              <td :key="dataIndex" v-else-if="dataIndex == 'date'" v-text="val"></td>
               <td
                 :key="dataIndex"
                 v-text="childTableLength(rowIndex,'biA')"
@@ -71,13 +71,11 @@
               <td class :key="index" v-else-if="index=='permitToWork'">
                 <childTable class="mx-auto" v-bind="ptw" :mainTable="mainData"></childTable>
               </td>
-              <td
-                :id="index"
-                class="align-middle"
-                :key="index"
-                v-else-if="index =='projectActivities'"
-              >
+              <td :id="index" :key="index" v-else-if="index =='projectActivities'">
                 <childList v-bind="pa" :mainTable="mainData"></childList>
+              </td>
+              <td :id="index" :key="index" v-else-if="index =='contractorManagement'">
+                <childList v-bind="cm" :mainTable="mainData"></childList>
               </td>
               <td
                 :id="index"
