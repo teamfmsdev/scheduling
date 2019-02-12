@@ -57,7 +57,7 @@
               <td :key="dataIndex" :class="dynamicClass(val)" v-else></td>
             </template>
           </tr>
-
+          
           <tr
             class="childRow"
             :id="rowIndex"
@@ -95,7 +95,16 @@
               ></td>
             </template>
           </tr>
+          
         </template>
+        <tr class="totalCount">
+          <td :colspan="2" v-text="'Total'"></td>
+          <td v-text="totalLength('biA')"></td>
+          <td v-text="totalLength('ptw')"></td>
+          <td v-text="totalLength('pa')"></td>
+          <td :colspan="8"></td>
+          <td v-text="totalLength('cm')"></td>
+        </tr>
       </tbody>
     </table>
   </b-container>
