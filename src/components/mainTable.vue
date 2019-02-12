@@ -382,6 +382,22 @@ export default {
           this.mainData[rowIndex].childTable[cTable].items.length
         } Activities`;
       }
+    },
+    dynamicClass: function(colorCode) {
+      switch (colorCode) {
+        case "p0":
+          return "p0";
+        case "p1":
+          return "p1";
+        case "p2":
+          return "p2";
+        case "p3":
+          return "p3";
+        case "p4":
+          return "p4";
+        case "p5":
+          return "p5";
+      }
     }
   },
   created: function() {
@@ -411,6 +427,28 @@ export default {
 .active {
   background-color: #074a4f;
 }
+
+.p0 {
+  background-color: white;
+}
+
+.p1 {
+  background-color: darkgreen;
+}
+
+.p2 {
+  background-color: lightgreen;
+}
+.p3 {
+  background-color: yellow;
+}
+.p4 {
+  background-color: orange;
+}
+.p5 {
+  background-color: red;
+}
+
 select {
   width: 25%;
   margin-bottom: 1%;
