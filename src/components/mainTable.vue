@@ -43,10 +43,18 @@
                 v-text="childTableLength(rowIndex,'ptw')"
                 v-else-if="dataIndex == 'permitToWork'"
               ></td>
-              <td :key="dataIndex" v-else-if="dataIndex == 'projectActivities'">{{val}}</td>
-              <td :key="dataIndex" v-else-if="dataIndex == 'contractorManagement'">{{val}}</td>
-              <td :key="dataIndex" v-else-if="dataIndex == 'day'">{{val}}</td>
-              <td :key="dataIndex" :class="{active:val}" v-else></td>
+              <td
+                :key="dataIndex"
+                v-else-if="dataIndex == 'projectActivities'"
+                v-text="childTableLength(rowIndex,'pa')"
+              ></td>
+              <td
+                :key="dataIndex"
+                v-else-if="dataIndex == 'contractorManagement'"
+                v-text="childTableLength(rowIndex,'cm')"
+              ></td>
+              <!-- <td :key="dataIndex" v-else-if="dataIndex == 'day'">{{val}}</td> -->
+              <td :key="dataIndex" :class="dynamicClass(val)" v-else></td>
             </template>
           </tr>
 
