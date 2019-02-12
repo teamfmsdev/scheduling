@@ -85,28 +85,10 @@
                 v-else-if="index =='day' || index=='date'"
               ></td>
 
-              <!-- <td
-                :id="index"
-                v-text="val"
-                class="align-middle"
-                :key="index"
-                @blur="editRow(val,$event)"
-                :contentEditable="true"
-                v-else-if="index =='projectActivities'"
-              ></td>-->
-              <td
-                :id="index"
-                v-text="val"
-                class="align-middle"
-                :key="index"
-                @blur="editRow(val,$event)"
-                :contentEditable="true"
-                v-else-if="index =='contractorManagement'"
-              ></td>
               <td
                 :id="index"
                 class="align-middle"
-                :class="{active:val}"
+                :class="dynamicClass(val)"
                 :key="index"
                 @click="editRow(val,$event)"
                 v-else
