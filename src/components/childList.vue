@@ -118,7 +118,8 @@ export default {
 <style scoped>
 .liText {
   white-space: pre-wrap;
-  word-wrap: break-word;
+  word-wrap: break-all;
+  word-break:break-all;
   text-align: left;
 }
 
