@@ -194,7 +194,8 @@ export default {
       selectedDate: new Date(),
       biA: "",
       ptw: "",
-      pa: ""
+      pa: "",
+      cm: ""
     };
   },
 
