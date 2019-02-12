@@ -244,6 +244,7 @@ export default {
       this.biA = this.getRowDetails(clickedRowData, "biA");
       this.ptw = this.getRowDetails(clickedRowData, "ptw");
       this.pa = this.getRowDetails(clickedRowData, "pa");
+      this.cm = this.getRowDetails(clickedRowData, "cm");
       // Get row data with rowDetails = true from vuex
       let currentExpandedRow = this.$store.getters.currentExpandedRow;
 
