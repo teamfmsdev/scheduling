@@ -329,14 +329,14 @@ export default {
             biActivities: "",
             permitToWork: "",
             projectActivities: "",
-            n1: false,
-            n2: false,
-            n3: false,
-            n4: false,
-            n5: false,
-            n6: false,
-            n7: false,
-            n8: false,
+            n1: "p0",
+            n2: "p0",
+            n3: "p0",
+            n4: "p0",
+            n5: "p0",
+            n6: "p0",
+            n7: "p0",
+            n8: "p0",
             contractorManagement: ""
           },
           childTable: {
@@ -360,8 +360,12 @@ export default {
             },
             pa: {
               tableName: "pa",
-              // fields: { fmNo: "FM NO", activities: "Activities" },
-              items: [{ activities: "DUDUDU" }, { activities: "SSSS" }]
+
+              items: []
+            },
+            cm: {
+              tableName: "cm",
+              items: []
             }
           },
           rowDetails: false
