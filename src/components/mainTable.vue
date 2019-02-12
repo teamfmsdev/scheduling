@@ -396,6 +396,23 @@ export default {
         } Activities`;
       }
     },
+    totalLength: function(colName){
+        let currentMonthData = this.$store.state.mainData.filter(element=>{
+          return (element.year == this.selectedYear &&
+          element.month == this.selectedMonths);
+          
+        })
+        let total = 0;
+        currentMonthData.forEach((element)=>{
+          total+=element.childTable[colName].items.length;
+        });
+        if(total>1)
+        return `${total} Activities`
+        else
+        return `${total} Activity`
+        // (total>1) ? return `${total} Activities`: `${total} Activity`;
+        // console.log(currentMonthData);
+      },
     dynamicClass: function(colorCode) {
       switch (colorCode) {
         case "p0":
@@ -498,6 +515,9 @@ table {
   }
 }
 
+.totalCount{
+  background-color:yellow;
+}
 .parentRow:hover {
   background-color: rgb(0, 177, 169);
 }
@@ -529,4 +549,6 @@ thead {
     }
   }
 }
+
+
 </style>
