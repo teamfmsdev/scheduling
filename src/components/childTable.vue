@@ -178,12 +178,15 @@ tr:hover {
 
 th:nth-child(1) {
   width: 15%;
+  max-width: 15%;
 }
 th:nth-child(2) {
   width: 65%;
+  max-width: 65%;
 }
 th:nth-child(3) {
   width: 20%;
+  max-width: 20%;
 }
 </style>
 
