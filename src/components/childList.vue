@@ -4,7 +4,12 @@
       <li :id="index" v-for="(val,index) in items" :key="index" class="list-group-item p-1">
         <div class="row no-gutters p-1">
           <!-- <div class="col-sm"></div> -->
-          <div :contenteditable="true" class="col-sm-11 liText" v-text="val.activities"></div>
+          <div
+            @blur="editRow($event)"
+            :contenteditable="true"
+            class="col-sm-11 liText"
+            v-text="val.activities"
+          ></div>
           <input
             @click="deleteRow"
             type="button"
@@ -46,7 +51,7 @@ export default {
       let newRow = {
         rowData: rowData,
         table: this.tableName,
-        data: { activities: "O Y E A" }
+        data: { activities: "" }
       };
       this.$store.dispatch("addChildTableRow", newRow);
     },
@@ -69,6 +74,42 @@ export default {
       };
 
       this.$store.dispatch("deleteChildTableRow", deletedRow);
+    },
+    editRow: function(event) {
+      // console.log(
+      //   event.target.parentNode.parentNode.parentNode.parentNode.parentNode
+      //     .parentNode.id
+      // );
+
+      // mainTable data that matches event target row Id
+      let rowId =
+        event.target.parentNode.parentNode.parentNode.parentNode.parentNode
+          .parentNode.id;
+
+      // Affected list row Id
+      let childTableRowId = event.target.parentNode.parentNode.id;
+      // console.log(childTableRowId);
+      // return true;
+
+      // Whole data for mainTable row
+      let rowData = this.mainTable[rowId];
+      // To diffrentiate which childTable <td> is
+      // affected
+      let dataType = "activities";
+      // User typed data in <td> to be updated in
+      // vuex store
+      let newValue = event.target.innerText;
+      // Trim start end
+      newValue = newValue.trim();
+      // To be send to vuex mutations
+      let newData = {
+        rowData: rowData,
+        table: this.tableName,
+        affectedRow: childTableRowId,
+        data: { newValue: newValue, dataType: dataType }
+      };
+
+      this.$store.dispatch("editChildTableData", newData);
     }
   }
 };
@@ -78,6 +119,14 @@ export default {
 .liText {
   white-space: pre-wrap;
   word-wrap: break-word;
+  text-align: left;
+}
+
+li:hover {
+  border: 2px solid rgba(0, 177, 168, 0.678);
+}
+li:focus {
+  border: 2px solid rgb(19, 146, 140);
 }
 
 .liBtn {
