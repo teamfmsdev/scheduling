@@ -12,9 +12,10 @@
             v-text="tdVal"
             :id="key == 'fmNo'? 'fmNo':'activities'"
             :contenteditable="true"
+            class="align-middle"
             @blur="editRow(tdVal,$event)"
           ></td>
-          <td>
+          <td class="align-middle">
             <input
               type="button"
               class="btn btn-sm btn-outline-primary"
