@@ -22,6 +22,7 @@
               value="-"
             >
             <input
+              v-if="tableName=='ptw'"
               type="button"
               class="btn btn-sm btn-outline-primary"
               @click.stop="reValidate"
@@ -162,7 +163,8 @@ tr {
   height: 1%;
 }
 tr:hover {
-  background-color: rgba(0, 177, 168, 0.678);
+  border: 2px solid rgba(0, 177, 168, 0.678);
+  // background-color: rgba(0, 177, 168, 0.678);
 }
 
 th:nth-child(1) {
