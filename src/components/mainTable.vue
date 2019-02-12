@@ -57,7 +57,7 @@
               <td :key="dataIndex" :class="dynamicClass(val)" v-else></td>
             </template>
           </tr>
-          
+
           <tr
             class="childRow"
             :id="rowIndex"
@@ -95,7 +95,7 @@
               ></td>
             </template>
           </tr>
-          
+
         </template>
         <tr class="totalCount">
           <td :colspan="2" v-text="'Total'"></td>
@@ -111,151 +111,151 @@
 </template>
 
 <script>
-import childTable from "@/components/childTable.vue";
-import childList from "@/components/childList.vue";
+import childTable from '@/components/childTable.vue'
+import childList from '@/components/childList.vue'
 
 export default {
-  data() {
+  data () {
     return {
       fields: [
         {
-          key: "day",
-          label: "Day",
-          thClass: "align-middle",
-          attr: "",
-          span: "",
+          key: 'day',
+          label: 'Day',
+          thClass: 'align-middle',
+          attr: '',
+          span: '',
           sortable: false
         },
         {
-          key: "date",
-          label: "Date",
-          thClass: "align-middle",
-          attr: "",
-          span: "",
+          key: 'date',
+          label: 'Date',
+          thClass: 'align-middle',
+          attr: '',
+          span: '',
           sortable: false
         },
         {
-          key: "biActivities",
-          label: "B&I Activities",
-          attr: "",
-          span: "",
-          thClass: "align-middle"
+          key: 'biActivities',
+          label: 'B&I Activities',
+          attr: '',
+          span: '',
+          thClass: 'align-middle'
         },
         {
-          key: "permitToWork",
-          label: "Permit To Work",
-          attr: "",
-          span: "",
-          thClass: "align-middle"
+          key: 'permitToWork',
+          label: 'Permit To Work',
+          attr: '',
+          span: '',
+          thClass: 'align-middle'
         },
         {
-          key: "projectActivities",
-          label: "Project Activities",
-          attr: "",
-          span: "",
-          thClass: "align-middle"
+          key: 'projectActivities',
+          label: 'Project Activities',
+          attr: '',
+          span: '',
+          thClass: 'align-middle'
         },
-        { key: "1", label: "1", attr: "", span: "" },
-        { key: "2", label: "2", attr: "", span: "" },
-        { key: "3", label: "3", attr: "", span: "" },
-        { key: "4", label: "4", attr: "", span: "" },
-        { key: "5", label: "5", attr: "", span: "" },
-        { key: "6", label: "6", attr: "", span: "" },
-        { key: "7", label: "7", attr: "", span: "" },
-        { key: "8", label: "8", attr: "", span: "" },
+        { key: '1', label: '1', attr: '', span: '' },
+        { key: '2', label: '2', attr: '', span: '' },
+        { key: '3', label: '3', attr: '', span: '' },
+        { key: '4', label: '4', attr: '', span: '' },
+        { key: '5', label: '5', attr: '', span: '' },
+        { key: '6', label: '6', attr: '', span: '' },
+        { key: '7', label: '7', attr: '', span: '' },
+        { key: '8', label: '8', attr: '', span: '' },
         {
-          key: "contractManagement",
-          label: "Contract Management",
-          attr: "",
-          span: ""
+          key: 'contractManagement',
+          label: 'Contract Management',
+          attr: '',
+          span: ''
         },
         {
-          key: "contractorManagement",
-          label: "Contractor Management",
-          attr: "",
-          span: ""
+          key: 'contractorManagement',
+          label: 'Contractor Management',
+          attr: '',
+          span: ''
         }
       ],
       items: [],
-      selectedMonths: "Jan",
+      selectedMonths: 'Jan',
       monthOptions: [
-        { value: "Jan", text: "January" },
-        { value: "Feb", text: "February" },
-        { value: "Mar", text: "March" },
-        { value: "Apr", text: "April" },
-        { value: "May", text: "May" },
-        { value: "Jun", text: "June" },
-        { value: "Jul", text: "July" },
-        { value: "Aug", text: "August" },
-        { value: "Sep", text: "September" },
-        { value: "Oct", text: "October" },
-        { value: "Nov", text: "November" },
-        { value: "Dec", text: "December" }
+        { value: 'Jan', text: 'January' },
+        { value: 'Feb', text: 'February' },
+        { value: 'Mar', text: 'March' },
+        { value: 'Apr', text: 'April' },
+        { value: 'May', text: 'May' },
+        { value: 'Jun', text: 'June' },
+        { value: 'Jul', text: 'July' },
+        { value: 'Aug', text: 'August' },
+        { value: 'Sep', text: 'September' },
+        { value: 'Oct', text: 'October' },
+        { value: 'Nov', text: 'November' },
+        { value: 'Dec', text: 'December' }
       ],
-      selectedYear: "2019",
+      selectedYear: '2019',
       yearOptions: [
-        { value: "2019", text: "2019" },
-        { value: "2020", text: "2020" },
-        { value: "2021", text: "2021" },
-        { value: "2022", text: "2022" },
-        { value: "2023", text: "2023" }
+        { value: '2019', text: '2019' },
+        { value: '2020', text: '2020' },
+        { value: '2021', text: '2021' },
+        { value: '2022', text: '2022' },
+        { value: '2023', text: '2023' }
       ],
       selectedDate: new Date(),
-      biA: "",
-      ptw: "",
-      pa: "",
-      cm: ""
-    };
+      biA: '',
+      ptw: '',
+      pa: '',
+      cm: ''
+    }
   },
 
   methods: {
-    headerRender: function(label) {
+    headerRender: function (label) {
       return (
-        label != "1" &&
-        label != "2" &&
-        label != "3" &&
-        label != "4" &&
-        label != "5" &&
-        label != "6" &&
-        label != "7" &&
-        label != "8"
-      );
+        label != '1' &&
+        label != '2' &&
+        label != '3' &&
+        label != '4' &&
+        label != '5' &&
+        label != '6' &&
+        label != '7' &&
+        label != '8'
+      )
     },
-    rowDetailsRender: function(index) {
-      if (index != "rowDetails") {
+    rowDetailsRender: function (index) {
+      if (index != 'rowDetails') {
         switch (index) {
-          case "biActivities":
-          case "permitToWork":
-          case "projectActivities":
-          case "n1":
-          case "n2":
-          case "n3":
-          case "n4":
-          case "n5":
-          case "n6":
-          case "n7":
-          case "n8":
-          case "contractorManagement":
-            return true;
+          case 'biActivities':
+          case 'permitToWork':
+          case 'projectActivities':
+          case 'n1':
+          case 'n2':
+          case 'n3':
+          case 'n4':
+          case 'n5':
+          case 'n6':
+          case 'n7':
+          case 'n8':
+          case 'contractorManagement':
+            return true
           default:
-            return false;
+            return false
         }
       }
     },
-    rowClicked: function(event) {
+    rowClicked: function (event) {
       // console.log("ROW CLICKED CALL");
       // Set the clicked row "Id" attribute as a var to match mainData index
-      let clickedRowId = event.target.parentNode.id;
+      let clickedRowId = event.target.parentNode.id
       // console.log(clickedRowId);
       // Row data from vuex store mainData with index that matches clickedRowId
-      let clickedRowData = this.mainData[clickedRowId];
+      let clickedRowData = this.mainData[clickedRowId]
       // Set the props to be pass to childTableComponents
-      this.biA = this.getRowDetails(clickedRowData, "biA");
-      this.ptw = this.getRowDetails(clickedRowData, "ptw");
-      this.pa = this.getRowDetails(clickedRowData, "pa");
-      this.cm = this.getRowDetails(clickedRowData, "cm");
+      this.biA = this.getRowDetails(clickedRowData, 'biA')
+      this.ptw = this.getRowDetails(clickedRowData, 'ptw')
+      this.pa = this.getRowDetails(clickedRowData, 'pa')
+      this.cm = this.getRowDetails(clickedRowData, 'cm')
       // Get row data with rowDetails = true from vuex
-      let currentExpandedRow = this.$store.getters.currentExpandedRow;
+      let currentExpandedRow = this.$store.getters.currentExpandedRow
 
       if (currentExpandedRow.length > 0) {
         currentExpandedRow.forEach(row => {
@@ -263,195 +263,189 @@ export default {
           row.year != clickedRowData.year ||
           row.month != clickedRowData.month ||
           row.mainTable.date != clickedRowData.mainTable.date
-            ? this.$store.dispatch("toggleRowDetails", row)
-            : "";
-        });
+            ? this.$store.dispatch('toggleRowDetails', row)
+            : ''
+        })
       }
       // Toggle/inverse current clicked row its rowDetails prop
-      this.$store.dispatch("toggleRowDetails", clickedRowData);
+      this.$store.dispatch('toggleRowDetails', clickedRowData)
     },
-    editRow: function(currentVal, event) {
-      //rowId that matches mainTable
-      let rowId = event.target.parentNode.id;
+    editRow: function (currentVal, event) {
+      // rowId that matches mainTable
+      let rowId = event.target.parentNode.id
       // console.log(rowId);
 
       // Whole data for mainTable row that matches rowId
-      let rowData = this.mainData[rowId];
+      let rowData = this.mainData[rowId]
 
       // User typed data in <td> to be updated in vuex store
-      let newValue = event.target.innerText;
+      let newValue = event.target.innerText
 
       let newData = {
         rowData: rowData,
         tData: event.target.id,
         data: newValue
-      };
+      }
 
-      this.$store.dispatch("mainTableEditRow", newData);
+      this.$store.dispatch('mainTableEditRow', newData)
     },
-    getRowDetails: function(rowData, tName) {
+    getRowDetails: function (rowData, tName) {
       // Find affected mainData row
       let affectedData = this.$store.state.mainData.find(element => {
         return (
           element.year == rowData.year &&
           element.month == rowData.month &&
           element.mainTable.date == rowData.mainTable.date
-        );
-      });
+        )
+      })
       // Return the mainData childTable with key that matches tName
-      return affectedData.childTable[tName];
+      return affectedData.childTable[tName]
     },
-    dateChange: function() {
-      this.$nextTick(function() {
+    dateChange: function () {
+      this.$nextTick(function () {
         // If existing data for month/year is 0
         if (this.mainData.length == 0) {
-          this.generateDaysOfMonth();
+          this.generateDaysOfMonth()
         }
-      });
+      })
     },
-    getDays: function(year, month) {
-      let date = new Date(year, month, 1);
-      let days = [];
+    getDays: function (year, month) {
+      let date = new Date(year, month, 1)
+      let days = []
       while (date.getMonth() == month) {
         days.push({
-          day: date.toLocaleString("en-gb", { weekday: "short" }),
+          day: date.toLocaleString('en-gb', { weekday: 'short' }),
           date: date.getDate()
-        });
-        date.setDate(date.getDate() + 1);
+        })
+        date.setDate(date.getDate() + 1)
       }
-      return days;
+      return days
     },
-    generateDaysOfMonth: function() {
-      this.selectedDate = new Date(this.currentSelectedDate);
-      let year = this.selectedDate.getFullYear();
-      let month = this.selectedDate.getMonth();
-      let days = this.getDays(year, month);
+    generateDaysOfMonth: function () {
+      this.selectedDate = new Date(this.currentSelectedDate)
+      let year = this.selectedDate.getFullYear()
+      let month = this.selectedDate.getMonth()
+      let days = this.getDays(year, month)
       // Empty store MainData
       // this.$store.dispatch("emptyMainData");
       for (let day of days) {
         let tempObj = {
-          month: this.selectedDate.toLocaleString("en-gb", { month: "short" }),
+          month: this.selectedDate.toLocaleString('en-gb', { month: 'short' }),
           year: year,
           mainTable: {
             day: day.day,
             date: day.date,
-            biActivities: "",
-            permitToWork: "",
-            projectActivities: "",
-            n1: "p0",
-            n2: "p0",
-            n3: "p0",
-            n4: "p0",
-            n5: "p0",
-            n6: "p0",
-            n7: "p0",
-            n8: "p0",
-            contractorManagement: ""
+            biActivities: '',
+            permitToWork: '',
+            projectActivities: '',
+            n1: 'p0',
+            n2: 'p0',
+            n3: 'p0',
+            n4: 'p0',
+            n5: 'p0',
+            n6: 'p0',
+            n7: 'p0',
+            n8: 'p0',
+            contractorManagement: ''
           },
           childTable: {
             biA: {
-              tableName: "biA",
+              tableName: 'biA',
               fields: {
-                fmNo: "FM#",
-                activities: "Activity",
-                buttons: "Actions"
+                fmNo: 'FM#',
+                activities: 'Activity',
+                buttons: 'Actions'
               },
               items: []
             },
             ptw: {
-              tableName: "ptw",
+              tableName: 'ptw',
               fields: {
-                fmNo: "PTW#",
-                activities: "Activity",
-                buttons: "Actions"
+                fmNo: 'PTW#',
+                activities: 'Activity',
+                buttons: 'Actions'
               },
               items: []
             },
             pa: {
-              tableName: "pa",
+              tableName: 'pa',
 
               items: []
             },
             cm: {
-              tableName: "cm",
+              tableName: 'cm',
               items: []
             }
           },
           rowDetails: false
-        };
+        }
 
-        this.$store.dispatch("mainDataInit", tempObj);
+        this.$store.dispatch('mainDataInit', tempObj)
       }
     },
-    childTableLength: function(rowIndex, cTable) {
+    childTableLength: function (rowIndex, cTable) {
       if (this.mainData[rowIndex].childTable[cTable].items.length == 0) {
-        return "";
+        return ''
       } else if (this.mainData[rowIndex].childTable[cTable].items.length == 1) {
         return `${
           this.mainData[rowIndex].childTable[cTable].items.length
-        } Activity`;
+        } Activity`
       } else {
         return `${
           this.mainData[rowIndex].childTable[cTable].items.length
-        } Activities`;
+        } Activities`
       }
     },
-    totalLength: function(colName){
-        let currentMonthData = this.$store.state.mainData.filter(element=>{
-          return (element.year == this.selectedYear &&
-          element.month == this.selectedMonths);
-          
-        })
-        let total = 0;
-        currentMonthData.forEach((element)=>{
-          total+=element.childTable[colName].items.length;
-        });
-        if(total>1)
-        return `${total} Activities`
-        else
-        return `${total} Activity`
-        // (total>1) ? return `${total} Activities`: `${total} Activity`;
-        // console.log(currentMonthData);
-      },
-    dynamicClass: function(colorCode) {
+    totalLength: function (colName) {
+      let currentMonthData = this.$store.state.mainData.filter(element => {
+        return (element.year == this.selectedYear &&
+          element.month == this.selectedMonths)
+      })
+      let total = 0
+      currentMonthData.forEach((element) => {
+        total += element.childTable[colName].items.length
+      })
+      if (total > 1) { return `${total} Activities` } else { return `${total} Activity` }
+      // (total>1) ? return `${total} Activities`: `${total} Activity`;
+      // console.log(currentMonthData);
+    },
+    dynamicClass: function (colorCode) {
       switch (colorCode) {
-        case "p0":
-          return "p0";
-        case "p1":
-          return "p1";
-        case "p2":
-          return "p2";
-        case "p3":
-          return "p3";
-        case "p4":
-          return "p4";
-        case "p5":
-          return "p5";
+        case 'p0':
+          return 'p0'
+        case 'p1':
+          return 'p1'
+        case 'p2':
+          return 'p2'
+        case 'p3':
+          return 'p3'
+        case 'p4':
+          return 'p4'
+        case 'p5':
+          return 'p5'
       }
     }
   },
-  created: function() {
-    this.generateDaysOfMonth();
+  created: function () {
+    this.generateDaysOfMonth()
   },
   computed: {
-    currentSelectedDate: function() {
-      let month = this.selectedDate.getMonth();
-      let year = this.selectedDate.getFullYear();
-      return `${this.selectedMonths},1,${this.selectedYear}`;
+    currentSelectedDate: function () {
+      let month = this.selectedDate.getMonth()
+      let year = this.selectedDate.getFullYear()
+      return `${this.selectedMonths},1,${this.selectedYear}`
     },
-    mainData() {
+    mainData () {
       return this.$store.state.mainData.filter(
         element =>
           element.month == this.selectedMonths &&
           element.year == this.selectedYear
-      );
+      )
     }
   },
   components: { childTable, childList }
-};
+}
 </script>
-
-
 
 <style lang="scss" scoped>
 .active {
@@ -549,6 +543,5 @@ thead {
     }
   }
 }
-
 
 </style>

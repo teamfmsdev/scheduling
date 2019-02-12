@@ -6,14 +6,14 @@
 <script>
 // @ is an alias to /src
 
-import mainTable from "@/components/mainTable.vue";
+import mainTable from '@/components/mainTable.vue'
 
 export default {
-  name: "home",
+  name: 'home',
   components: {
     mainTable
   }
-};
+}
 </script>
 
  <style scoped>

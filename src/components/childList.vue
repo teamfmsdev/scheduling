@@ -29,7 +29,6 @@
   </div>
 </template>
 
-
 <script>
 export default {
   props: {
@@ -37,45 +36,45 @@ export default {
     tableName: String,
     mainTable: Array
   },
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {
-    addRow(event) {
+    addRow (event) {
       // mainTable row id
-      let rowId = event.target.parentNode.parentNode.parentNode.id;
+      let rowId = event.target.parentNode.parentNode.parentNode.id
 
       // mainTable data from prop
-      let rowData = this.mainTable[rowId];
+      let rowData = this.mainTable[rowId]
       // New row to be added to vuex store
       let newRow = {
         rowData: rowData,
         table: this.tableName,
-        data: { activities: "" }
-      };
-      this.$store.dispatch("addChildTableRow", newRow);
+        data: { activities: '' }
+      }
+      this.$store.dispatch('addChildTableRow', newRow)
     },
-    deleteRow: function(event) {
+    deleteRow: function (event) {
       // mainTable row Id
       let rowId =
         event.target.parentNode.parentNode.parentNode.parentNode.parentNode
-          .parentNode.id;
+          .parentNode.id
 
-      let childTableRowId = event.target.parentNode.parentNode.id;
+      let childTableRowId = event.target.parentNode.parentNode.id
 
-      console.log(childTableRowId);
+      console.log(childTableRowId)
       // Whole data for parent row
-      let rowData = this.mainTable[rowId];
+      let rowData = this.mainTable[rowId]
 
       let deletedRow = {
         rowData: rowData,
         table: this.tableName,
         data: { childTableRowId: childTableRowId }
-      };
+      }
 
-      this.$store.dispatch("deleteChildTableRow", deletedRow);
+      this.$store.dispatch('deleteChildTableRow', deletedRow)
     },
-    editRow: function(event) {
+    editRow: function (event) {
       // console.log(
       //   event.target.parentNode.parentNode.parentNode.parentNode.parentNode
       //     .parentNode.id
@@ -84,35 +83,35 @@ export default {
       // mainTable data that matches event target row Id
       let rowId =
         event.target.parentNode.parentNode.parentNode.parentNode.parentNode
-          .parentNode.id;
+          .parentNode.id
 
       // Affected list row Id
-      let childTableRowId = event.target.parentNode.parentNode.id;
+      let childTableRowId = event.target.parentNode.parentNode.id
       // console.log(childTableRowId);
       // return true;
 
       // Whole data for mainTable row
-      let rowData = this.mainTable[rowId];
+      let rowData = this.mainTable[rowId]
       // To diffrentiate which childTable <td> is
       // affected
-      let dataType = "activities";
+      let dataType = 'activities'
       // User typed data in <td> to be updated in
       // vuex store
-      let newValue = event.target.innerText;
+      let newValue = event.target.innerText
       // Trim start end
-      newValue = newValue.trim();
+      newValue = newValue.trim()
       // To be send to vuex mutations
       let newData = {
         rowData: rowData,
         table: this.tableName,
         affectedRow: childTableRowId,
         data: { newValue: newValue, dataType: dataType }
-      };
+      }
 
-      this.$store.dispatch("editChildTableData", newData);
+      this.$store.dispatch('editChildTableData', newData)
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -134,4 +133,3 @@ li:focus {
   height: 1%;
 }
 </style>
-

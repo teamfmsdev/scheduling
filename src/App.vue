@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import "@/styles/globalStyle.css";
-export default {};
+import '@/styles/globalStyle.css'
+export default {}
 </script>
 
 <style lang="scss">
