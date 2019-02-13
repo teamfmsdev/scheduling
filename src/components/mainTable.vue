@@ -95,7 +95,6 @@
               ></td>
             </template>
           </tr>
-
         </template>
         <tr class="totalCount">
           <td :colspan="2" v-text="'Total'"></td>
@@ -113,10 +112,12 @@
 <script>
 import childTable from '@/components/childTable.vue'
 import childList from '@/components/childList.vue'
+import axios from 'axios'
 
 export default {
   data () {
     return {
+      axiData: '',
       fields: [
         {
           key: 'day',
@@ -398,14 +399,20 @@ export default {
     },
     totalLength: function (colName) {
       let currentMonthData = this.$store.state.mainData.filter(element => {
-        return (element.year == this.selectedYear &&
-          element.month == this.selectedMonths)
+        return (
+          element.year == this.selectedYear &&
+          element.month == this.selectedMonths
+        )
       })
       let total = 0
-      currentMonthData.forEach((element) => {
+      currentMonthData.forEach(element => {
         total += element.childTable[colName].items.length
       })
-      if (total > 1) { return `${total} Activities` } else { return `${total} Activity` }
+      if (total > 1) {
+        return `${total} Activities`
+      } else {
+        return `${total} Activity`
+      }
       // (total>1) ? return `${total} Activities`: `${total} Activity`;
       // console.log(currentMonthData);
     },
@@ -428,6 +435,13 @@ export default {
   },
   created: function () {
     this.generateDaysOfMonth()
+    axios
+      .get('http://localhost/scheduling/public/server/saveData.php', {
+        params: {
+          message: 'WAZZUP'
+        }
+      })
+      .then(response => console.log(response.data))
   },
   computed: {
     currentSelectedDate: function () {
@@ -509,8 +523,8 @@ table {
   }
 }
 
-.totalCount{
-  background-color:yellow;
+.totalCount {
+  background-color: yellow;
 }
 .parentRow:hover {
   background-color: rgb(0, 177, 169);
@@ -543,5 +557,4 @@ thead {
     }
   }
 }
-
 </style>
