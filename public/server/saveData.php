@@ -1,11 +1,23 @@
 <?php
-  // require "connection.php";
-// $dummyData;
+  require "connection.php";
 
-// foreach ($_GET as $key => $value) {
-  
-// }
+  $data = $_GET['date'];
+  $stmt = $con -> prepare("INSERT INTO `parentRow`(`date`) VALUES
+  (?)");
+$i=1;
+foreach ($_GET as $key => $value) {
+  $stmt -> bindValue($i,$data);
+}
 
-echo $_GET['message'];
+  try
+  {    
+      $stmt->execute();
+      echo "Insert success";
+  }
+  catch (PDOException $e)
+  {
+      echo "Insert FAILED";
+  }
+
 
 ?>
