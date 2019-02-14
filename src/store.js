@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
+import dayjs from 'dayjs'
 
 Vue.use(Vuex)
 
@@ -26,6 +28,22 @@ export default new Vuex.Store({
       })
       let { childTable } = affectedData
       childTable[childTableName].items.push(data)
+
+      let date = dayjs(
+        new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)
+      ).format('YYYY-MM-DD')
+      axios
+        .get('http://localhost/Schdeuling/public/server/updateData.php', {
+          params: {
+            date: date,
+            table: table,
+            row: childTable[childTableName].length - 1,
+            $column: '',
+            $newValue: '',
+            operation: 'addChildTableRow'
+          }
+        })
+        .then(response => console.log(response.data))
     },
     deleteChildTableRow: (state, payload) => {
       // Destructure
