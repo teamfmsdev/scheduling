@@ -112,7 +112,7 @@
 <script>
 import childTable from '@/components/childTable.vue'
 import childList from '@/components/childList.vue'
-import axios from 'axios'
+// import axios from "axios";
 
 export default {
   data () {
@@ -383,6 +383,11 @@ export default {
 
         this.$store.dispatch('mainDataInit', tempObj)
       }
+      this.$store.dispatch('mainDataAjaxUpdate', {
+        day: '1',
+        month: this.selectedMonths,
+        year: this.selectedYear
+      })
     },
     childTableLength: function (rowIndex, cTable) {
       if (this.mainData[rowIndex].childTable[cTable].items.length == 0) {
@@ -435,13 +440,6 @@ export default {
   },
   created: function () {
     this.generateDaysOfMonth()
-    axios
-      .get('http://localhost/scheduling/public/server/saveData.php', {
-        params: {
-          message: 'WAZZUP'
-        }
-      })
-      .then(response => console.log(response.data))
   },
   computed: {
     currentSelectedDate: function () {
