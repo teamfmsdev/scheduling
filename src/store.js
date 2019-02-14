@@ -77,10 +77,27 @@ export default new Vuex.Store({
       // Assigning new value to affected childTable
       // column
       childTable[table].items[affectedRow][data.dataType] = data.newValue
+      // DATABASE UPDATING
+      let date = dayjs(
+        new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)
+      ).format('YYYY-MM-DD')
+      axios
+        .get('http://localhost/Schdeuling/public/server/updateData.php', {
+          params: {
+            date: date,
+            table: table,
+            row: affectedRow,
+            type: data.dataType,
+            data: data.newValue,
+            operation: 'editChildTabledata'
+          }
+        })
+        .then(response => console.log(response.data))
     },
     mainTableAddRow: (state, payload) => {
       state.push(payload)
     },
+    // Color rotation function for parentRow
     mainTableEditRow: (state, payload) => {
       let { rowData, tData, data } = payload
 
@@ -133,6 +150,33 @@ export default new Vuex.Store({
     },
     mainDataInit: (state, payload) => {
       state.mainData.push(payload)
+
+      let date = dayjs(
+        new Date(`${payload.mainTable.date}/${payload.month}/${payload.year}`)
+      ).format('YYYY-MM-DD')
+
+      // axios
+      //   .get("http://localhost/Schdeuling/public/server/saveData.php", {
+      //     params: {
+      //       date: date,
+      //       operation: "mainDataInit"
+      //     }
+      //   })
+      //   .then(response => console.log(response.data));
+    },
+    mainDataAjaxUpdate: (state, payload) => {
+      // Date to choose from
+      let date = dayjs(
+        new Date(`${payload.day}/${payload.month}/${payload.year}`)
+      ).format('YYYY-MM-DD')
+
+      axios.get('http://localhost/Schdeuling/public/server/retrieveData.php', {
+        params: {
+          date: '2019-02-13',
+          operation: 'mainDataAjaxUpdate'
+        }
+      })
+      // .then(response => console.log(response.data));
     },
     toggleRowDetails: (state, payload) => {
       // Affected mainData row
@@ -199,6 +243,9 @@ export default new Vuex.Store({
     },
     reValidateRow: (context, payload) => {
       context.commit('reValidateRow', payload)
+    },
+    mainDataAjaxUpdate: (context, payload) => {
+      context.commit('mainDataAjaxUpdate', payload)
     }
   }
 })
