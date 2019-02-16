@@ -6,15 +6,17 @@
       </thead>
       <tbody>
         <tr :id="rowKey" :key="rowKey" v-for="(value,rowKey) in items">
-          <td
-            :key="key"
-            v-for="(tdVal,key) in items[rowKey]"
-            v-text="tdVal"
-            :id="key == 'fmNo'? 'fmNo':'activities'"
-            :contenteditable="true"
-            class="align-middle"
-            @blur="editRow(tdVal,$event)"
-          ></td>
+          <template v-for="(tdVal,key) in items[rowKey]">
+            <td
+              :key="key"
+              v-if="key=='fmNo' || key=='activities'"
+              v-text="tdVal"
+              :id="key == 'fmNo'? 'fmNo':'activities'"
+              :contenteditable="true"
+              class="align-middle"
+              @blur="editRow(tdVal,$event)"
+            ></td>
+          </template>
           <td class="align-middle">
             <input
               type="button"
@@ -163,7 +165,7 @@ table {
   width: 100%;
   white-space: pre-wrap;
   word-wrap: break-all;
-  word-break:break-all
+  word-break: break-all;
 }
 
 th,
