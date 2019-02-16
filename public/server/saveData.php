@@ -2,8 +2,8 @@
   require "connection.php";
 
   $data = $_GET['date'];
-  $stmt = $con -> prepare("INSERT INTO `parentRow`(`date`) VALUES
-  (?)");
+  $stmt = $con -> prepare("INSERT IGNORE INTO `parentRow`(`date`) VALUES
+  (?)" );
 $i=1;
 foreach ($_GET as $key => $value) {
   $stmt -> bindValue($i,$data);
