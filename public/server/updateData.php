@@ -76,7 +76,8 @@ if($stmt -> execute()){
 }
 elseif($data["operation"]=="mainTableEditRow"){
 
-    $stmt= $con -> prepare("UPDATE `$table` SET `$column`='$newValue' WHERE `date`='$date'");
+    $stmt= $con -> prepare("UPDATE `$table` SET `$column`='$newValue' WHERE YEAR(`date`)=YEAR('$date')
+    AND MONTH(`date`)=MONTH('$date') AND DAY(`date`)>=DAY('$date')");
 
     if ($stmt->execute()){
       $message["serverMessage"] = "Color updated";
