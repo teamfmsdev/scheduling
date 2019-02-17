@@ -101,7 +101,14 @@
           <td v-text="totalLength('biA')"></td>
           <td v-text="totalLength('ptw')"></td>
           <td v-text="totalLength('pa')"></td>
-          <td :colspan="8"></td>
+          <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n1'])"></td>
+          <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n2'])"></td>
+          <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n3'])"></td>
+          <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n4'])"></td>
+          <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n5'])"></td>
+          <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n6'])"></td>
+          <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n7'])"></td>
+          <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n8'])"></td>
           <td v-text="totalLength('cm')"></td>
         </tr>
       </tbody>
@@ -112,6 +119,9 @@
 <script>
 import childTable from '@/components/childTable.vue'
 import childList from '@/components/childList.vue'
+import dayjs from 'dayjs'
+import axios from 'axios'
+import { resolve, Promise } from 'q'
 // import axios from "axios";
 
 export default {
@@ -323,96 +333,134 @@ export default {
       return days
     },
     generateDaysOfMonth: function () {
-      this.selectedDate = new Date(this.currentSelectedDate)
-      let year = this.selectedDate.getFullYear()
-      let month = this.selectedDate.getMonth()
-      let days = this.getDays(year, month)
-      // Empty store MainData
-      // this.$store.dispatch("emptyMainData");
-      for (let day of days) {
-        let tempObj = {
-          month: this.selectedDate.toLocaleString('en-gb', { month: 'short' }),
-          year: year,
-          mainTable: {
-            day: day.day,
-            date: day.date,
-            biActivities: '',
-            permitToWork: '',
-            projectActivities: '',
-            n1: 'p0',
-            n2: 'p0',
-            n3: 'p0',
-            n4: 'p0',
-            n5: 'p0',
-            n6: 'p0',
-            n7: 'p0',
-            n8: 'p0',
-            contractorManagement: ''
-          },
-          childTable: {
-            biA: {
-              tableName: 'biA',
-              fields: {
-                fmNo: 'FM#',
-                activities: 'Activity',
-                buttons: 'Actions'
-              },
-              items: []
+      return new Promise(resolve => {
+        this.selectedDate = new Date(this.currentSelectedDate)
+        let year = this.selectedDate.getFullYear()
+        let month = this.selectedDate.getMonth()
+        let days = this.getDays(year, month)
+        // Empty store MainData
+        // this.$store.dispatch("emptyMainData");
+        for (let day of days) {
+          let tempObj = {
+            month: this.selectedDate.toLocaleString('en-gb', {
+              month: 'short'
+            }),
+            year: year,
+            mainTable: {
+              day: day.day,
+              date: day.date,
+              biActivities: '',
+              permitToWork: '',
+              projectActivities: '',
+              n1: 'p0',
+              n2: 'p0',
+              n3: 'p0',
+              n4: 'p0',
+              n5: 'p0',
+              n6: 'p0',
+              n7: 'p0',
+              n8: 'p0',
+              contractorManagement: ''
             },
-            ptw: {
-              tableName: 'ptw',
-              fields: {
-                fmNo: 'PTW#',
-                activities: 'Activity',
-                buttons: 'Actions'
+            childTable: {
+              biA: {
+                tableName: 'biA',
+                fields: {
+                  fmNo: 'FM#',
+                  activities: 'Activity',
+                  buttons: 'Actions'
+                },
+                items: []
               },
-              items: []
-            },
-            pa: {
-              tableName: 'pa',
+              ptw: {
+                tableName: 'ptw',
+                fields: {
+                  fmNo: 'PTW#',
+                  activities: 'Activity',
+                  buttons: 'Actions'
+                },
+                items: []
+              },
+              pa: {
+                tableName: 'pa',
 
-              items: []
+                items: []
+              },
+              cm: {
+                tableName: 'cm',
+                items: []
+              }
             },
-            cm: {
-              tableName: 'cm',
-              items: []
-            }
-          },
-          rowDetails: false
+            rowDetails: false
+          }
+
+          this.$store.dispatch('mainDataInit', tempObj)
         }
+        let date = dayjs(
+          new Date(`1/${this.selectedMonths}/${this.selectedYear}`)
+        ).format('YYYY-MM-DD')
 
-        this.$store.dispatch('mainDataInit', tempObj)
-      }
-      this.$store.dispatch('mainDataAjaxUpdate', {
-        day: '1',
-        month: this.selectedMonths,
-        year: this.selectedYear
+        axios.get('http://localhost:80/ccfm/public/server/saveData.php', {
+          params: {
+            date: date,
+            operation: 'mainDataInit'
+          }
+        })
+        this.$store.dispatch('mainDataAjaxUpdate', {
+          day: '1',
+          month: this.selectedMonths,
+          year: this.selectedYear
+        })
+        resolve('Vue Created')
       })
     },
     childTableLength: function (rowIndex, cTable) {
-      if (this.mainData[rowIndex].childTable[cTable].items.length == 0) {
+      let count = 0
+      // Test every row of childTable items for empty data
+      this.mainData[rowIndex]['childTable'][cTable].items.every(
+        (rowValue, rowIndex) => {
+          if (cTable == 'bia' || cTable == 'ptw') {
+            if (rowValue['fmNo'] != '' || rowValue['activities'] != '') {
+              count += 1
+              return true
+            }
+          } else {
+            if (rowValue['activities'] != '') {
+              count += 1
+              return true
+            }
+          }
+        }
+      )
+
+      if (count == 0) {
         return ''
-      } else if (this.mainData[rowIndex].childTable[cTable].items.length == 1) {
-        return `${
-          this.mainData[rowIndex].childTable[cTable].items.length
-        } Activity`
+      } else if (count == 1) {
+        return `${count} Activity`
       } else {
-        return `${
-          this.mainData[rowIndex].childTable[cTable].items.length
-        } Activities`
+        return `${count} Activities`
       }
     },
     totalLength: function (colName) {
-      let currentMonthData = this.$store.state.mainData.filter(element => {
-        return (
-          element.year == this.selectedYear &&
-          element.month == this.selectedMonths
-        )
-      })
       let total = 0
-      currentMonthData.forEach(element => {
-        total += element.childTable[colName].items.length
+
+      // Check every length of childTable excluding empty row and total it up
+      this.mainData.forEach((rowValue, rowIndex) => {
+        rowValue['childTable'][colName].items.every((colValue, colIndex) => {
+          if (colName == 'bia' || colName == 'ptw') {
+            if (colValue['fmNo'] != '' || colValue['activities'] != '') {
+              total += 1
+              return true
+            }
+          } else {
+            if (colValue['activities'] != '') {
+              total += 1
+              return true
+            }
+          }
+        })
       })
+
       if (total > 1) {
         return `${total} Activities`
       } else {
@@ -438,8 +486,16 @@ export default {
       }
     }
   },
-  created: function () {
-    this.generateDaysOfMonth()
+  created: async function () {
+    let dataTest = await this.generateDaysOfMonth()
+    console.log(process.env.VUE_APP_API_URL)
+    console.log(process.env.VUE_APP_ROOT_API)
+
+    // this.$store.dispatch("mainDataAjaxUpdate", {
+    //   day: "1",
+    //   month: this.selectedMonths,
+    //   year: this.selectedYear
+    // });
   },
   computed: {
     currentSelectedDate: function () {
@@ -448,6 +504,11 @@ export default {
       return `${this.selectedMonths},1,${this.selectedYear}`
     },
     mainData () {
+      this.$store.dispatch('mainDataAjaxUpdate', {
+        day: '1',
+        month: this.selectedMonths,
+        year: this.selectedYear
+      })
       return this.$store.state.mainData.filter(
         element =>
           element.month == this.selectedMonths &&
@@ -490,8 +551,7 @@ select {
   margin-bottom: 1%;
 }
 
-td,
-th {
+td {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
