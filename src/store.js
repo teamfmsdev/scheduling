@@ -26,7 +26,7 @@ export default new Vuex.Store({
 
       let date = dayjs(new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)).format('YYYY-MM-DD')
       axios
-        .get('http://localhost/scheduling/public/server/updateData.php', {
+        .get('http://localhost:80/ccfm/public/server/updateData.php', {
           params: {
             date: date,
             table: childTableName.toLowerCase(),
@@ -59,7 +59,7 @@ export default new Vuex.Store({
 
       let date = dayjs(new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)).format('YYYY-MM-DD')
       axios
-        .get('http://localhost/scheduling/public/server/updateData.php', {
+        .get('http://localhost:80/ccfm/public/server/updateData.php', {
           params: {
             date: date,
             table: table.toLowerCase(),
@@ -90,7 +90,7 @@ export default new Vuex.Store({
       // DATABASE UPDATING
       let date = dayjs(new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)).format('YYYY-MM-DD')
       axios
-        .get('http://localhost/scheduling/public/server/updateData.php', {
+        .get('http://localhost:80/ccfm/public/server/updateData.php', {
           params: {
             date: date,
             table: table.toLowerCase(),
@@ -180,14 +180,6 @@ export default new Vuex.Store({
       // console.log(payload);
     },
     mainDataInit: async (state, payload) => {
-      let date = dayjs(new Date(`${payload.mainTable.date}/${payload.month}/${payload.year}`)).format('YYYY-MM-DD')
-
-      axios.get('http://localhost/scheduling/public/server/saveData.php', {
-        params: {
-          date: date,
-          operation: 'mainDataInit'
-        }
-      })
       // console.log(serverResponse)
       state.mainData.push(payload)
       // .then(response => {
@@ -199,7 +191,7 @@ export default new Vuex.Store({
       let date = dayjs(new Date(`${payload.day}/${payload.month}/${payload.year}`)).format('YYYY-MM-DD')
 
       axios
-        .get('http://localhost/scheduling/public/server/retrieveData.php', {
+        .get('http://localhost:80/ccfm/public/server/retrieveData.php', {
           params: {
             date: date,
             operation: 'mainDataAjaxUpdate'
@@ -280,7 +272,7 @@ export default new Vuex.Store({
 
       let date = dayjs(new Date(`${targetData.mainTable.date}/${targetData.month}/${targetData.year}`)).format('YYYY-MM-DD')
       axios
-        .get('http://localhost/scheduling/public/server/updateData.php', {
+        .get('http://localhost:80/ccfm/public/server/updateData.php', {
           params: {
             date: date,
             table: table.toLowerCase(),
