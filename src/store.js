@@ -143,31 +143,34 @@ export default new Vuex.Store({
           // If >5 set to 0(white)
           newColor > 5 ? (newColor = 0) : ''
           // Make it as string
-          mainTable[tData] = `p${newColor}`
-          affectedData = state.mainData.filter(element => {
-            return element.year == rowData.year && element.month == rowData.month && element.mainTable.date > rowData.mainTable.date
-          })
-          let date
-          affectedData.forEach(element => {
-            let date = dayjs(new Date(`${element.mainTable.date}/${element.month}/${element.year}`)).format('YYYY-MM-DD')
 
-            axios
-              .get('http://localhost/scheduling/public/server/updateData.php', {
-                params: {
-                  date: date,
-                  table: 'parentRow',
-                  // If row exist, assign the value of 'row' else send empty string
-                  row: '',
-                  type: tData,
-                  data: `p${newColor}`,
-                  operation: 'mainTableEditRow'
-                }
+          // date of clicked row
+          let date = dayjs(new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)).format('YYYY-MM-DD')
+          axios
+            .get('http://localhost:80/ccfm/public/server/updateData.php', {
+              params: {
+                date: date,
+                table: 'parentRow',
+                // If row exist, assign the value of 'row' else send empty string
+                row: '',
+                type: tData,
+                data: `p${newColor}`,
+                operation: 'mainTableEditRow'
+              }
+            })
+            .then(response => {
+              console.log(response.data['serverMessage'])
+              // Current clicked data
+              mainTable[tData] = `p${newColor}`
+              // Filtered date of  the following days
+              affectedData = state.mainData.filter(element => {
+                return element.year == rowData.year && element.month == rowData.month && element.mainTable.date > rowData.mainTable.date
               })
-              .then(response => {
+              affectedData.forEach(element => {
                 element.mainTable[tData] = `p${newColor}`
-                console.log(response.data['serverMessage'])
               })
-          })
+            })
+
           break
         default:
           mainTable[tData] = data
