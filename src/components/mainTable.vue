@@ -419,7 +419,7 @@ export default {
       // Test every row of childTable items for empty data
       this.mainData[rowIndex]['childTable'][cTable].items.every(
         (rowValue, rowIndex) => {
-          if (cTable == 'bia' || cTable == 'ptw') {
+          if (cTable == 'biA' || cTable == 'ptw') {
             if (rowValue['fmNo'] != '' || rowValue['activities'] != '') {
               count += 1
               return true
@@ -447,7 +447,7 @@ export default {
       // Check every length of childTable excluding empty row and total it up
       this.mainData.forEach((rowValue, rowIndex) => {
         rowValue['childTable'][colName].items.every((colValue, colIndex) => {
-          if (colName == 'bia' || colName == 'ptw') {
+          if (colName == 'biA' || colName == 'ptw') {
             if (colValue['fmNo'] != '' || colValue['activities'] != '') {
               total += 1
               return true
