@@ -20,14 +20,14 @@
           <td class="align-middle">
             <input
               type="button"
-              class="btn btn-sm btn-outline-primary"
+              class="btn btn-sm btn-outline-primary deleteBtn"
               @click.stop="deleteRow"
               value="-"
             >
             <input
               v-if="tableName=='ptw'"
               type="button"
-              class="btn btn-sm btn-outline-primary"
+              class="btn btn-sm btn-outline-primary revalidateBtn"
               @click.stop="reValidate"
               value="R"
             >
@@ -149,7 +149,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#addButton {
+.deleteBtn,
+.revalidateBtn {
+  width: 25px;
 }
 
 td {
