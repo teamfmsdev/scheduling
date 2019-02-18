@@ -317,6 +317,12 @@ export default {
         // If existing data for month/year is 0
         if (this.mainData.length == 0) {
           this.generateDaysOfMonth()
+        } else {
+          this.$store.dispatch('mainDataAjaxUpdate', {
+            day: '1',
+            month: this.selectedMonths,
+            year: this.selectedYear
+          })
         }
       })
     },
@@ -488,14 +494,8 @@ export default {
   },
   created: async function () {
     let dataTest = await this.generateDaysOfMonth()
-    console.log(process.env.VUE_APP_API_URL)
-    console.log(process.env.VUE_APP_ROOT_API)
-
-    // this.$store.dispatch("mainDataAjaxUpdate", {
-    //   day: "1",
-    //   month: this.selectedMonths,
-    //   year: this.selectedYear
-    // });
+    // console.log(process.env.VUE_APP_API_URL);
+    // console.log(process.env.VUE_APP_ROOT_API);
   },
   computed: {
     currentSelectedDate: function () {
