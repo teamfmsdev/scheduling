@@ -504,11 +504,6 @@ export default {
       return `${this.selectedMonths},1,${this.selectedYear}`
     },
     mainData () {
-      this.$store.dispatch('mainDataAjaxUpdate', {
-        day: '1',
-        month: this.selectedMonths,
-        year: this.selectedYear
-      })
       return this.$store.state.mainData.filter(
         element =>
           element.month == this.selectedMonths &&
