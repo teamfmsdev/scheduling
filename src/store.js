@@ -7,203 +7,174 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    mainData: []
+    mainData: [],
+    apiUrl: process.env.VUE_APP_API_URL
   },
   getters: {
     currentExpandedRow: state => {
       return state.mainData.filter(element => {
-        return element.rowDetails == true;
-      });
+        return element.rowDetails == true
+      })
     }
   },
   mutations: {
     addChildTableRow: (state, payload) => {
-      let { rowData, table: childTableName, data } = payload;
+      let { rowData, table: childTableName, data } = payload
       let affectedData = state.mainData.find(element => {
-        return (
-          element.year == rowData.year &&
-          element.month == rowData.month &&
-          element.mainTable.date == rowData.mainTable.date
-        );
-      });
-      let { childTable } = affectedData;
+        return element.year == rowData.year && element.month == rowData.month && element.mainTable.date == rowData.mainTable.date
+      })
+      let { childTable } = affectedData
 
-      let date = dayjs(
-        new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)
-      ).format("YYYY-MM-DD");
+      let date = dayjs(new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)).format('YYYY-MM-DD')
       axios
-        .get("http://localhost:80/ccfm/public/server/updateData.php", {
+        .get(`${state.apiUrl}updateData.php`, {
           params: {
             date: date,
             table: childTableName.toLowerCase(),
             // If row exist, assign the value of 'row' else send empty string
-            row: "",
-            type: "",
-            data: "",
-            operation: "addChildTableData"
+            row: '',
+            type: '',
+            data: '',
+            operation: 'addChildTableData'
           }
         })
         .then(response => {
           // If the operation was a creating new record\
-          data["row"] = response.data["row"];
-          childTable[childTableName].items.push(data);
-          console.log(response.data["serverMessage"]);
-        });
+          data['row'] = response.data['row']
+          childTable[childTableName].items.push(data)
+          console.log(response.data['serverMessage'])
+        })
     },
     deleteChildTableRow: (state, payload) => {
       // Destructure
-      let { rowData, table, data } = payload;
+      let { rowData, table, data } = payload
       // Find rows that are affected
       let affectedData = state.mainData.find(element => {
-        return (
-          element.year == rowData.year &&
-          element.month == rowData.month &&
-          element.mainTable.date == rowData.mainTable.date
-        );
-      });
+        return element.year == rowData.year && element.month == rowData.month && element.mainTable.date == rowData.mainTable.date
+      })
 
-      let { childTable } = affectedData;
+      let { childTable } = affectedData
       // Splice childTable items with index that match // childTableRowId
 
       // DATABASE UPDATING
 
-      let date = dayjs(
-        new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)
-      ).format("YYYY-MM-DD");
+      let date = dayjs(new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)).format('YYYY-MM-DD')
       axios
-        .get("http://localhost:80/ccfm/public/server/updateData.php", {
+        .get(`${state.apiUrl}updateData.php`, {
           params: {
             date: date,
             table: table.toLowerCase(),
             // If row exist, assign the value of 'row' else send empty string
-            row: childTable[table].items[data.childTableRowId]["row"],
-            type: "",
-            data: "",
-            operation: "deleteChildTableData"
+            row: childTable[table].items[data.childTableRowId]['row'],
+            type: '',
+            data: '',
+            operation: 'deleteChildTableData'
           }
         })
         .then(response => {
-          childTable[table].items.splice(data.childTableRowId, 1);
-          console.log(response.data);
-        });
+          childTable[table].items.splice(data.childTableRowId, 1)
+          console.log(response.data)
+        })
     },
     editChildTableData: (state, payload) => {
       // Destructuring
-      let { rowData, table, affectedRow, data } = payload;
+      let { rowData, table, affectedRow, data } = payload
       // Finding affected mainData
       let affectedData = state.mainData.find(element => {
-        return (
-          element.year == rowData.year &&
-          element.month == rowData.month &&
-          element.mainTable.date == rowData.mainTable.date
-        );
-      });
+        return element.year == rowData.year && element.month == rowData.month && element.mainTable.date == rowData.mainTable.date
+      })
       // Destructuring
-      let { childTable } = affectedData;
+      let { childTable } = affectedData
       // Assigning new value to affected childTable
       // column
-      childTable[table].items[affectedRow][data.dataType] = data.newValue;
+      childTable[table].items[affectedRow][data.dataType] = data.newValue
       // DATABASE UPDATING
-      let date = dayjs(
-        new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)
-      ).format("YYYY-MM-DD");
+      let date = dayjs(new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)).format('YYYY-MM-DD')
       axios
-        .get("http://localhost:80/ccfm/public/server/updateData.php", {
+        .get(`${state.apiUrl}updateData.php`, {
           params: {
             date: date,
             table: table.toLowerCase(),
             // If row exist, assign the value of 'row' else send empty string
-            row: childTable[table].items[affectedRow]["row"],
+            row: childTable[table].items[affectedRow]['row'],
             type: data.dataType,
             data: data.newValue,
-            operation: "editChildTableData"
+            operation: 'editChildTableData'
           }
         })
         .then(({ data }) => {
           // If the operation was a creating new record
-          if (data["opsCode"] == "1") {
-            childTable[table].items[affectedRow]["row"] = data["row"];
-            console.log(data["serverMessage"]);
+          if (data['opsCode'] == '1') {
+            childTable[table].items[affectedRow]['row'] = data['row']
+            console.log(data['serverMessage'])
           }
 
-          console.log(data);
-        });
+          console.log(data)
+        })
     },
     mainTableAddRow: (state, payload) => {
-      state.push(payload);
+      state.push(payload)
     },
     // Color rotation function for parentRow
     mainTableEditRow: (state, payload) => {
-      let { rowData, tData, data } = payload;
+      let { rowData, tData, data } = payload
 
       let affectedData = state.mainData.find(element => {
-        return (
-          element.year == rowData.year &&
-          element.month == rowData.month &&
-          element.mainTable.date == rowData.mainTable.date
-        );
-      });
+        return element.year == rowData.year && element.month == rowData.month && element.mainTable.date == rowData.mainTable.date
+      })
 
-      let { mainTable } = affectedData;
+      let { mainTable } = affectedData
 
       switch (tData) {
-        case "n1":
-        case "n2":
-        case "n3":
-        case "n4":
-        case "n5":
-        case "n6":
-        case "n7":
-        case "n8":
-          let newColor = mainTable[tData];
+        case 'n1':
+        case 'n2':
+        case 'n3':
+        case 'n4':
+        case 'n5':
+        case 'n6':
+        case 'n7':
+        case 'n8':
+          let newColor = mainTable[tData]
           // Remove "P" from string
-          newColor = newColor.slice(1);
+          newColor = newColor.slice(1)
           // Make the remaining string as number
-          newColor = parseInt(newColor);
+          newColor = parseInt(newColor)
           // Rotate color
-          newColor = newColor + 1;
+          newColor = newColor + 1
           // If >5 set to 0(white)
-          newColor > 5 ? (newColor = 0) : "";
+          newColor > 5 ? (newColor = 0) : ''
           // Make it as string
 
           // date of clicked row
-          let date = dayjs(
-            new Date(
-              `${rowData.mainTable.date}/${rowData.month}/${rowData.year}`
-            )
-          ).format("YYYY-MM-DD");
+          let date = dayjs(new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)).format('YYYY-MM-DD')
           axios
-            .get("http://localhost:80/ccfm/public/server/updateData.php", {
+            .get(`${state.apiUrl}updateData.php`, {
               params: {
                 date: date,
-                table: "parentRow",
+                table: 'parentRow',
                 // If row exist, assign the value of 'row' else send empty string
-                row: "",
+                row: '',
                 type: tData,
                 data: `p${newColor}`,
-                operation: "mainTableEditRow"
+                operation: 'mainTableEditRow'
               }
             })
             .then(response => {
-              console.log(response.data["serverMessage"]);
+              console.log(response.data['serverMessage'])
               // Current clicked data
-              mainTable[tData] = `p${newColor}`;
+              mainTable[tData] = `p${newColor}`
               // Filtered date of  the following days
               affectedData = state.mainData.filter(element => {
-                return (
-                  element.year == rowData.year &&
-                  element.month == rowData.month &&
-                  element.mainTable.date > rowData.mainTable.date
-                );
-              });
+                return element.year == rowData.year && element.month == rowData.month && element.mainTable.date > rowData.mainTable.date
+              })
               affectedData.forEach(element => {
-                element.mainTable[tData] = `p${newColor}`;
-              });
-            });
+                element.mainTable[tData] = `p${newColor}`
+              })
+            })
 
-          break;
+          break
         default:
-          mainTable[tData] = data;
+          mainTable[tData] = data
       }
 
       // console.log("Mutations called")
@@ -211,81 +182,70 @@ export default new Vuex.Store({
     },
     mainDataInit: async (state, payload) => {
       // console.log(serverResponse)
-      state.mainData.push(payload);
+      state.mainData.push(payload)
       // .then(response => {
       //   state.mainData.push(payload)
       // })
     },
     mainDataAjaxUpdate: (state, payload) => {
       // Date to choose from
-      let date = dayjs(
-        new Date(`${payload.day}/${payload.month}/${payload.year}`)
-      ).format("YYYY-MM-DD");
-
+      let date = dayjs(new Date(`${payload.day}/${payload.month}/${payload.year}`)).format('YYYY-MM-DD')
+      console.log(state.apiUrl)
       axios
-        .get("http://localhost:80/ccfm/public/server/retrieveData.php", {
+        .get(`${state.apiUrl}retrieveData.php`, {
           params: {
             date: date,
-            operation: "mainDataAjaxUpdate"
+            operation: 'mainDataAjaxUpdate'
           }
         })
         .then(({ data }) => {
           // console.log(data)
           data.forEach((dataIndex, index) => {
             let affectedData = state.mainData.find(element => {
-              return (
-                element.year == dataIndex.year &&
-                element.month == dataIndex.month &&
-                element.mainTable.date == dataIndex.mainTable.date
-              );
-            });
+              return element.year == dataIndex.year && element.month == dataIndex.month && element.mainTable.date == dataIndex.mainTable.date
+            })
             // Loop through each days
             for (let data in dataIndex) {
               switch (data) {
-                case "mainTable":
+                case 'mainTable':
                   // console.log(data)
                   for (let mT in dataIndex[data]) {
                     switch (mT) {
-                      case "n1":
-                      case "n2":
-                      case "n3":
-                      case "n4":
-                      case "n5":
-                      case "n6":
-                      case "n7":
-                      case "n8":
+                      case 'n1':
+                      case 'n2':
+                      case 'n3':
+                      case 'n4':
+                      case 'n5':
+                      case 'n6':
+                      case 'n7':
+                      case 'n8':
                         // console.log(mT)
-                        affectedData[data][mT] = dataIndex[data][mT];
-                        break;
+                        affectedData[data][mT] = dataIndex[data][mT]
+                        break
                       default:
                         // console.log('mainTable default called Loop')
-                        break;
+                        break
                     }
                   }
-                  break;
-                case "childTable":
+                  break
+                case 'childTable':
                   for (let cT in dataIndex[data]) {
                     switch (cT) {
-                      case "biA":
-                      case "cm":
-                      case "pa":
-                      case "ptw":
-                        for (let cTItem in dataIndex[data][cT]["items"]) {
+                      case 'biA':
+                      case 'cm':
+                      case 'pa':
+                      case 'ptw':
+                        for (let cTItem in dataIndex[data][cT]['items']) {
                           // Push data from ajax to childTable
                           // CTItem == index of childTable items from ajax
                           // console.log(
                           //   dataIndex[data][cT]["items"][cTItem]["row"]
                           // );
 
-                          let existingRow = affectedData[data][cT][
-                            "items"
-                          ].findIndex(element => {
+                          let existingRow = affectedData[data][cT]['items'].findIndex(element => {
                             // Find the row value of ajax update in mainData
-                            return (
-                              element["row"] ==
-                              dataIndex[data][cT]["items"][cTItem]["row"]
-                            );
-                          });
+                            return element['row'] == dataIndex[data][cT]['items'][cTItem]['row']
+                          })
                           // console.log(existingRow);
 
                           // TODO !!!!
@@ -293,138 +253,110 @@ export default new Vuex.Store({
 
                           // If item already exist in mainData[ChildTable]
                           if (existingRow != -1) {
-                            for (let itemCol in affectedData[data][cT]["items"][
-                              existingRow
-                            ]) {
+                            for (let itemCol in affectedData[data][cT]['items'][existingRow]) {
                               switch (itemCol) {
-                                case "fmNo":
-                                case "activities":
+                                case 'fmNo':
+                                case 'activities':
                                   // Replace value of childtable items in mainData with the one from Ajax update
-                                  affectedData[data][cT]["items"][existingRow][
-                                    itemCol
-                                  ] =
-                                    dataIndex[data][cT]["items"][cTItem][
-                                      itemCol
-                                    ];
-                                  break;
+                                  affectedData[data][cT]['items'][existingRow][itemCol] = dataIndex[data][cT]['items'][cTItem][itemCol]
+                                  break
                                 default:
-                                  break;
+                                  break
                               }
                             }
                           } else {
-                            affectedData[data][cT]["items"].push(
-                              dataIndex[data][cT]["items"][cTItem]
-                            );
+                            affectedData[data][cT]['items'].push(dataIndex[data][cT]['items'][cTItem])
                           }
                         }
-                        break;
+                        break
                       default:
-                        break;
+                        break
                     }
                   }
-                  break;
+                  break
                 default:
-                  break;
+                  break
               }
             }
-          });
-        });
+          })
+        })
     },
     toggleRowDetails: (state, payload) => {
       // Affected mainData row
       let affectedData = state.mainData.find(element => {
-        return (
-          element.year == payload.year &&
-          element.month == payload.month &&
-          element.mainTable.date == payload.mainTable.date
-        );
-      });
+        return element.year == payload.year && element.month == payload.month && element.mainTable.date == payload.mainTable.date
+      })
 
       // Inverse rowDetails
-      affectedData.rowDetails = !affectedData.rowDetails;
+      affectedData.rowDetails = !affectedData.rowDetails
     },
     reValidateRow: (state, payload) => {
-      let { rowData, table, affectedRow } = payload;
+      let { rowData, table, affectedRow } = payload
       // data to be validated
       let affectedData = state.mainData.find(element => {
-        return (
-          element.year == rowData.year &&
-          element.month == rowData.month &&
-          element.mainTable.date == rowData.mainTable.date
-        );
-      });
+        return element.year == rowData.year && element.month == rowData.month && element.mainTable.date == rowData.mainTable.date
+      })
       // Target date
       let targetData = state.mainData.find(element => {
-        return (
-          element.year == rowData.year &&
-          element.month == rowData.month &&
-          element.mainTable.date == rowData.mainTable.date + 1
-        );
-      });
+        return element.year == rowData.year && element.month == rowData.month && element.mainTable.date == rowData.mainTable.date + 1
+      })
 
-      let date = dayjs(
-        new Date(
-          `${targetData.mainTable.date}/${targetData.month}/${targetData.year}`
-        )
-      ).format("YYYY-MM-DD");
+      let date = dayjs(new Date(`${targetData.mainTable.date}/${targetData.month}/${targetData.year}`)).format('YYYY-MM-DD')
       axios
-        .get("http://localhost:80/ccfm/public/server/updateData.php", {
+        .get(`${state.apiUrl}updateData.php`, {
           params: {
             date: date,
             table: table.toLowerCase(),
             // If row exist, assign the value of 'row' else send empty string
-            row: "",
-            type: "",
-            data: "",
-            fmNo: affectedData.childTable[table].items[affectedRow]["fmNo"],
-            activities:
-              affectedData.childTable[table].items[affectedRow]["activities"],
-            operation: "reValidateChildTableData"
+            row: '',
+            type: '',
+            data: '',
+            fmNo: affectedData.childTable[table].items[affectedRow]['fmNo'],
+            activities: affectedData.childTable[table].items[affectedRow]['activities'],
+            operation: 'reValidateChildTableData'
           }
         })
         .then(response => {
           // Deep copy to make it not a reactive data
-          let newData = JSON.parse(
-            JSON.stringify(affectedData.childTable[table].items[affectedRow])
-          );
-          newData["row"] = response.data["row"];
-          targetData.childTable[table].items.push(newData);
-        });
+          let newData = JSON.parse(JSON.stringify(affectedData.childTable[table].items[affectedRow]))
+          newData['row'] = response.data['row']
+          targetData.childTable[table].items.push(newData)
+        })
     },
     emptyMainData: (state, payload) => {
-      state.mainData = [];
+      state.mainData = []
     }
   },
   actions: {
     addChildTableRow: (context, payload) => {
-      context.commit("addChildTableRow", payload);
+      context.commit('addChildTableRow', payload)
     },
     mainTableAddRow: (context, payload) => {
-      context.commit("mainTableAddRow", payload);
+      context.commit('mainTableAddRow', payload)
     },
     mainDataInit: (context, payload) => {
-      context.commit("mainDataInit", payload);
+      context.commit('mainDataInit', payload)
     },
     toggleRowDetails: (context, payload) => {
-      context.commit("toggleRowDetails", payload);
+      context.commit('toggleRowDetails', payload)
     },
     emptyMainData: (context, payload) => {
-      context.commit("emptyMainData");
+      context.commit('emptyMainData')
     },
     deleteChildTableRow: (context, payload) => {
-      context.commit("deleteChildTableRow", payload);
+      context.commit('deleteChildTableRow', payload)
     },
     editChildTableData: (context, payload) => {
-      context.commit("editChildTableData", payload);
+      context.commit('editChildTableData', payload)
     },
     mainTableEditRow: (context, payload) => {
-      context.commit("mainTableEditRow", payload);
+      context.commit('mainTableEditRow', payload)
     },
     reValidateRow: (context, payload) => {
-      context.commit("reValidateRow", payload);
+      context.commit('reValidateRow', payload)
     },
     mainDataAjaxUpdate: (context, payload) => {
-      context.commit("mainDataAjaxUpdate", payload);
+      context.commit('mainDataAjaxUpdate', payload)
     }
   }
-});
+})
