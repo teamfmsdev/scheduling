@@ -127,7 +127,6 @@ import { resolve, Promise } from 'q'
 export default {
   data () {
     return {
-      axiData: '',
       fields: [
         {
           key: 'day',
@@ -406,7 +405,7 @@ export default {
           new Date(`1/${this.selectedMonths}/${this.selectedYear}`)
         ).format('YYYY-MM-DD')
 
-        axios.get('http://localhost:80/ccfm/public/server/saveData.php', {
+        axios.get(`${this.$store.state.apiUrl}saveData.php`, {
           params: {
             date: date,
             operation: 'mainDataInit'
@@ -494,7 +493,7 @@ export default {
   },
   created: async function () {
     let dataTest = await this.generateDaysOfMonth()
-    // console.log(process.env.VUE_APP_API_URL);
+    // console.log(this.apiUrl);
     // console.log(process.env.VUE_APP_ROOT_API);
   },
   computed: {
