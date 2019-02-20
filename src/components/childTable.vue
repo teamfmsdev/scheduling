@@ -176,9 +176,40 @@ export default {
         affectedRow: childTableRowId
       }
       this.$store.dispatch('reValidateRow', newData)
+    },
+    displayInfo: function (event) {
+      let rowId = event.target.closest('tr').parentNode.closest('tr').id
+      let childTableRowId = event.target.closest('tr').id
+
+      let rowData = this.mainTable[rowId]
+
+      // let date = days(new Date(`1/${this.rowData.mainTable.date}`))
+
+      // let fmNo =
+      //   rowData["childTable"][this.tableName]["items"][childTableRowId]["fmNo"];
+      // console.log(fmNo);
+      axios
+        .get(`${this.$store.state.apiUrl}miscRetrieve.php`, {
+          params: {
+            fmNo:
+              rowData['childTable'][this.tableName]['items'][childTableRowId][
+                'fmNo'
+              ]
+          }
+        })
+        .then(({ data }) => {
+          if (data != false) {
+            for (let items in this.modalItems[0]) {
+              this.modalItems[0][items] = data[items]
+            }
+            this.modalShow = !this.modalShow
+          } else {
+            alert('Error: FM# not in record')
+          }
+        })
     }
   },
-  components: { infoModal }
+  components: {}
 }
 </script>
 
