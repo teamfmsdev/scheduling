@@ -62,15 +62,16 @@
       class="btn btn-sm btn-outline-primary w-25 my-3"
       @click.stop="addChildTableRow"
     >
-    <b-modal centered v-model="modalShow">Content Goes Here
-      <div slot="modal-title">TITLE</div>
-      <!-- <template v-slot:"title">Test title</template> -->
+    <b-modal centered v-model="modalShow">
+      <div class="mx-auto" slot="modal-title">Activities Information</div>
+      <b-table class="modalTable" borderless outlined small stacked :items="modalItems"></b-table>
     </b-modal>
   </div>
 </template>
 
 <script>
-import infoModal from '@/components/infoModal.vue'
+import dayjs from 'dayjs'
+import axios from 'axios'
 export default {
   props: {
     fields: Object,
