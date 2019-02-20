@@ -31,6 +31,13 @@
               @click.stop="reValidate"
               value="R"
             >
+            <input
+              v-if="tableName=='biA'"
+              type="button"
+              class="btn btn-sm btn-outline-primary infoButton"
+              @click="modalShow=!modalShow"
+              value="I"
+            >
           </td>
         </tr>
         <!-- <input
@@ -48,10 +55,15 @@
       class="btn btn-sm btn-outline-primary w-25 my-3"
       @click.stop="addChildTableRow"
     >
+    <b-modal centered v-model="modalShow">Content Goes Here
+      <div slot="modal-title">TITLE</div>
+      <!-- <template v-slot:"title">Test title</template> -->
+    </b-modal>
   </div>
 </template>
 
 <script>
+import infoModal from '@/components/infoModal.vue'
 export default {
   props: {
     fields: Object,
@@ -62,6 +74,7 @@ export default {
 
   data () {
     return {
+      modalShow: false
       // tableName: this.tableName
     }
   },
@@ -144,7 +157,8 @@ export default {
       }
       this.$store.dispatch('reValidateRow', newData)
     }
-  }
+  },
+  components: { infoModal }
 }
 </script>
 
