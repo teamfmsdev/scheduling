@@ -25,19 +25,26 @@
               value="-"
             >
             <input
-              v-if="tableName=='ptw'"
+              v-if="tableName=='ptw' || tableName=='biA'"
               type="button"
               class="btn btn-sm btn-outline-primary revalidateBtn"
               @click.stop="reValidate"
-              value="R"
+              :value="tableName=='ptw'?'R':'CF'"
             >
             <input
               v-if="tableName=='biA'"
               type="button"
               class="btn btn-sm btn-outline-primary infoButton"
-              @click="modalShow=!modalShow"
+              @click="displayInfo"
               value="I"
             >
+            <!-- <input
+              v-if="tableName=='biA'"
+              type="button"
+              class="btn btn-sm btn-outline-primary infoButton"
+              @click="displayInfo"
+              value="I"
+            >-->
           </td>
         </tr>
         <!-- <input
