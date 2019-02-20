@@ -49,8 +49,9 @@ $date = $data['date'];
 
   $tempArray=[];
   $date = $data["date"];
-  $biaFetch = $con -> prepare("SELECT * FROM `bia` 
-  WHERE YEAR(`date`)=YEAR('$date') AND MONTH(`date`)=MONTH('$date')") ;
+  $biaFetch = $con -> prepare("SELECT `bia`.`date`,`biaentry`.`fmNo`,`biaentry`.`activities` 
+  FROM `bia` INNER JOIN `biaentry` on `bia`.`fmNo`=`biaentry`.`fmNo` WHERE YEAR(`bia`.`date`)=YEAR('$date') 
+  AND MONTH(`bia`.`date`)=MONTH('$date')") ;
 
   if($biaFetch->execute()){
     $resultData = $biaFetch -> fetchAll(PDO::FETCH_ASSOC);
@@ -61,14 +62,9 @@ $date = $data['date'];
         switch ($columnKey) {
           case "date":
           // $tempArray[$rowKey]["date"] = $columnValue;
-          break;
-          case "row":
-          $tempArray[$rowKey]["row"] = $columnValue; 
-          
-          break;         
+          break;          
           case "fmNo":
-          $tempArray[$rowKey]["fmNo"] = $columnValue;
-          
+          $tempArray[$rowKey]["fmNo"] = $columnValue;          
           break;
           case "activities":
           $tempArray[$rowKey]["activities"] = $columnValue;                    
@@ -88,8 +84,9 @@ $date = $data['date'];
 
   $tempArray = [];
   $date = $data["date"];
-  $ptwFetch = $con -> prepare("SELECT * FROM `ptw` 
-  WHERE YEAR(`date`)=YEAR('$date') AND MONTH(`date`)=MONTH('$date')") ;
+  $ptwFetch = $con -> prepare("SELECT `ptw`.`date`,`ptwentry`.`ptwNo`,`ptwentry`.`activities` 
+  FROM `ptw` INNER JOIN `ptwentry` on `ptw`.`ptwNo`=`ptwentry`.`ptwNo` 
+  WHERE YEAR(`ptw`.`date`)=YEAR('$date') AND MONTH(`ptw`.`date`)=MONTH('$date')") ;
 
   if($ptwFetch->execute()){
     $resultData = $ptwFetch -> fetchAll(PDO::FETCH_ASSOC);
@@ -100,14 +97,9 @@ $date = $data['date'];
         switch ($columnKey) {
           case "date":
           // $tempArray[$rowKey]["date"] = $columnValue;
-          break;
-          case "row":
-          $tempArray[$rowKey]["row"] = $columnValue; 
-          
-          break;         
-          case "fmNo":
-          $tempArray[$rowKey]["fmNo"] = $columnValue;
-          
+          break;    
+          case "ptwNo":
+          $tempArray[$rowKey]["ptwNo"] = $columnValue;          
           break;
           case "activities":
           $tempArray[$rowKey]["activities"] = $columnValue;                    
@@ -130,8 +122,9 @@ $date = $data['date'];
 
   $tempArray = [];
   $date = $data["date"];
-  $paFetch = $con -> prepare("SELECT * FROM `pa` 
-  WHERE YEAR(`date`)=YEAR('$date') AND MONTH(`date`)=MONTH('$date')") ;
+  $paFetch = $con -> prepare("SELECT `pa`.`date`,`paentry`.`paItem`,`paentry`.`activities`
+   FROM `pa` INNER JOIN `paentry` ON `pa`.`paItem`=`paentry`.`paItem` 
+   WHERE YEAR(`pa`.`date`)=YEAR('$date') AND MONTH(`pa`.`date`)=MONTH('$date')") ;
 
   if($paFetch->execute()){
     $resultData = $paFetch -> fetchAll(PDO::FETCH_ASSOC);
@@ -143,7 +136,7 @@ $date = $data['date'];
           case "date":
           // $tempArray[$rowKey]["date"] = $columnValue;
           break;
-          case "row":
+          case "paItem":
           $tempArray[$rowKey]["row"] = $columnValue; 
           
           break;         
@@ -167,8 +160,9 @@ $date = $data['date'];
 
   $tempArray = [];
   $date = $data["date"];
-  $cmFetch = $con -> prepare("SELECT * FROM `cm` 
-  WHERE YEAR(`date`)=YEAR('$date') AND MONTH(`date`)=MONTH('$date')") ;
+  $cmFetch = $con -> prepare("SELECT `cm`.`date`,`cmentry`.`cmItem`,`cmentry`.`activities`
+  FROM `cm` INNER JOIN `cmentry` ON `cm`.`cmItem`=`cmentry`.`cmItem` 
+  WHERE YEAR(`cm`.`date`)=YEAR('$date') AND MONTH(`cm`.`date`)=MONTH('$date')") ;
 
   if($cmFetch->execute()){
     $resultData = $cmFetch -> fetchAll(PDO::FETCH_ASSOC);
@@ -180,7 +174,7 @@ $date = $data['date'];
           case "date":
           // $tempArray[$rowKey]["date"] = $columnValue;
           break;
-          case "row":
+          case "cmItem":
           $tempArray[$rowKey]["row"] = $columnValue; 
           
           break;         
