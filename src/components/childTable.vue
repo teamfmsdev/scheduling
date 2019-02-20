@@ -82,7 +82,19 @@ export default {
 
   data () {
     return {
-      modalShow: false
+      modalShow: false,
+      modalItems: [
+        {
+          workTitle: '',
+          priority: '',
+          type: '',
+          location: '',
+          status: '',
+          requestBy: '',
+          requestDate: ''
+        }
+      ]
+
       // tableName: this.tableName
     }
   },
