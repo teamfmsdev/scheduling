@@ -422,22 +422,26 @@ export default {
     childTableLength: function (rowIndex, cTable) {
       let count = 0
       // Test every row of childTable items for empty data
-      this.mainData[rowIndex]['childTable'][cTable].items.every(
-        (rowValue, rowIndex) => {
+      this.mainData[rowIndex]['childTable'][cTable].items.forEach(
+        (rowValue, itemIndex) => {
           if (cTable == 'biA' || cTable == 'ptw') {
-            if (rowValue['fmNo'] != '' || rowValue['activities'] != '') {
+            if (
+              rowValue['fmNo'].trim() != '' ||
+              rowValue['activities'].trim() != ''
+            ) {
               count += 1
-              return true
+              // return true;
             }
           } else {
-            if (rowValue['activities'] != '') {
+            if (rowValue['activities'].trim() != '') {
               count += 1
-              return true
+              // return true;
             }
           }
+          // rowIndex == 3 ? console.log(rowIndex) : "";
         }
       )
-
+      // rowIndex == 3 ? console.log(count) : "";
       if (count == 0) {
         return ''
       } else if (count == 1) {
@@ -450,20 +454,24 @@ export default {
       let total = 0
 
       // Check every length of childTable excluding empty row and total it up
+      let isNotEmpty
       this.mainData.forEach((rowValue, rowIndex) => {
-        rowValue['childTable'][colName].items.every((colValue, colIndex) => {
-          if (colName == 'biA' || colName == 'ptw') {
-            if (colValue['fmNo'] != '' || colValue['activities'] != '') {
-              total += 1
-              return true
-            }
-          } else {
-            if (colValue['activities'] != '') {
-              total += 1
-              return true
+        isNotEmpty = rowValue['childTable'][colName].items.forEach(
+          (colValue, colIndex) => {
+            if (colName == 'biA' || colName == 'ptw') {
+              if (
+                colValue['fmNo'].trim() != '' ||
+                colValue['activities'].trim() != ''
+              ) {
+                total += 1
+              }
+            } else {
+              if (colValue['activities'].trim() != '') {
+                total += 1
+              }
             }
           }
-        })
+        )
       })
 
       if (total > 1) {
