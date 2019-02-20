@@ -121,7 +121,6 @@ import childTable from '@/components/childTable.vue'
 import childList from '@/components/childList.vue'
 import dayjs from 'dayjs'
 import axios from 'axios'
-import { resolve, Promise } from 'q'
 // import axios from "axios";
 
 export default {
