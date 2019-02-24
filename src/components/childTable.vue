@@ -336,14 +336,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.deleteBtn,
-.revalidateBtn {
-  width: 25px;
-}
+// .deleteBtn,
+// .revalidateBtn {
+//   width: 25px;
+// }
+
+// td {
+//   input {
+//     width: 25%;
+//   }
+// }
 
 td {
   white-space: pre-wrap;
   word-wrap: break-all;
+}
+
+.modalTable {
+  td {
+    // word-break: normal !important;
+    // word-wrap: normal;
+  }
 }
 
 td:focus {
@@ -353,8 +366,8 @@ td:focus {
 table {
   width: 100%;
   white-space: pre-wrap;
-  word-wrap: break-all;
-  word-break: break-all;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 th,
