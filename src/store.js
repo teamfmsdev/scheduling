@@ -21,11 +21,17 @@ export default new Vuex.Store({
     addChildTableRow: (state, payload) => {
       let { rowData, table: childTableName, data } = payload
       let affectedData = state.mainData.find(element => {
-        return element.year == rowData.year && element.month == rowData.month && element.mainTable.date == rowData.mainTable.date
+        return (
+          element.year == rowData.year &&
+          element.month == rowData.month &&
+          element.mainTable.date == rowData.mainTable.date
+        )
       })
       let { childTable } = affectedData
 
-      let date = dayjs(new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)).format('YYYY-MM-DD')
+      let date = dayjs(
+        new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)
+      ).format('YYYY-MM-DD')
       axios
         .get(`${state.apiUrl}updateData.php`, {
           params: {
@@ -41,6 +47,11 @@ export default new Vuex.Store({
         .then(response => {
           // If the operation was a creating new record\
           data['row'] = response.data['row']
+          if (childTableName.toLowerCase() == 'bia') {
+            data.status = 0
+          } else if (childTableName.toLowerCase() == 'ptw') {
+            data.type = 'NR'
+          }
           childTable[childTableName].items.push(data)
           console.log(response.data['serverMessage'])
         })
@@ -50,7 +61,11 @@ export default new Vuex.Store({
       let { rowData, table, data } = payload
       // Find rows that are affected
       let affectedData = state.mainData.find(element => {
-        return element.year == rowData.year && element.month == rowData.month && element.mainTable.date == rowData.mainTable.date
+        return (
+          element.year == rowData.year &&
+          element.month == rowData.month &&
+          element.mainTable.date == rowData.mainTable.date
+        )
       })
 
       let { childTable } = affectedData
@@ -58,7 +73,9 @@ export default new Vuex.Store({
 
       // DATABASE UPDATING
 
-      let date = dayjs(new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)).format('YYYY-MM-DD')
+      let date = dayjs(
+        new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)
+      ).format('YYYY-MM-DD')
       axios
         .get(`${state.apiUrl}updateData.php`, {
           params: {
@@ -81,7 +98,11 @@ export default new Vuex.Store({
       let { rowData, table, affectedRow, data } = payload
       // Finding affected mainData
       let affectedData = state.mainData.find(element => {
-        return element.year == rowData.year && element.month == rowData.month && element.mainTable.date == rowData.mainTable.date
+        return (
+          element.year == rowData.year &&
+          element.month == rowData.month &&
+          element.mainTable.date == rowData.mainTable.date
+        )
       })
       // Destructuring
       let { childTable } = affectedData
@@ -89,7 +110,9 @@ export default new Vuex.Store({
       // column
       childTable[table].items[affectedRow][data.dataType] = data.newValue
       // DATABASE UPDATING
-      let date = dayjs(new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)).format('YYYY-MM-DD')
+      let date = dayjs(
+        new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)
+      ).format('YYYY-MM-DD')
       axios
         .get(`${state.apiUrl}updateData.php`, {
           params: {
@@ -233,7 +256,11 @@ export default new Vuex.Store({
       let { rowData, tData, data } = payload
 
       let affectedData = state.mainData.find(element => {
-        return element.year == rowData.year && element.month == rowData.month && element.mainTable.date == rowData.mainTable.date
+        return (
+          element.year == rowData.year &&
+          element.month == rowData.month &&
+          element.mainTable.date == rowData.mainTable.date
+        )
       })
 
       let { mainTable } = affectedData
@@ -259,7 +286,11 @@ export default new Vuex.Store({
           // Make it as string
 
           // date of clicked row
-          let date = dayjs(new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)).format('YYYY-MM-DD')
+          let date = dayjs(
+            new Date(
+              `${rowData.mainTable.date}/${rowData.month}/${rowData.year}`
+            )
+          ).format('YYYY-MM-DD')
           axios
             .get(`${state.apiUrl}updateData.php`, {
               params: {
@@ -278,7 +309,11 @@ export default new Vuex.Store({
               mainTable[tData] = `p${newColor}`
               // Filtered date of  the following days
               affectedData = state.mainData.filter(element => {
-                return element.year == rowData.year && element.month == rowData.month && element.mainTable.date > rowData.mainTable.date
+                return (
+                  element.year == rowData.year &&
+                  element.month == rowData.month &&
+                  element.mainTable.date > rowData.mainTable.date
+                )
               })
               affectedData.forEach(element => {
                 element.mainTable[tData] = `p${newColor}`
@@ -302,7 +337,9 @@ export default new Vuex.Store({
     },
     mainDataAjaxUpdate: (state, payload) => {
       // Date to choose from
-      let date = dayjs(new Date(`${payload.day}/${payload.month}/${payload.year}`)).format('YYYY-MM-DD')
+      let date = dayjs(
+        new Date(`${payload.day}/${payload.month}/${payload.year}`)
+      ).format('YYYY-MM-DD')
       console.log(state.apiUrl)
       axios
         .get(`${state.apiUrl}retrieveData.php`, {
@@ -315,7 +352,11 @@ export default new Vuex.Store({
           // console.log(data)
           data.forEach((dataIndex, index) => {
             let affectedData = state.mainData.find(element => {
-              return element.year == dataIndex.year && element.month == dataIndex.month && element.mainTable.date == dataIndex.mainTable.date
+              return (
+                element.year == dataIndex.year &&
+                element.month == dataIndex.month &&
+                element.mainTable.date == dataIndex.mainTable.date
+              )
             })
             // Loop through each days
             for (let data in dataIndex) {
@@ -355,9 +396,14 @@ export default new Vuex.Store({
                           //   dataIndex[data][cT]["items"][cTItem]["row"]
                           // );
 
-                          let existingRow = affectedData[data][cT]['items'].findIndex(element => {
+                          let existingRow = affectedData[data][cT][
+                            'items'
+                          ].findIndex(element => {
                             // Find the row value of ajax update in mainData
-                            return element['row'] == dataIndex[data][cT]['items'][cTItem]['row']
+                            return (
+                              element['row'] ==
+                              dataIndex[data][cT]['items'][cTItem]['row']
+                            )
                           })
                           // console.log(existingRow);
 
@@ -366,19 +412,29 @@ export default new Vuex.Store({
 
                           // If item already exist in mainData[ChildTable]
                           if (existingRow != -1) {
-                            for (let itemCol in affectedData[data][cT]['items'][existingRow]) {
+                            for (let itemCol in affectedData[data][cT]['items'][
+                              existingRow
+                            ]) {
                               switch (itemCol) {
                                 case 'fmNo':
                                 case 'activities':
+                                case 'status':
                                   // Replace value of childtable items in mainData with the one from Ajax update
-                                  affectedData[data][cT]['items'][existingRow][itemCol] = dataIndex[data][cT]['items'][cTItem][itemCol]
+                                  affectedData[data][cT]['items'][existingRow][
+                                    itemCol
+                                  ] =
+                                    dataIndex[data][cT]['items'][cTItem][
+                                      itemCol
+                                    ]
                                   break
                                 default:
                                   break
                               }
                             }
                           } else {
-                            affectedData[data][cT]['items'].push(dataIndex[data][cT]['items'][cTItem])
+                            affectedData[data][cT]['items'].push(
+                              dataIndex[data][cT]['items'][cTItem]
+                            )
                           }
                         }
                         break
@@ -397,7 +453,11 @@ export default new Vuex.Store({
     toggleRowDetails: (state, payload) => {
       // Affected mainData row
       let affectedData = state.mainData.find(element => {
-        return element.year == payload.year && element.month == payload.month && element.mainTable.date == payload.mainTable.date
+        return (
+          element.year == payload.year &&
+          element.month == payload.month &&
+          element.mainTable.date == payload.mainTable.date
+        )
       })
 
       // Inverse rowDetails
@@ -407,14 +467,26 @@ export default new Vuex.Store({
       let { rowData, table, affectedRow } = payload
       // data to be validated
       let affectedData = state.mainData.find(element => {
-        return element.year == rowData.year && element.month == rowData.month && element.mainTable.date == rowData.mainTable.date
+        return (
+          element.year == rowData.year &&
+          element.month == rowData.month &&
+          element.mainTable.date == rowData.mainTable.date
+        )
       })
       // Target date
       let targetData = state.mainData.find(element => {
-        return element.year == rowData.year && element.month == rowData.month && element.mainTable.date == rowData.mainTable.date + 1
+        return (
+          element.year == rowData.year &&
+          element.month == rowData.month &&
+          element.mainTable.date == rowData.mainTable.date + 1
+        )
       })
 
-      let date = dayjs(new Date(`${targetData.mainTable.date}/${targetData.month}/${targetData.year}`)).format('YYYY-MM-DD')
+      let date = dayjs(
+        new Date(
+          `${targetData.mainTable.date}/${targetData.month}/${targetData.year}`
+        )
+      ).format('YYYY-MM-DD')
       axios
         .get(`${state.apiUrl}updateData.php`, {
           params: {
@@ -425,13 +497,21 @@ export default new Vuex.Store({
             type: '',
             data: '',
             fmNo: affectedData.childTable[table].items[affectedRow]['fmNo'],
-            activities: affectedData.childTable[table].items[affectedRow]['activities'],
+            activities:
+              affectedData.childTable[table].items[affectedRow]['activities'],
+            type:
+              // Set type value according to table
+              table.toLowerCase() == 'bia'
+                ? affectedData.childTable[table].items[affectedRow]['status']
+                : affectedData.childTable[table].items[affectedRow]['type'],
             operation: 'reValidateChildTableData'
           }
         })
         .then(response => {
           // Deep copy to make it not a reactive data
-          let newData = JSON.parse(JSON.stringify(affectedData.childTable[table].items[affectedRow]))
+          let newData = JSON.parse(
+            JSON.stringify(affectedData.childTable[table].items[affectedRow])
+          )
           newData['row'] = response.data['row']
           targetData.childTable[table].items.push(newData)
         })
