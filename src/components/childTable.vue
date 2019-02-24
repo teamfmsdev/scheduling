@@ -5,7 +5,12 @@
         <th :key="key" v-for="(value,key) in fields">{{value}}</th>
       </thead>
       <tbody>
-        <tr :id="rowKey" :key="rowKey" v-for="(value,rowKey) in items">
+        <tr
+          :class="{completed:value['status']=='1',routine:value['type']=='R'}"
+          :id="rowKey"
+          :key="rowKey"
+          v-for="(value,rowKey) in items"
+        >
           <template v-for="(tdVal,key) in items[rowKey]">
             <td
               :key="key"
@@ -255,5 +260,13 @@ th:nth-child(2) {
 th:nth-child(3) {
   width: 20%;
   max-width: 20%;
+}
+
+.completed {
+  background-color: lightgreen;
+}
+
+.routine {
+  background-color: lightblue;
 }
 </style>
