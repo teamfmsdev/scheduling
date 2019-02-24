@@ -21,7 +21,8 @@ if($data["operation"]=="editChildTableData"){
   }else{
       echo "Update failed";
   }
-}elseif($data["operation"]=="addChildTableData") {
+}
+elseif($data["operation"]=="addChildTableData") {
 
   switch($table){
     case "bia":
@@ -45,9 +46,9 @@ if($data["operation"]=="editChildTableData"){
     $message["serverMessage"]="Record Inserted successfully";
     
     echo json_encode($message);
-}else{
-    echo "Failed to insert new record";
-}
+  }else{
+      echo "Failed to insert new record";
+  }
   
 }elseif($data["operation"]=="deleteChildTableData"){
   $stmt = $con -> prepare("DELETE FROM $table WHERE (`row`='$row')");
@@ -60,19 +61,21 @@ if($data["operation"]=="editChildTableData"){
 elseif($data["operation"]=="reValidateChildTableData"){
   $fmNo = $_GET["fmNo"];
   $activities = $_GET["activities"];
-  $stmt = $con -> prepare("INSERT INTO `$table` (`date`,`fmNo`,`activities`)
-  VALUES ('$date','$fmNo','$activities') ;
+  $type = $_GET["type"]; 
+ 
+  $stmt = $con -> prepare("INSERT INTO `$table` 
+  VALUES ('$date',DEFAULT,'$fmNo','$activities','$type') ;
   SELECT LAST_INSERT_ID();");
 
-if($stmt -> execute()){
-  $rowValue = $con ->lastInsertId();
-  $message["row"]=$rowValue;
-  $message["serverMessage"]="Revalidate successfull";
-  
-  echo json_encode($message);
-}else{
-  echo "Failed to revalidate";
-}
+  if($stmt -> execute()){
+    $rowValue = $con ->lastInsertId();
+    $message["row"]=$rowValue;
+    $message["serverMessage"]="Revalidate successfull";
+    
+    echo json_encode($message);
+  }else{
+    echo "Failed to revalidate";
+  }
 }
 elseif($data["operation"]=="mainTableEditRow"){
 
