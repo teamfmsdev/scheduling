@@ -104,11 +104,124 @@ export default new Vuex.Store({
         })
         .then(({ data }) => {
           // If the operation was a creating new record
-          if (data['opsCode'] == '1') {
-            childTable[table].items[affectedRow]['row'] = data['row']
-            console.log(data['serverMessage'])
-          }
+          // if (data['opsCode'] == '1') {
+          //   childTable[table].items[affectedRow]['row'] = data['row']
+          //   console.log(data['serverMessage'])
+          // }
 
+          return console.log(data)
+        })
+        .then(() => {
+          // If user entered fmNo, auto retrieve work title and save to db
+          if (data.dataType == 'fmNo' && table.toLowerCase() == 'bia') {
+            axios
+              .get(`${state.apiUrl}miscRetrieve.php`, {
+                params: {
+                  fmNo: childTable[table].items[affectedRow]['fmNo'],
+                  operation: 'getWorkTitle'
+                }
+              })
+              .then(({ data: response }) => {
+                payload.data.newValue = response['activities']
+                payload.data.dataType = 'activities'
+                // console.log(payload)
+                let { rowData, table, affectedRow, data } = payload
+
+                axios
+                  .get(`${state.apiUrl}updateData.php`, {
+                    params: {
+                      date: date,
+                      table: table.toLowerCase(),
+                      // If row exist, assign the value of 'row' else send empty string
+                      row: childTable[table].items[affectedRow]['row'],
+                      type: data.dataType,
+                      data: data.newValue,
+                      operation: 'editChildTableData'
+                    }
+                  })
+                  .then(() => {
+                    if (response) {
+                      // console.log(response['activities'])
+                      childTable[table].items[affectedRow]['activities'] =
+                        response['activities']
+                    }
+
+                    // return console.log(response['activities'])
+                  })
+                // console.log(payload)
+              })
+          }
+        })
+    },
+    // Toggle the completion of biA jobs
+    toggleChildTableCompletion: (state, payload) => {
+      let { rowData, table, affectedRow } = payload
+      // Affected mainData
+      let affectedData = state.mainData.find(element => {
+        return (
+          element.year == rowData.year &&
+          element.month == rowData.month &&
+          element.mainTable.date == rowData.mainTable.date
+        )
+      })
+      let date = dayjs(
+        new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)
+      ).format('YYYY-MM-DD')
+
+      let { childTable } = affectedData
+
+      let newValue = childTable[table].items[affectedRow]['status'] == 0 ? 1 : 0
+
+      axios
+        .get(`${state.apiUrl}updateData.php`, {
+          params: {
+            date: date,
+            table: table.toLowerCase(),
+            // If row exist, assign the value of 'row' else send empty string
+            row: childTable[table].items[affectedRow]['row'],
+            type: '',
+            data: newValue,
+            operation: 'toggleChildTableCompletion'
+          }
+        })
+        .then(({ data }) => {
+          childTable[table].items[affectedRow]['status'] = newValue
+          console.log(data)
+        })
+    },
+    togglePtwType: (state, payload) => {
+      let { rowData, table, affectedRow } = payload
+      // Affected mainData
+      let affectedData = state.mainData.find(element => {
+        return (
+          element.year == rowData.year &&
+          element.month == rowData.month &&
+          element.mainTable.date == rowData.mainTable.date
+        )
+      })
+      let date = dayjs(
+        new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)
+      ).format('YYYY-MM-DD')
+
+      let { childTable } = affectedData
+
+      let newValue =
+        childTable[table].items[affectedRow]['type'] == 'R' ? 'NR' : 'R'
+
+      axios
+        .get(`${state.apiUrl}updateData.php`, {
+          params: {
+            date: date,
+            table: table.toLowerCase(),
+            // If row exist, assign the value of 'row' else send empty string
+            row: childTable[table].items[affectedRow]['row'],
+            type: '',
+            data: newValue,
+            operation: 'togglePtwType'
+          }
+        })
+        .then(({ data }) => {
+          childTable[table].items[affectedRow]['type'] = newValue
           console.log(data)
         })
     },
@@ -357,6 +470,12 @@ export default new Vuex.Store({
     },
     mainDataAjaxUpdate: (context, payload) => {
       context.commit('mainDataAjaxUpdate', payload)
+    },
+    toggleChildTableCompletion: (context, payload) => {
+      context.commit('toggleChildTableCompletion', payload)
+    },
+    togglePtwType: (context, payload) => {
+      context.commit('togglePtwType', payload)
     }
   }
 })
