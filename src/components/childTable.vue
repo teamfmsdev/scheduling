@@ -23,26 +23,64 @@
             ></td>
           </template>
           <td class="align-middle">
-            <input
+            <button
+              v-if="tableName=='biA'"
+              class="btn btn-sm btn-outline-primary fas fa-info-circle infoButton"
+              @click="displayInfo"
+              value
+            ></button>
+
+            <button
+              v-if="tableName=='biA'"
+              class="btn btn-sm btn-outline-primary fas fa-check-circle"
+              @click="markCompleted"
+              value="C"
+            ></button>
+
+            <button
+              v-if="tableName=='ptw' || tableName=='biA'"
+              class="btn btn-sm btn-outline-primary fas fa-arrow-circle-right revalidateBtn"
+              @click.stop="reValidate"
+              :value="tableName=='ptw'?'R':'CF'"
+            ></button>
+            <button
+              v-if="tableName=='ptw'"
+              class="btn btn-sm btn-outline-primary fas fa-clock"
+              @click="markType"
+              value="C"
+            ></button>
+            <button
+              class="btn btn-sm btn-outline-primary fas fa-trash-alt deleteBtn"
+              @click.stop="deleteRow"
+              value="-"
+            ></button>
+            <!-- <input
               type="button"
               class="btn btn-sm btn-outline-primary deleteBtn"
               @click.stop="deleteRow"
               value="-"
-            >
-            <input
+            >-->
+            <!-- <input
               v-if="tableName=='ptw' || tableName=='biA'"
               type="button"
               class="btn btn-sm btn-outline-primary revalidateBtn"
               @click.stop="reValidate"
               :value="tableName=='ptw'?'R':'CF'"
-            >
-            <input
+            >-->
+            <!-- <input
               v-if="tableName=='biA'"
               type="button"
               class="btn btn-sm btn-outline-primary infoButton"
               @click="displayInfo"
-              value="I"
-            >
+              value
+            >-->
+            <!-- <input
+              v-if="tableName=='ptw'"
+              type="button"
+              class="btn btn-sm btn-outline-primary"
+              @click="markType"
+              value="C"
+            >-->
             <!-- <input
               v-if="tableName=='biA'"
               type="button"
