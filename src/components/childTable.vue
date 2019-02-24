@@ -98,16 +98,47 @@
         >-->
       </tbody>
     </table>
-    <input
+    <!-- <input
       id="addButton"
       type="button"
       value="+"
       class="btn btn-sm btn-outline-primary w-25 my-3"
       @click.stop="addChildTableRow"
-    >
+    >-->
+    <button
+      id="addButton"
+      value
+      class="btn btn-sm btn-outline-primary fas fa-plus-square fa-lg w-25 my-3"
+      @click.stop="addChildTableRow"
+    ></button>
     <b-modal centered v-model="modalShow">
       <div class="mx-auto" slot="modal-title">Activities Information</div>
-      <b-table class="modalTable" borderless outlined small stacked :items="modalItems"></b-table>
+      <b-container fluid>
+        <b-row no-gutters>
+          <b-col class="font-weight-bold">Work Title:</b-col>
+          <b-col>{{modalItems.workTitle}}</b-col>
+        </b-row>
+        <hr>
+        <b-row no-gutters>
+          <b-col class="font-weight-bold">Priority:</b-col>
+          <b-col>{{modalItems.priority}}</b-col>
+          <b-col class="font-weight-bold">Type:</b-col>
+          <b-col>{{modalItems.type}}</b-col>
+        </b-row>
+        <hr>
+        <b-row no-gutters>
+          <b-col class="font-weight-bold">Location:</b-col>
+          <b-col>{{modalItems.location}}</b-col>
+          <b-col class="font-weight-bold">Status:</b-col>
+          <b-col>{{modalItems.status}}</b-col>
+        </b-row>
+        <hr>
+        <b-row no-gutters>
+          <b-col class="font-weight-bold">Description:</b-col>
+          <b-col class="text-left">{{modalItems.description}}</b-col>
+        </b-row>
+      </b-container>
+      <!-- <b-table class="modalTable" borderless outlined small stacked :items="modalItems"></b-table> -->
     </b-modal>
   </div>
 </template>
