@@ -63,16 +63,17 @@ $date = $data['date'];
           // $tempArray[$rowKey]["date"] = $columnValue;
           break;
           case "row":
-          $tempArray[$rowKey]["row"] = $columnValue; 
-          
-          break;         
+            $tempArray[$rowKey]["row"] = $columnValue;           
+            break;         
           case "fmNo":
-          $tempArray[$rowKey]["fmNo"] = $columnValue;
-          
-          break;
+            $tempArray[$rowKey]["fmNo"] = $columnValue;        
+            break;
           case "activities":
-          $tempArray[$rowKey]["activities"] = $columnValue;                    
+            $tempArray[$rowKey]["activities"] = $columnValue;                    
             break;          
+          case "status":
+            $tempArray[$rowKey]["status"] = $columnValue;
+           break;
           default:            
             break;
         }
@@ -111,7 +112,10 @@ $date = $data['date'];
           break;
           case "activities":
           $tempArray[$rowKey]["activities"] = $columnValue;                    
-            break;          
+          break; 
+          case "type":
+            $tempArray[$rowKey]["type"] = $columnValue;
+           break;        
           default:            
             break;
         }
