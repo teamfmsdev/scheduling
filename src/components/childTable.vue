@@ -265,19 +265,70 @@ export default {
             fmNo:
               rowData['childTable'][this.tableName]['items'][childTableRowId][
                 'fmNo'
-              ]
+              ],
+            operation: 'displayModal'
           }
         })
         .then(({ data }) => {
           if (data != false) {
-            for (let items in this.modalItems[0]) {
-              this.modalItems[0][items] = data[items]
+            for (let items in this.modalItems) {
+              this.modalItems[items] = data[items]
             }
             this.modalShow = !this.modalShow
           } else {
             alert('Error: FM# not in record')
           }
         })
+    },
+    markCompleted (event) {
+      // mainTable data that matches event target row Id
+      let rowId = event.target.closest('tr').parentNode.closest('tr').id
+
+      // Affected childTable row Id
+      let childTableRowId = event.target.closest('tr').id
+
+      // Whole data for mainTable row
+      let rowData = this.mainTable[rowId]
+      // To diffrentiate which childTable <td> is
+      // affected
+      let dataType = event.target.id
+      // User typed data in <td> to be updated in
+      // vuex store
+      let newValue = event.target.innerText
+      // To be send to vuex mutations
+      let newData = {
+        rowData: rowData,
+        table: this.tableName,
+        affectedRow: childTableRowId
+        // data: { newValue: newValue, dataType: dataType }
+      }
+
+      this.$store.dispatch('toggleChildTableCompletion', newData)
+    },
+    markType (event) {
+      // mainTable data that matches event target row Id
+      let rowId = event.target.closest('tr').parentNode.closest('tr').id
+
+      // Affected childTable row Id
+      let childTableRowId = event.target.closest('tr').id
+
+      // Whole data for mainTable row
+      let rowData = this.mainTable[rowId]
+      // To diffrentiate which childTable <td> is
+      // affected
+      let dataType = event.target.id
+      // User typed data in <td> to be updated in
+      // vuex store
+      let newValue = event.target.innerText
+      // To be send to vuex mutations
+      let newData = {
+        rowData: rowData,
+        table: this.tableName,
+        affectedRow: childTableRowId
+        // data: { newValue: newValue, dataType: dataType }
+      }
+
+      this.$store.dispatch('togglePtwType', newData)
     }
   },
   components: {}
