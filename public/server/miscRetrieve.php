@@ -20,14 +20,25 @@ foreach ($_GET as $key => $value) {
 
 $fmNo=$data["fmNo"];
 
-$stmt = $con -> prepare("SELECT `Work Title` As workTitle,`Priority` As priority,
-`Type 1` As type,`Location` As location ,`Status` As status
-,`Request By` As requestBy,DATE_FORMAT(`Request Date`,'%d-%m-%Y') As requestDate FROM `main` WHERE `row`='$fmNo'");
-
-if ($stmt->execute()){
-  $resultData = $stmt ->fetch(PDO::FETCH_ASSOC);
-  echo json_encode($resultData);
+if($data["operation"]=="displayModal"){
+  $stmt = $con -> prepare("SELECT `Work Title` As workTitle,`Priority` As priority,
+  `Type 1` As type,`Location` As location ,`Status` As status
+  ,`Description` as description FROM `main` WHERE `row`='$fmNo'");
+  
+  if ($stmt->execute()){
+    $resultData = $stmt ->fetch(PDO::FETCH_ASSOC);
+    echo json_encode($resultData);
+  }
 }
+elseif($data["operation"]=="getWorkTitle"){
+  $stmt = $con -> prepare("SELECT `Work Title` As activities FROM `main` WHERE `row`='$fmNo'");
+  
+  if ($stmt->execute()){
+    $resultData = $stmt ->fetch(PDO::FETCH_ASSOC);
+    echo json_encode($resultData);
+  }
+}
+
 
 
 
