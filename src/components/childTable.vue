@@ -157,17 +157,14 @@ export default {
   data () {
     return {
       modalShow: false,
-      modalItems: [
-        {
-          workTitle: '',
-          priority: '',
-          type: '',
-          location: '',
-          status: '',
-          requestBy: '',
-          requestDate: ''
-        }
-      ]
+      modalItems: {
+        workTitle: '',
+        priority: '',
+        type: '',
+        location: '',
+        status: '',
+        description: ''
+      }
 
       // tableName: this.tableName
     }
