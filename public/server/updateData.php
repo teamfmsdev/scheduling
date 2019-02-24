@@ -88,5 +88,27 @@ elseif($data["operation"]=="mainTableEditRow"){
       echo json_encode($message);
     }
 }
+elseif($data["operation"]=="toggleChildTableCompletion"){
+  $stmt = $con -> prepare("UPDATE `$table` SET `status`='$newValue'
+  WHERE `row`='$row'");
+  
+  if($stmt->execute()){
+    echo "Status updated";
+  }
+  else{
+    echo "Status failed to update";
+  }
+}
+elseif($data["operation"]=="togglePtwType"){
+  $stmt = $con -> prepare("UPDATE `$table` SET `type`='$newValue'
+  WHERE `row`='$row'");
+  
+  if($stmt->execute()){
+    echo "Type updated";
+  }
+  else{
+    echo "Type failed to update";
+  }
+}
 
 
