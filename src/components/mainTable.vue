@@ -145,64 +145,44 @@ export default {
       fields: [
         {
           key: 'day',
-          label: 'Day',
-          thClass: 'align-middle',
-          attr: '',
-          span: '',
-          sortable: false
+          label: 'Day'
         },
         {
           key: 'date',
-          label: 'Date',
-          thClass: 'align-middle',
-          attr: '',
-          span: '',
-          sortable: false
+          label: 'Date'
         },
         {
           key: 'biActivities',
-          label: 'B&I Activities',
-          attr: '',
-          span: '',
-          thClass: 'align-middle'
+          label: 'B&I Activities'
         },
         {
           key: 'permitToWork',
-          label: 'Permit To Work',
-          attr: '',
-          span: '',
-          thClass: 'align-middle'
+          label: 'Permit To Work'
         },
         {
           key: 'projectActivities',
-          label: 'Project Activities',
-          attr: '',
-          span: '',
-          thClass: 'align-middle'
+          label: 'Project Activities'
         },
-        { key: '1', label: '1', attr: '', span: '' },
-        { key: '2', label: '2', attr: '', span: '' },
-        { key: '3', label: '3', attr: '', span: '' },
-        { key: '4', label: '4', attr: '', span: '' },
-        { key: '5', label: '5', attr: '', span: '' },
-        { key: '6', label: '6', attr: '', span: '' },
-        { key: '7', label: '7', attr: '', span: '' },
-        { key: '8', label: '8', attr: '', span: '' },
+        { key: '1', label: '1' },
+        { key: '2', label: '2' },
+        { key: '3', label: '3' },
+        { key: '4', label: '4' },
+        { key: '5', label: '5' },
+        { key: '6', label: '6' },
+        { key: '7', label: '7' },
+        { key: '8', label: '8' },
         {
           key: 'contractManagement',
-          label: 'Contract Management',
-          attr: '',
-          span: ''
+          label: 'Contract Management'
         },
         {
           key: 'contractorManagement',
-          label: 'Contractor Management',
-          attr: '',
-          span: ''
+          label: 'Contractor Management'
         }
       ],
       items: [],
-      selectedMonths: 'Jan',
+      selectedMonths: dayjs(new Date()).format('MMM'),
+      selectedYear: dayjs(new Date()).format('YYYY'),
       monthOptions: [
         { value: 'Jan', text: 'January' },
         { value: 'Feb', text: 'February' },
@@ -217,7 +197,7 @@ export default {
         { value: 'Nov', text: 'November' },
         { value: 'Dec', text: 'December' }
       ],
-      selectedYear: '2019',
+
       yearOptions: [
         { value: '2019', text: '2019' },
         { value: '2020', text: '2020' },
