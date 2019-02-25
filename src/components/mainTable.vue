@@ -35,23 +35,23 @@
               <td :key="dataIndex" v-else-if="dataIndex == 'date'" v-text="val"></td>
               <td
                 :key="dataIndex"
-                v-text="childTableLength(rowIndex,'biA')"
+                v-html="childTableLength(rowIndex,'biA')"
                 v-else-if="dataIndex == 'biActivities'"
               ></td>
               <td
                 :key="dataIndex"
-                v-text="childTableLength(rowIndex,'ptw')"
+                v-html="childTableLength(rowIndex,'ptw')"
                 v-else-if="dataIndex == 'permitToWork'"
               ></td>
               <td
                 :key="dataIndex"
                 v-else-if="dataIndex == 'projectActivities'"
-                v-text="childTableLength(rowIndex,'pa')"
+                v-html="childTableLength(rowIndex,'pa')"
               ></td>
               <td
                 :key="dataIndex"
                 v-else-if="dataIndex == 'contractorManagement'"
-                v-text="childTableLength(rowIndex,'cm')"
+                v-html="childTableLength(rowIndex,'cm')"
               ></td>
               <!-- <td :key="dataIndex" v-else-if="dataIndex == 'day'">{{val}}</td> -->
               <td :key="dataIndex" :class="dynamicClass(val)" v-else></td>
@@ -97,10 +97,10 @@
           </tr>
         </template>
         <tr class="totalCount">
-          <td :colspan="2" v-text="'Total'"></td>
-          <td v-text="totalLength('biA')"></td>
-          <td v-text="totalLength('ptw')"></td>
-          <td v-text="totalLength('pa')"></td>
+          <td :colspan="2" v-html="'<b>Total</b>'"></td>
+          <td v-html="totalLength('biA')"></td>
+          <td v-html="totalLength('ptw')"></td>
+          <td v-html="totalLength('pa')"></td>
           <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n1'])"></td>
           <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n2'])"></td>
           <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n3'])"></td>
@@ -109,7 +109,7 @@
           <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n6'])"></td>
           <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n7'])"></td>
           <td :class="dynamicClass(mainData[mainData.length-1]['mainTable']['n8'])"></td>
-          <td v-text="totalLength('cm')"></td>
+          <td v-html="totalLength('cm')"></td>
         </tr>
       </tbody>
     </table>
