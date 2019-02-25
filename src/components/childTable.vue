@@ -18,37 +18,32 @@
               @blur="editRow(tdVal,$event)"
             ></td>
           </template>
-          <td class="align-middle">
+          <td class="align-middle d-flex flex-row justify-content-start flex-wrap">
             <button
               v-if="tableName=='biA'"
               class="btn btn-sm btn-outline-primary fas fa-info-circle infoButton"
               @click="displayInfo"
-              value
             ></button>
 
             <button
               v-if="tableName=='biA'"
               class="btn btn-sm btn-outline-primary fas fa-check-circle"
               @click="markCompleted"
-              value="C"
             ></button>
 
             <button
               v-if="tableName=='ptw' || tableName=='biA'"
-              class="btn btn-sm btn-outline-primary fas fa-arrow-circle-right revalidateBtn"
+              class="btn btn-sm btn-outline-primary fas fa-arrow-alt-circle-down revalidateBtn"
               @click.stop="reValidate"
-              :value="tableName=='ptw'?'R':'CF'"
             ></button>
             <button
               v-if="tableName=='ptw'"
-              class="btn btn-sm btn-outline-primary fas fa-clock"
+              class="btn btn-sm btn-outline-primary fas fa-registered"
               @click="markType"
-              value="C"
             ></button>
             <button
               class="btn btn-sm btn-outline-primary fas fa-trash-alt deleteBtn"
               @click.stop="deleteRow"
-              value="-"
             ></button>
             <!-- <input
               type="button"
