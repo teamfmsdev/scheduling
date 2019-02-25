@@ -504,6 +504,14 @@ export default {
                 colValue['activities'].trim() != ''
               ) {
                 total += 1
+                // Check for completed job
+                if (colName == 'biA' && colValue['status'] == 1) {
+                  completedCount += 1
+                }
+                // Check for routine job
+                if (colName == 'ptw' && colValue['type'] == 'R') {
+                  routineCount += 1
+                }
               }
             } else {
               if (colValue['activities'].trim() != '') {
@@ -514,11 +522,35 @@ export default {
         )
       })
 
-      if (total > 1) {
-        return `${total} Activities`
+      let totalString
+
+      if (colName == 'biA') {
+        // totalString = `<b>Completed</b>: <mark>${completedCount}</mark> / Total: ${count}`;
+        if (total == 0) {
+          totalString = ''
+        } else {
+          totalString = `<b>Completed :</b> <mark style='background-color:#057953; color:white;'><b>${completedCount}</b></mark> <b>Total :</b> <mark style='background-color:#4c4c4c; color:white;'><b>${total}</b></mark>`
+        }
+      } else if (colName == 'ptw') {
+        if (total == 0) {
+          totalString = ''
+        } else {
+          totalString = `<b>Routine :</b> <mark style='background-color:#40A6CC; color:white;'><b>${routineCount}</b></mark> <b>Total :</b> <mark style='background-color:#4c4c4c; color:white;'><b>${total}</b></mark>`
+        }
       } else {
-        return `${total} Activity`
+        if (total == 0) {
+          totalString = ''
+        } else {
+          totalString = `<b>Total :</b> <mark style='background-color:#4c4c4c; color:white;'><b>${total}</b></mark>`
+        }
       }
+      return totalString
+
+      // if (total > 1) {
+      //   return `${total} Activities`;
+      // } else {
+      //   return `${total} Activity`;
+      // }
       // (total>1) ? return `${total} Activities`: `${total} Activity`;
       // console.log(currentMonthData);
     },
@@ -624,7 +656,7 @@ table {
 }
 
 .totalCount {
-  background-color: yellow;
+  background-color: #00b8ff;
 }
 .parentRow:hover {
   background-color: rgb(0, 177, 169);
@@ -656,5 +688,8 @@ thead {
       width: 15%;
     }
   }
+}
+.markComplete {
+  background-color: #006d62 !important;
 }
 </style>
