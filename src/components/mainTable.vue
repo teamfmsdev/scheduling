@@ -1,7 +1,17 @@
 <template>
   <b-container fluid>
-    <b-form-select @change="dateChange" v-model="selectedMonths" :options="monthOptions"/>
-    <b-form-select @change="dateChange" v-model="selectedYear" :options="yearOptions"/>
+    <b-form-select
+      class="text-center"
+      @change="dateChange"
+      v-model="selectedMonths"
+      :options="monthOptions"
+    />
+    <b-form-select
+      class="text-center"
+      @change="dateChange"
+      v-model="selectedYear"
+      :options="yearOptions"
+    />
     <table class="table table-sm table-bordered">
       <thead class>
         <tr>
