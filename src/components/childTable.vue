@@ -351,7 +351,7 @@ td {
 }
 
 td:focus {
-  border: 2px solid rgb(19, 146, 140);
+  border: 2px solid #3295ff;
 }
 
 table {
@@ -366,7 +366,7 @@ tr {
   height: 1%;
 }
 tr:hover {
-  border: 2px solid rgba(0, 177, 168, 0.678);
+  border: 2px solid #006fe6;
   // background-color: rgba(0, 177, 168, 0.678);
 }
 
@@ -384,10 +384,10 @@ th:nth-child(3) {
 }
 
 .completed {
-  background-color: lightgreen;
+  background-color: #369375;
 }
 
 .routine {
-  background-color: lightblue;
+  background-color: #66b7d6;
 }
 </style>
