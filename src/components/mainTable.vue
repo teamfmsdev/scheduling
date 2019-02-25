@@ -565,6 +565,21 @@ export default {
         case 'p5':
           return 'p5'
       }
+    },
+    isToday (rowIndex) {
+      let rowDate = dayjs(
+        new Date(
+          `${this.mainData[rowIndex].mainTable.date}/${
+            this.mainData[rowIndex].month
+          }/${this.mainData[rowIndex].year}`
+        )
+      ).format('YYYY-MM-DD')
+
+      let todayDate = dayjs(new Date()).format('YYYY-MM-DD')
+
+      if (rowDate == todayDate) {
+        return true
+      }
     }
   },
   created: async function () {
@@ -641,8 +656,8 @@ table {
 }
 
 .parentRow {
-  // color: white;
   background-color: white;
+
   td {
     height: 37px;
     max-height: 37px;
