@@ -38,7 +38,13 @@
 
       <tbody>
         <template v-for="(val,rowIndex) in mainData">
-          <tr class="parentRow" :id="rowIndex" @click.stop="rowClicked" :key="rowIndex">
+          <tr
+            class="parentRow"
+            :class="{currentDay:isToday(rowIndex)}"
+            :id="rowIndex"
+            @click.stop="rowClicked"
+            :key="rowIndex"
+          >
             <template v-for="(val,dataIndex) in mainData[rowIndex]['mainTable']">
               <!-- Do a loop LATER -->
               <td :key="dataIndex" v-if="dataIndex == 'day'" v-text="val"></td>
@@ -701,5 +707,9 @@ thead {
 }
 .markComplete {
   background-color: #006d62 !important;
+}
+
+.currentDay {
+  border: 2px solid #006e99;
 }
 </style>
