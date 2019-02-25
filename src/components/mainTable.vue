@@ -420,16 +420,26 @@ export default {
     },
     childTableLength: function (rowIndex, cTable) {
       let count = 0
+      let completedCount = 0
+      let routineCount = 0
       // Test every row of childTable items for empty data
       this.mainData[rowIndex]['childTable'][cTable].items.forEach(
         (rowValue, itemIndex) => {
+          // Count completed/routine/non-routine activity
           if (cTable == 'biA' || cTable == 'ptw') {
             if (
               rowValue['fmNo'].trim() != '' ||
               rowValue['activities'].trim() != ''
             ) {
               count += 1
-              // return true;
+              // Check for completed job
+              if (cTable == 'biA' && rowValue['status'] == 1) {
+                completedCount += 1
+              }
+              // Check for routine job
+              if (cTable == 'ptw' && rowValue['type'] == 'R') {
+                routineCount += 1
+              }
             }
           } else {
             if (rowValue['activities'].trim() != '') {
@@ -440,17 +450,48 @@ export default {
           // rowIndex == 3 ? console.log(rowIndex) : "";
         }
       )
-      // rowIndex == 3 ? console.log(count) : "";
-      if (count == 0) {
-        return ''
-      } else if (count == 1) {
-        return `${count} Activity`
+
+      let totalString
+
+      if (cTable == 'biA') {
+        // totalString = `<b>Completed</b>: <mark>${completedCount}</mark> / Total: ${count}`;
+        if (count == 0) {
+          totalString = ''
+        } else {
+          totalString = `<i  class="fas fas fa-check-circle fa-lg text-primary"></i> <mark style='background-color:#057953; color:white;'><b>${completedCount}</b></mark> <b>/</b> <mark style='background-color:#4c4c4c; color:white;'><b>${count}</b></mark>`
+        }
+        // else {
+        //   totalString = `<b>Completed :</b> <mark style='background-color:#057953; color:white;'><b>${completedCount}</b></mark> <b>Total :</b> <mark style='background-color:#4c4c4c; color:white;'><b>${count}</b></mark>`;
+        // }
+      } else if (cTable == 'ptw') {
+        if (count == 0) {
+          totalString = ''
+        } else {
+          totalString = `<i  class="fas fa-registered fa-lg text-primary"></i> <mark style='background-color:#40A6CC; color:white;'><b>${routineCount}</b></mark>  <b>/</b>  <mark style='background-color:#4c4c4c; color:white;'><b>${count}</b></mark>`
+        }
+        // else {
+        //   totalString = `<b>Routine :</b> <mark style='background-color:#40A6CC; color:white;'><b>${routineCount}</b></mark> <b>Total :</b> <mark style='background-color:#4c4c4c; color:white;'><b>${count}</b></mark>`;
+        // }
       } else {
-        return `${count} Activities`
+        if (count == 0) {
+          totalString = ''
+        } else {
+          totalString = `<b>Total :</b> <mark style='background-color:#4c4c4c; color:white;'><b>${count}</b></mark>`
+        }
       }
+      return totalString
+      // if (count == 0) {
+      //   return ''
+      // } else if (count == 1) {
+      //   return `${count} Activity`
+      // } else {
+      //   return `${count} Activities`
+      // }
     },
     totalLength: function (colName) {
       let total = 0
+      let completedCount = 0
+      let routineCount = 0
 
       // Check every length of childTable excluding empty row and total it up
       let isNotEmpty
