@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <div id="nav">
-      <h1>CCFM Monthly Schedule</h1>
+      <h1 class="mb-0 p-0">PCOGD Facilities Management</h1>
+      <h2 class="p-0 mt-0 text-white">
+        <strong>Planning & Scheduling</strong>
+      </h2>
+      <a href="/pcogdfm">Request & Reporting</a>
       <!-- <router-link to="/">Home</router-link>| -->
     </div>
     <router-view/>
@@ -24,14 +28,15 @@ export default {}
 }
 #nav {
   margin-bottom: 2%;
-  background-color: #00b1a9;
-  padding: 1rem;
+  background-color: rgb(0, 177, 169);
+  // padding: 1rem;
+  h1 {
+    font-weight: bold;
+    color: white;
+  }
   a {
     font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+    // color: white;
   }
 }
 </style>
