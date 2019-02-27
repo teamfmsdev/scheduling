@@ -94,7 +94,6 @@ export default new Vuex.Store({
         })
     },
     editChildTableData: (state, payload) => {
-      // Destructuring
       let { rowData, table, affectedRow, data } = payload
       // Finding affected mainData
       let affectedData = state.mainData.find(element => {
@@ -106,75 +105,114 @@ export default new Vuex.Store({
       })
       // Destructuring
       let { childTable } = affectedData
-      // Assigning new value to affected childTable
-      // column
-      childTable[table].items[affectedRow][data.dataType] = data.newValue
-      // DATABASE UPDATING
+
+      // Date of mainData
       let date = dayjs(
         new Date(`${rowData.mainTable.date}/${rowData.month}/${rowData.year}`)
       ).format('YYYY-MM-DD')
-      axios
-        .get(`${state.apiUrl}updateData.php`, {
-          params: {
-            date: date,
-            table: table.toLowerCase(),
-            // If row exist, assign the value of 'row' else send empty string
-            row: childTable[table].items[affectedRow]['row'],
-            type: data.dataType,
-            data: data.newValue,
-            operation: 'editChildTableData'
-          }
-        })
-        .then(({ data }) => {
-          // If the operation was a creating new record
-          // if (data['opsCode'] == '1') {
-          //   childTable[table].items[affectedRow]['row'] = data['row']
-          //   console.log(data['serverMessage'])
-          // }
 
-          return console.log(data)
-        })
-        .then(() => {
-          // If user entered fmNo, auto retrieve work title and save to db
-          if (data.dataType == 'fmNo' && table.toLowerCase() == 'bia') {
-            axios
-              .get(`${state.apiUrl}miscRetrieve.php`, {
-                params: {
-                  fmNo: childTable[table].items[affectedRow]['fmNo'],
-                  operation: 'getWorkTitle'
-                }
-              })
-              .then(({ data: response }) => {
-                payload.data.newValue = response['activities']
-                payload.data.dataType = 'activities'
-                // console.log(payload)
-                let { rowData, table, affectedRow, data } = payload
+      // Check for childTable name
+      // if its bia
+      if (data.dataType == 'fmNo' && table.toLowerCase() == 'bia') {
+        axios
+          .get(`${state.apiUrl}miscRetrieve.php`, {
+            params: {
+              fmNo: data.newValue,
+              operation: 'getWorkTitle'
+            }
+          })
+          .then(async ({ data: serverData }) => {
+            // If server response with a row information
+            if (serverData) {
+              let { rowData, table, affectedRow, data } = payload
+              await axios
+                .get(`${state.apiUrl}updateData.php`, {
+                  params: {
+                    date: date,
+                    table: table.toLowerCase(),
+                    // If row exist, assign the value of 'row' else send empty string
+                    row: childTable[table].items[affectedRow]['row'],
+                    type: data.dataType,
+                    data: data.newValue,
+                    operation: 'editChildTableData'
+                  }
+                })
+                .then(() => {
+                  if (serverData) {
+                    childTable[table].items[affectedRow]['fmNo'] = data.newValue
+                  }
+                })
+              // Save into database
+              payload.data.newValue = serverData['priority']
+              payload.data.dataType = 'priority'
 
-                axios
-                  .get(`${state.apiUrl}updateData.php`, {
-                    params: {
-                      date: date,
-                      table: table.toLowerCase(),
-                      // If row exist, assign the value of 'row' else send empty string
-                      row: childTable[table].items[affectedRow]['row'],
-                      type: data.dataType,
-                      data: data.newValue,
-                      operation: 'editChildTableData'
-                    }
-                  })
-                  .then(() => {
-                    if (response) {
-                      // console.log(response['activities'])
-                      childTable[table].items[affectedRow]['activities'] =
-                        response['activities']
-                    }
+              await axios
+                .get(`${state.apiUrl}updateData.php`, {
+                  params: {
+                    date: date,
+                    table: table.toLowerCase(),
+                    // If row exist, assign the value of 'row' else send empty string
+                    row: childTable[table].items[affectedRow]['row'],
+                    type: data.dataType,
+                    data: data.newValue,
+                    operation: 'editChildTableData'
+                  }
+                })
+                .then(() => {
+                  if (serverData) {
+                    childTable[table].items[affectedRow]['priority'] =
+                      serverData['priority']
+                  }
+                })
+              // Save activities into database
+              payload.data.newValue = serverData['activities']
+              payload.data.dataType = 'activities'
+              await axios
+                .get(`${state.apiUrl}updateData.php`, {
+                  params: {
+                    date: date,
+                    table: table.toLowerCase(),
+                    // If row exist, assign the value of 'row' else send empty string
+                    row: childTable[table].items[affectedRow]['row'],
+                    type: data.dataType,
+                    data: data.newValue,
+                    operation: 'editChildTableData'
+                  }
+                })
+                .then(() => {
+                  if (serverData) {
+                    childTable[table].items[affectedRow]['activities'] =
+                      serverData['activities']
+                  }
+                })
+            } else {
+              alert('FM# not in record')
+            }
+          })
+      } else {
+        axios
+          .get(`${state.apiUrl}updateData.php`, {
+            params: {
+              date: date,
+              table: table.toLowerCase(),
+              // If row exist, assign the value of 'row' else send empty string
+              row: childTable[table].items[affectedRow]['row'],
+              type: data.dataType,
+              data: data.newValue,
+              operation: 'editChildTableData'
+            }
+          })
+          .then(({ data }) => {
+            childTable[table].items[affectedRow][data.dataType] = data.newValue
+            return console.log(data)
+          })
+      }
+      // Destructuring
 
-                    // return console.log(response['activities'])
-                  })
-                // console.log(payload)
-              })
-          }
-        })
+      // Assigning new value to affected childTable
+      // column
+
+      // DATABASE UPDATING
     },
     // Toggle the completion of biA jobs
     toggleChildTableCompletion: (state, payload) => {
