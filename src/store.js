@@ -504,7 +504,8 @@ export default new Vuex.Store({
     },
     reValidateRow: (state, payload) => {
       let { rowData, table, affectedRow } = payload
-      // data to be validated
+
+      // affected mainData that contains the childTable item
       let affectedData = state.mainData.find(element => {
         return (
           element.year == rowData.year &&
@@ -512,24 +513,31 @@ export default new Vuex.Store({
           element.mainTable.date == rowData.mainTable.date
         )
       })
+      // The next day as the target date to revalidate into
+      let targetDate = dayjs(
+        new Date(
+          `${affectedData.mainTable.date}/${affectedData.month}/${
+            affectedData.year
+          }`
+        )
+      )
+        .add(1, 'day')
+        .format('YYYY-MM-DD')
+
       // Target date
       let targetData = state.mainData.find(element => {
         return (
-          element.year == rowData.year &&
-          element.month == rowData.month &&
-          element.mainTable.date == rowData.mainTable.date + 1
+          dayjs(
+            new Date(
+              `${element.mainTable.date}/${element.month}/${element.year}`
+            )
+          ).format('YYYY-MM-DD') == targetDate
         )
       })
-
-      let date = dayjs(
-        new Date(
-          `${targetData.mainTable.date}/${targetData.month}/${targetData.year}`
-        )
-      ).format('YYYY-MM-DD')
       axios
         .get(`${state.apiUrl}updateData.php`, {
           params: {
-            date: date,
+            date: targetDate,
             table: table.toLowerCase(),
             // If row exist, assign the value of 'row' else send empty string
             row: '',
@@ -547,12 +555,16 @@ export default new Vuex.Store({
           }
         })
         .then(response => {
+          if (targetData) {
+            let newData = JSON.parse(
+              JSON.stringify(affectedData.childTable[table].items[affectedRow])
+            )
+            // add 'row' number that server returned
+            newData['row'] = response.data['row']
+            // Push the payload data to the next day
+            targetData.childTable[table].items.push(newData)
+          }
           // Deep copy to make it not a reactive data
-          let newData = JSON.parse(
-            JSON.stringify(affectedData.childTable[table].items[affectedRow])
-          )
-          newData['row'] = response.data['row']
-          targetData.childTable[table].items.push(newData)
         })
     },
     emptyMainData: (state, payload) => {
