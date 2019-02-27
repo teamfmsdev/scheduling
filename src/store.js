@@ -455,6 +455,7 @@ export default new Vuex.Store({
                             ]) {
                               switch (itemCol) {
                                 case 'fmNo':
+                                case 'priority':
                                 case 'activities':
                                 case 'status':
                                   // Replace value of childtable items in mainData with the one from Ajax update
