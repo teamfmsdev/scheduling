@@ -68,6 +68,9 @@ $date = $data['date'];
           case "fmNo":
             $tempArray[$rowKey]["fmNo"] = $columnValue;        
             break;
+            case "priority":
+            $tempArray[$rowKey]["priority"] = $columnValue;        
+            break;
           case "activities":
             $tempArray[$rowKey]["activities"] = $columnValue;                    
             break;          
