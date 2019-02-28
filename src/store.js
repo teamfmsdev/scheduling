@@ -540,6 +540,11 @@ export default new Vuex.Store({
           ).format('YYYY-MM-DD') == targetDate
         )
       })
+
+      let priority =
+        table == 'biA'
+          ? affectedData.childTable[table].items[affectedRow]['priority']
+          : ''
       axios
         .get(`${state.apiUrl}updateData.php`, {
           params: {
@@ -550,6 +555,7 @@ export default new Vuex.Store({
             type: '',
             data: '',
             fmNo: affectedData.childTable[table].items[affectedRow]['fmNo'],
+            priority: priority,
             activities:
               affectedData.childTable[table].items[affectedRow]['activities'],
             type:
