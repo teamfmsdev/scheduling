@@ -237,7 +237,8 @@ export default new Vuex.Store({
 
       let { childTable } = affectedData
 
-      let newValue = childTable[table].items[affectedRow]['status'] == 0 ? 1 : 0
+      let newValue =
+        childTable[table].items[affectedRow]['status'] == 0 ? 1 : 0
 
       axios
         .get(`${state.apiUrl}updateData.php`, {

@@ -24,13 +24,13 @@
               class="btn btn-sm btn-outline-primary fas fa-info-circle infoButton"
               @click="displayInfo"
             ></button>
-            
+
             <button
               v-if="tableName=='biA'"
               class="btn btn-sm btn-outline-primary fas fa-check-circle"
               @click="markCompleted"
             ></button>
-            
+
             <button
               v-if="tableName=='ptw' || tableName=='biA'"
               class="btn btn-sm btn-outline-primary fas fa-arrow-alt-circle-down revalidateBtn"
@@ -135,8 +135,8 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
-import axios from "axios";
+import dayjs from 'dayjs'
+import axios from 'axios'
 export default {
   props: {
     fields: Object,
@@ -145,109 +145,109 @@ export default {
     mainTable: Array
   },
 
-  data() {
+  data () {
     return {
       modalShow: false,
       modalItems: {
-        workTitle: "",
-        priority: "",
-        type: "",
-        location: "",
-        status: "",
-        description: ""
+        workTitle: '',
+        priority: '',
+        type: '',
+        location: '',
+        status: '',
+        description: ''
       }
 
       // tableName: this.tableName
-    };
+    }
   },
   methods: {
-    addChildTableRow: function(event) {
+    addChildTableRow: function (event) {
       // mainTable row Id
-      let rowId = event.target.parentNode.parentNode.parentNode.id;
+      let rowId = event.target.parentNode.parentNode.parentNode.id
       // mainTable data from prop
-      let rowData = this.mainTable[rowId];
+      let rowData = this.mainTable[rowId]
       // New row to be added to vuex store
       let data =
-        this.tableName == "biA"
-          ? { fmNo: "", priority: "", activities: "" }
-          : { fmNo: "", activities: "" };
+        this.tableName == 'biA'
+          ? { fmNo: '', priority: '', activities: '' }
+          : { fmNo: '', activities: '' }
       let newRow = {
         // Id for row
         rowData: rowData,
         table: this.tableName,
         data: data
-      };
-      this.$store.dispatch("addChildTableRow", newRow);
+      }
+      this.$store.dispatch('addChildTableRow', newRow)
     },
-    deleteRow: function(event) {
+    deleteRow: function (event) {
       // mainTable row Id
 
       let rowId =
         event.target.parentNode.parentNode.parentNode.parentNode.parentNode
-          .parentNode.parentNode.id;
+          .parentNode.parentNode.id
       // console.log(rowId);
 
-      let childTableRowId = event.target.parentNode.parentNode.id;
+      let childTableRowId = event.target.parentNode.parentNode.id
       // Whole data for parent row
-      let rowData = this.mainTable[rowId];
+      let rowData = this.mainTable[rowId]
 
       let deletedRow = {
         rowData: rowData,
         table: this.tableName,
         data: { childTableRowId: childTableRowId }
-      };
+      }
 
-      this.$store.dispatch("deleteChildTableRow", deletedRow);
+      this.$store.dispatch('deleteChildTableRow', deletedRow)
     },
-    editRow: function(currentVal, event) {
+    editRow: function (currentVal, event) {
       // mainTable data that matches event target row Id
       let rowId =
         event.target.parentNode.parentNode.parentNode.parentNode.parentNode
-          .parentNode.id;
+          .parentNode.id
 
       // Affected childTable row Id
-      let childTableRowId = event.target.parentNode.id;
+      let childTableRowId = event.target.parentNode.id
 
       // Whole data for mainTable row
-      let rowData = this.mainTable[rowId];
+      let rowData = this.mainTable[rowId]
       // To diffrentiate which childTable <td> is
       // affected
-      let dataType = event.target.id;
+      let dataType = event.target.id
       // User typed data in <td> to be updated in
       // vuex store
-      let newValue = event.target.innerText;
+      let newValue = event.target.innerText
       // To be send to vuex mutations
       let newData = {
         rowData: rowData,
         table: this.tableName,
         affectedRow: childTableRowId,
         data: { newValue: newValue, dataType: dataType }
-      };
+      }
 
-      this.$store.dispatch("editChildTableData", newData);
+      this.$store.dispatch('editChildTableData', newData)
     },
-    reValidate: function(event) {
+    reValidate: function (event) {
       // mainTable row Id
       let rowId =
         event.target.parentNode.parentNode.parentNode.parentNode.parentNode
-          .parentNode.parentNode.id;
+          .parentNode.parentNode.id
       // childTable row Id
-      let childTableRowId = event.target.parentNode.parentNode.id;
+      let childTableRowId = event.target.parentNode.parentNode.id
       // mainTable data from prop
-      let rowData = this.mainTable[rowId];
+      let rowData = this.mainTable[rowId]
 
       let newData = {
         rowData: rowData,
         table: this.tableName,
         affectedRow: childTableRowId
-      };
-      this.$store.dispatch("reValidateRow", newData);
+      }
+      this.$store.dispatch('reValidateRow', newData)
     },
-    displayInfo: function(event) {
-      let rowId = event.target.closest("tr").parentNode.closest("tr").id;
-      let childTableRowId = event.target.closest("tr").id;
+    displayInfo: function (event) {
+      let rowId = event.target.closest('tr').parentNode.closest('tr').id
+      let childTableRowId = event.target.closest('tr').id
 
-      let rowData = this.mainTable[rowId];
+      let rowData = this.mainTable[rowId]
 
       // let date = days(new Date(`1/${this.rowData.mainTable.date}`))
 
@@ -258,76 +258,76 @@ export default {
         .get(`${this.$store.state.apiUrl}miscRetrieve.php`, {
           params: {
             fmNo:
-              rowData["childTable"][this.tableName]["items"][childTableRowId][
-                "fmNo"
+              rowData['childTable'][this.tableName]['items'][childTableRowId][
+                'fmNo'
               ],
-            operation: "displayModal"
+            operation: 'displayModal'
           }
         })
         .then(({ data }) => {
           if (data != false) {
             for (let items in this.modalItems) {
-              this.modalItems[items] = data[items];
+              this.modalItems[items] = data[items]
             }
-            this.modalShow = !this.modalShow;
+            this.modalShow = !this.modalShow
           } else {
-            alert("Error: FM# not in record");
+            alert('Error: FM# not in record')
           }
-        });
+        })
     },
-    markCompleted(event) {
+    markCompleted (event) {
       // mainTable data that matches event target row Id
-      let rowId = event.target.closest("tr").parentNode.closest("tr").id;
+      let rowId = event.target.closest('tr').parentNode.closest('tr').id
 
       // Affected childTable row Id
-      let childTableRowId = event.target.closest("tr").id;
+      let childTableRowId = event.target.closest('tr').id
 
       // Whole data for mainTable row
-      let rowData = this.mainTable[rowId];
+      let rowData = this.mainTable[rowId]
       // To diffrentiate which childTable <td> is
       // affected
-      let dataType = event.target.id;
+      let dataType = event.target.id
       // User typed data in <td> to be updated in
       // vuex store
-      let newValue = event.target.innerText;
+      let newValue = event.target.innerText
       // To be send to vuex mutations
       let newData = {
         rowData: rowData,
         table: this.tableName,
         affectedRow: childTableRowId
         // data: { newValue: newValue, dataType: dataType }
-      };
+      }
 
-      this.$store.dispatch("toggleChildTableCompletion", newData);
+      this.$store.dispatch('toggleChildTableCompletion', newData)
     },
-    markType(event) {
+    markType (event) {
       // mainTable data that matches event target row Id
-      let rowId = event.target.closest("tr").parentNode.closest("tr").id;
+      let rowId = event.target.closest('tr').parentNode.closest('tr').id
 
       // Affected childTable row Id
-      let childTableRowId = event.target.closest("tr").id;
+      let childTableRowId = event.target.closest('tr').id
 
       // Whole data for mainTable row
-      let rowData = this.mainTable[rowId];
+      let rowData = this.mainTable[rowId]
       // To diffrentiate which childTable <td> is
       // affected
-      let dataType = event.target.id;
+      let dataType = event.target.id
       // User typed data in <td> to be updated in
       // vuex store
-      let newValue = event.target.innerText;
+      let newValue = event.target.innerText
       // To be send to vuex mutations
       let newData = {
         rowData: rowData,
         table: this.tableName,
         affectedRow: childTableRowId
         // data: { newValue: newValue, dataType: dataType }
-      };
+      }
 
-      this.$store.dispatch("togglePtwType", newData);
+      this.$store.dispatch('togglePtwType', newData)
     }
   },
   components: {}
-};
+}
 </script>
 
 <style lang="scss" scoped>
