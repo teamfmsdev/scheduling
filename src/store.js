@@ -113,7 +113,11 @@ export default new Vuex.Store({
 
       // Check for childTable name
       // if its bia
-      if (data.dataType == 'fmNo' && table.toLowerCase() == 'bia') {
+      if (
+        data.dataType == 'fmNo' &&
+        data.newValue.trim() != '' &&
+        table.toLowerCase() == 'bia'
+      ) {
         axios
           .get(`${state.apiUrl}miscRetrieve.php`, {
             params: {
@@ -139,7 +143,8 @@ export default new Vuex.Store({
                 })
                 .then(() => {
                   if (serverData) {
-                    childTable[table].items[affectedRow]['fmNo'] = data.newValue
+                    childTable[table].items[affectedRow]['fmNo'] =
+                      data.newValue
                   }
                 })
               // Save into database
