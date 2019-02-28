@@ -207,9 +207,10 @@ export default new Vuex.Store({
               operation: 'editChildTableData'
             }
           })
-          .then(({ data }) => {
+          .then(({ data: serverData }) => {
+            // console.log(childTable[table].items[affectedRow][data.dataType]);
             childTable[table].items[affectedRow][data.dataType] = data.newValue
-            return console.log(data)
+            return console.log(serverData)
           })
       }
       // Destructuring
