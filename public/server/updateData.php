@@ -62,10 +62,20 @@ elseif($data["operation"]=="reValidateChildTableData"){
   $fmNo = $_GET["fmNo"];
   $activities = $_GET["activities"];
   $type = $_GET["type"]; 
+  $priority = $_GET["priority"];
  
-  $stmt = $con -> prepare("INSERT INTO `$table` 
+  if($table=="bia"){
+    $stmt = $con -> prepare("INSERT INTO `$table` 
+  VALUES ('$date',DEFAULT,'$fmNo','$priority','$activities','$type') ;
+  SELECT LAST_INSERT_ID();");
+  }
+  else{
+    $stmt = $con -> prepare("INSERT INTO `$table` 
   VALUES ('$date',DEFAULT,'$fmNo','$activities','$type') ;
   SELECT LAST_INSERT_ID();");
+  }
+
+  
 
   if($stmt -> execute()){
     $rowValue = $con ->lastInsertId();
