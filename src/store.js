@@ -143,58 +143,17 @@ export default new Vuex.Store({
                 })
                 .then(() => {
                   if (serverData) {
-                    childTable[table].items[affectedRow]['fmNo'] =
-                      data.newValue
-                  }
-                })
-              // Save into database
-              payload.data.newValue = serverData['priority']
-              payload.data.dataType = 'priority'
-
-              await axios
-                .get(`${state.apiUrl}updateData.php`, {
-                  params: {
-                    date: date,
-                    table: table.toLowerCase(),
-                    // If row exist, assign the value of 'row' else send empty string
-                    row: childTable[table].items[affectedRow]['row'],
-                    type: data.dataType,
-                    data: data.newValue,
-                    operation: 'editChildTableData'
-                  }
-                })
-                .then(() => {
-                  if (serverData) {
-                    childTable[table].items[affectedRow]['priority'] =
-                      serverData['priority']
-                  }
-                })
-              // Save activities into database
-              payload.data.newValue = serverData['activities']
-              payload.data.dataType = 'activities'
-              await axios
-                .get(`${state.apiUrl}updateData.php`, {
-                  params: {
-                    date: date,
-                    table: table.toLowerCase(),
-                    // If row exist, assign the value of 'row' else send empty string
-                    row: childTable[table].items[affectedRow]['row'],
-                    type: data.dataType,
-                    data: data.newValue,
-                    operation: 'editChildTableData'
-                  }
-                })
-                .then(() => {
-                  if (serverData) {
-                    childTable[table].items[affectedRow]['activities'] =
-                      serverData['activities']
+                    for (let key in serverData) {
+                      childTable[table].items[affectedRow][key] =
+                        serverData[key]
+                    }
                   }
                 })
             } else {
               alert('FM# not in record')
             }
           })
-      } else {
+      } else if (table.toLowerCase() != 'bia') {
         axios
           .get(`${state.apiUrl}updateData.php`, {
             params: {
@@ -213,12 +172,6 @@ export default new Vuex.Store({
             return console.log(serverData)
           })
       }
-      // Destructuring
-
-      // Assigning new value to affected childTable
-      // column
-
-      // DATABASE UPDATING
     },
     // Toggle the completion of biA jobs
     toggleChildTableCompletion: (state, payload) => {
@@ -237,8 +190,7 @@ export default new Vuex.Store({
 
       let { childTable } = affectedData
 
-      let newValue =
-        childTable[table].items[affectedRow]['status'] == 0 ? 1 : 0
+      let newValue = childTable[table].items[affectedRow]['status'] == 0 ? 1 : 0
 
       axios
         .get(`${state.apiUrl}updateData.php`, {
@@ -542,10 +494,10 @@ export default new Vuex.Store({
         )
       })
 
-      let priority =
-        table == 'biA'
-          ? affectedData.childTable[table].items[affectedRow]['priority']
-          : ''
+      // let priority =
+      //   table == 'biA'
+      //     ? affectedData.childTable[table].items[affectedRow]['priority']
+      //     : ''
       axios
         .get(`${state.apiUrl}updateData.php`, {
           params: {
@@ -556,26 +508,28 @@ export default new Vuex.Store({
             type: '',
             data: '',
             fmNo: affectedData.childTable[table].items[affectedRow]['fmNo'],
-            priority: priority,
+            // priority: priority,
             activities:
               affectedData.childTable[table].items[affectedRow]['activities'],
             type:
               // Set type value according to table
               table.toLowerCase() == 'bia'
-                ? affectedData.childTable[table].items[affectedRow]['status']
+                ? ''
                 : affectedData.childTable[table].items[affectedRow]['type'],
             operation: 'reValidateChildTableData'
           }
         })
-        .then(response => {
+        .then(({ data: serverData }) => {
           if (targetData) {
             let newData = JSON.parse(
               JSON.stringify(affectedData.childTable[table].items[affectedRow])
             )
             // add 'row' number that server returned
-            newData['row'] = response.data['row']
+            newData['row'] = serverData['row']
             // Push the payload data to the next day
             targetData.childTable[table].items.push(newData)
+
+            console.log(serverData['serverMessage'])
           }
           // Deep copy to make it not a reactive data
         })
