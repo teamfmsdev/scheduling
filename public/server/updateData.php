@@ -17,7 +17,20 @@ if($data["operation"]=="editChildTableData"){
   $stmt = $con -> prepare("UPDATE `$table` SET `$column`='$newValue' WHERE `row`='$row'");
 
   if($stmt -> execute()){
+    if($table=="bia"){
+      $fmNo = $data["data"];
+      // Append to description of row = fmNo 
+      $logMsg = $con->prepare("UPDATE `biaschedule` SET `description`
+      =CONCAT(`description`,CONCAT('\n\n***Job scheduled on ',DATE_FORMAT('$date','%d-%m-%Y'))) WHERE `fmNo`='$fmNo'");
+
+      if($logMsg->execute()){
+        echo "Job scheduled";
+      }
+    }
+    else{
       echo "Update sucess";
+    }
+      
   }else{
       echo "Update failed";
   }
