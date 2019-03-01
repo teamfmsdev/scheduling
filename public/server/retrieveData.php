@@ -49,7 +49,7 @@ $date = $data['date'];
 
   $tempArray=[];
   $date = $data["date"];
-  $biaFetch = $con -> prepare("SELECT * FROM `bia` 
+  $biaFetch = $con -> prepare("SELECT * FROM `biaschedule` 
   WHERE YEAR(`date`)=YEAR('$date') AND MONTH(`date`)=MONTH('$date')") ;
 
   if($biaFetch->execute()){
@@ -75,6 +75,7 @@ $date = $data['date'];
             $tempArray[$rowKey]["activities"] = $columnValue;                    
             break;          
           case "status":
+            $columnValue == "Closed" ? $columnValue = 1: $columnValue = 0;
             $tempArray[$rowKey]["status"] = $columnValue;
            break;
           default:            
