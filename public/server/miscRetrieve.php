@@ -31,7 +31,7 @@ if($data["operation"]=="displayModal"){
   }
 }
 elseif($data["operation"]=="getWorkTitle"){
-  $stmt = $con -> prepare("SELECT `Priority` as priority,`Work Title` As activities FROM `main` WHERE `row`='$fmNo'");
+  $stmt = $con -> prepare("SELECT `row` as fmNo,`Priority` as priority,`Work Title` As activities,`Status` as status FROM `main` WHERE `row`='$fmNo'");
   // $stmt = $con -> prepare("SELECT `bia`.`date`,`bia`.`fmNo`,`main`.`Priority` as priority
   // ,`main`.`Work Title` as activities,`main`.`Status` as status 
   // FROM `ccfm`.`bia` JOIN `ms`.`main` ON `ccfm`.`bia`.`fmNo` = `ms`.`main`.`row`");
@@ -40,7 +40,15 @@ elseif($data["operation"]=="getWorkTitle"){
   
   if ($stmt->execute()){
     $resultData = $stmt ->fetch(PDO::FETCH_ASSOC);  
+    if($resultData){
+      $resultData["status"] == "Closed" ? $resultData["status"] = 1 :$resultData["status"] = 0;
       echo json_encode($resultData);    
+    }
+    else{
+      echo json_encode($resultData);    
+    }
+    
+      
   }
 }
 
