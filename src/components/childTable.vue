@@ -102,7 +102,7 @@
       class="btn btn-sm btn-outline-primary fas fa-plus-square fa-lg w-25 my-3"
       @click.stop="addChildTableRow"
     ></button>
-    <b-modal centered v-model="modalShow">
+    <b-modal size="lg" centered v-model="modalShow">
       <div class="mx-auto" slot="modal-title">Activities Information</div>
       <b-container fluid>
         <b-row no-gutters>
