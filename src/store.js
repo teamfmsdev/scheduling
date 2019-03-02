@@ -520,18 +520,34 @@ export default new Vuex.Store({
           }
         })
         .then(({ data: serverData }) => {
-          if (targetData) {
-            let newData = JSON.parse(
-              JSON.stringify(affectedData.childTable[table].items[affectedRow])
-            )
-            // add 'row' number that server returned
-            newData['row'] = serverData['row']
-            // Push the payload data to the next day
-            targetData.childTable[table].items.push(newData)
-
-            console.log(serverData['serverMessage'])
-          }
           // Deep copy to make it not a reactive data
+          let newData = JSON.parse(
+            JSON.stringify(affectedData.childTable[table].items[affectedRow])
+          )
+          // console.log(newData)
+          // add 'row' number that server returned
+          // newData['row'] = serverData['row']
+          // Push the payload data to the next day
+          if (serverData['rowAffected'] != 0) {
+            if (table.toLowerCase() == 'bia') {
+              if (targetData) {
+                targetData.childTable[table].items.push(newData)
+                affectedData.childTable[table].items.splice(affectedRow, 1)
+              } else {
+                affectedData.childTable[table].items.splice(affectedRow, 1)
+              }
+            } else {
+              if (targetData) {
+                newData['row'] = serverData['row']
+                targetData.childTable[table].items.push(newData)
+              }
+              // newData['row'] = serverData['row']
+              // targetData.childTable[table].items.push(newData)
+            }
+          }
+          // console.log(affectedRow)
+          console.log(serverData['serverMessage'])
+          console.log(serverData['rowAffected'])
         })
     },
     emptyMainData: (state, payload) => {
