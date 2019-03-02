@@ -134,7 +134,12 @@
         </b-row>
         <hr>
         <b-row no-gutters>
-          <b-col class="font-weight-bold">Description:</b-col>
+          <b-col class="font-weight-bold">Description</b-col>
+          <!-- <b-col class="text-left">{{modalItems.description}}</b-col> -->
+        </b-row>
+        <hr>
+        <b-row no-gutters>
+          <!-- <b-col class="font-weight-bold">Description:</b-col> -->
           <b-col class="text-left">{{modalItems.description}}</b-col>
         </b-row>
       </b-container>
@@ -400,12 +405,12 @@ tr:hover {
 
 .biATable {
   th:nth-child(1) {
-    width: 15%;
-    max-width: 15%;
+    width: 10%;
+    max-width: 10%;
   }
   th:nth-child(2) {
-    width: 2%;
-    max-width: 2%;
+    width: 10%;
+    max-width: 10%;
   }
   th:nth-child(3) {
     width: 60%;
