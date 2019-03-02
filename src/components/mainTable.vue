@@ -625,7 +625,7 @@ export default {
 
 <style lang="scss" scoped>
 .active {
-  background-color: #074a4f;
+  background-color: #193aa7;
 }
 
 .p0 {
@@ -694,7 +694,9 @@ table {
 .childRow {
   background-color: white;
   // color: white;
-  border: 2px solid rgb(2, 233, 221);
+  border-top: 2px solid #07968f;
+  border-bottom: 2px solid #07968f;
+  // border: 2px solid #006560;
 }
 
 thead {
@@ -723,6 +725,8 @@ thead {
 }
 
 .currentDay {
-  border: 2px solid #006e99;
+  border-top: 2px solid #006e99;
+  border-bottom: 2px solid #006e99;
+  // border: 2px solid #006e99;
 }
 </style>
