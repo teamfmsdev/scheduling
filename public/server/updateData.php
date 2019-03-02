@@ -95,68 +95,31 @@ elseif($data["operation"]=="reValidateChildTableData"){
   // $priority = $_GET["priority"];
  
   if($table=="bia"){
-    $stmt = $con -> prepare("INSERT INTO `$table` 
-  VALUES ('$date',DEFAULT,'$fmNo');
-  SELECT LAST_INSERT_ID() INTO @row;
-  DELETE FROM `bia` WHERE `row`!=@row AND DATE(`date`)<DATE('$date') AND `fmNo`='$fmNo';
-  UPDATE `biaschedule` SET `description`=CONCAT(`description`,CONCAT('\n\n***Job rescheduled to ',DATE_FORMAT('$date','%d-%m-%Y'))) 
-  WHERE `fmNo`='$fmNo';");
 
-  // SELECT LAST_INSERT_ID(); 
+  $stmt = $con -> query("UPDATE `bia` SET `date`='$date' WHERE TRIM(`fmNo`) = $fmNo;
+  UPDATE `biaschedule` SET `description`=CONCAT(`description`,CONCAT('\n\n***Job rescheduled to ',DATE_FORMAT('$date','%d-%m-%Y')))
+  WHERE `fmNo`=$fmNo;");
+
+  $count= $stmt->rowCount();
+
+  $jsonData["serverMessage"]="Revalidate Success";
+  $jsonData["rowAffected"]=$count;
+  echo json_encode($jsonData);
   }
   else{
     $stmt = $con -> prepare("INSERT INTO `$table` 
-  VALUES ('$date',DEFAULT,'$fmNo','$activities','$type') ;
-  SELECT LAST_INSERT_ID();");
-  } 
-
-  if($stmt -> execute()){        
-    if ($table=="bia"){
-      $fetchLast = $con -> prepare(" SELECT * FROM `biaschedule` WHERE `fmNo`='$fmNo'");
-      $fetchLast->execute();
-      $resultData = $fetchLast ->fetch(PDO::FETCH_ASSOC);
-      $jsonData;
-      foreach ($resultData as $columnKey => $columnValue) {
-
-        switch ($columnKey) {
-          case "date":
-          // $tempArray["date"] = $columnValue;
-          break;
-          case "row":
-            $jsonData["row"] = $columnValue;           
-            break;         
-          case "fmNo":
-            $jsonData["fmNo"] = $columnValue;        
-            break;
-            case "priority":
-            $jsonData["priority"] = $columnValue;        
-            break;
-          case "activities":
-            $jsonData["activities"] = $columnValue;                    
-            break;          
-          case "status":
-            $columnValue == "Closed" ? $columnValue = 1: $columnValue = 0;
-            $jsonData["status"] = $columnValue;
-           break;
-          default:            
-            break;
-        }
-      }
-      $jsonData["serverMessage"] = "Revalidate Successfull";
-      echo json_encode($jsonData);
-    }
-    else{
-      $rowValue = $con ->lastInsertId();
-      $message["row"]=$rowValue;
-      $message["serverMessage"]="Revalidate successfull";
+    VALUES ('$date',DEFAULT,'$fmNo','$activities','$type') ;
+    SELECT LAST_INSERT_ID();");
     
-      echo json_encode($message);
+
+    if($stmt->execute()){
+      $resultData = $con->lastInsertId();
+      $serverData["row"] = $resultData;
+      $serverData["serverMessage"] = "Revalidate Success";
+      echo json_encode($serverData);
     }
-    // $rowValue = $con ->lastInsertId();
-    
-  }else{
-    echo "Failed to revalidate";
   }
+
 }
 elseif($data["operation"]=="mainTableEditRow"){
 
@@ -173,22 +136,23 @@ elseif($data["operation"]=="mainTableEditRow"){
     }
 }
 elseif($data["operation"]=="toggleChildTableCompletion"){
+  // $row=$data['row'];
   $newValue == 1 ? $jobStatus = "completed on " : $jobStatus = "reopened on ";
-  $newValue == 1 ? $closedBy = "Support Team" : $closedBy = "";
-  $newValue == 1 ? $closedDate = "CURDATE()" : $closedDate = "";
+  $newValue == 1 ? $closedBy = "Support Team" : $closedBy = "''";
+  $newValue == 1 ? $closedDate = "CURDATE()" : $closedDate = "''";
   $newValue == 1 ? $newValue = "Closed" : $newValue = "New";
   
   $stmt = $con -> prepare("UPDATE `biaschedule` SET `status`='$newValue',
-  `description`=CONCAT(`description`,CONCAT('\n\n***Job $jobStatus',DATE_FORMAT('$date','%d-%m-%Y'))),
-  `closedBy`='$closedBy',
-  `completionDate`=$closedDate 
-  WHERE `row`='$row'");
+  `description`=CONCAT(`description`,CONCAT('\n\n***Job $jobStatus',DATE_FORMAT(CURDATE(),'%d-%m-%Y'))),
+  `closedBy`='$closedBy',`completionDate`=$closedDate WHERE `row`= $row ");
   
   if($stmt->execute()){
     echo "Status updated";
+    
   }
   else{
     echo "Status failed to update";
+    
   }
 }
 elseif($data["operation"]=="togglePtwType"){
