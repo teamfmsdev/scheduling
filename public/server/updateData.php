@@ -21,7 +21,7 @@ if($data["operation"]=="editChildTableData"){
       $fmNo = $data["data"];
       // Append to description of row = fmNo 
       $logMsg = $con->prepare("UPDATE `biaschedule` SET `description`
-      =CONCAT(`description`,CONCAT('\n\n***Job scheduled on ',DATE_FORMAT('$date','%d-%m-%Y'))) WHERE `fmNo`='$fmNo'");
+      =CONCAT(`description`,CONCAT('\n\n***Job scheduled on ',DATE_FORMAT('$date','%d-%m-%Y'))), `status`='In Progress' WHERE `fmNo`='$fmNo'");
 
       if($logMsg->execute()){
         echo "Job scheduled";
