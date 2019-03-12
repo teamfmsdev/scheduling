@@ -21,7 +21,7 @@ if($data["operation"]=="editChildTableData"){
       $fmNo = $data["data"];
       // Append to description of row = fmNo 
       $logMsg = $con->prepare("UPDATE `biaschedule` SET `description`
-      =CONCAT(`description`,CONCAT('\n\n***Job scheduled on ',DATE_FORMAT('$date','%d-%m-%Y'))), `status`='In Progress' WHERE `fmNo`='$fmNo'");
+      =CONCAT(`description`,CONCAT('\n\n***Job scheduled on ',DATE_FORMAT('$date','%d-%m-%Y'))), `status`='Scheduled' WHERE `fmNo`='$fmNo'");
 
       if($logMsg->execute()){
         echo "Job scheduled";
@@ -67,7 +67,8 @@ elseif($data["operation"]=="addChildTableData") {
 elseif($data["operation"]=="deleteChildTableData"){
   if($table=="bia"){
     $stmt=$con->prepare("SELECT `fmNo` INTO @fmNo FROM $table WHERE (`row`='$row');
-    UPDATE `biaschedule` SET `description`=CONCAT(`description`,CONCAT('\n\n***Job removed from schedule on ',DATE_FORMAT(CURDATE(),'%d-%m-%Y'))) 
+    UPDATE `biaschedule` SET `description`=CONCAT(`description`,CONCAT('\n\n***Job removed from schedule on ',DATE_FORMAT(CURDATE(),'%d-%m-%Y')))
+    , `status`='In Progress' 
     WHERE `fmNo`=@fmNo;
     DELETE FROM $table WHERE (`row`='$row');");
 
