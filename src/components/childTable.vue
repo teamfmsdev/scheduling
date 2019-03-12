@@ -210,8 +210,9 @@ export default {
         table: this.tableName,
         data: { childTableRowId: childTableRowId }
       }
-
-      this.$store.dispatch('deleteChildTableRow', deletedRow)
+      if (confirm('Do you want to delete this record?')) {
+        this.$store.dispatch('deleteChildTableRow', deletedRow)
+      }
     },
     editRow: function (currentVal, event) {
       // mainTable data that matches event target row Id
