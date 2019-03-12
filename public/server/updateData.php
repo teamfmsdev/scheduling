@@ -141,7 +141,7 @@ elseif($data["operation"]=="toggleChildTableCompletion"){
   $newValue == 1 ? $jobStatus = "completed on " : $jobStatus = "reopened on ";
   $newValue == 1 ? $closedBy = "Support Team" : $closedBy = "''";
   $newValue == 1 ? $closedDate = "CURDATE()" : $closedDate = "''";
-  $newValue == 1 ? $newValue = "Closed" : $newValue = "New";
+  $newValue == 1 ? $newValue = "Closed" : $newValue = "Scheduled";
   
   $stmt = $con -> prepare("UPDATE `biaschedule` SET `status`='$newValue',
   `description`=CONCAT(`description`,CONCAT('\n\n***Job $jobStatus',DATE_FORMAT(CURDATE(),'%d-%m-%Y'))),
