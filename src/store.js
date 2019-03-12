@@ -191,23 +191,43 @@ export default new Vuex.Store({
       let { childTable } = affectedData
 
       let newValue = childTable[table].items[affectedRow]['status'] == 0 ? 1 : 0
-
-      axios
-        .get(`${state.apiUrl}updateData.php`, {
-          params: {
-            date: date,
-            table: table.toLowerCase(),
-            // If row exist, assign the value of 'row' else send empty string
-            row: childTable[table].items[affectedRow]['row'],
-            type: '',
-            data: newValue,
-            operation: 'toggleChildTableCompletion'
-          }
-        })
-        .then(({ data }) => {
-          childTable[table].items[affectedRow]['status'] = newValue
-          console.log(data)
-        })
+      if (newValue == 0) {
+        if (confirm('Re-open selected job ?')) {
+          axios
+            .get(`${state.apiUrl}updateData.php`, {
+              params: {
+                date: date,
+                table: table.toLowerCase(),
+                // If row exist, assign the value of 'row' else send empty string
+                row: childTable[table].items[affectedRow]['row'],
+                type: '',
+                data: newValue,
+                operation: 'toggleChildTableCompletion'
+              }
+            })
+            .then(({ data }) => {
+              childTable[table].items[affectedRow]['status'] = newValue
+              console.log(data)
+            })
+        }
+      } else {
+        axios
+          .get(`${state.apiUrl}updateData.php`, {
+            params: {
+              date: date,
+              table: table.toLowerCase(),
+              // If row exist, assign the value of 'row' else send empty string
+              row: childTable[table].items[affectedRow]['row'],
+              type: '',
+              data: newValue,
+              operation: 'toggleChildTableCompletion'
+            }
+          })
+          .then(({ data }) => {
+            childTable[table].items[affectedRow]['status'] = newValue
+            console.log(data)
+          })
+      }
     },
     togglePtwType: (state, payload) => {
       let { rowData, table, affectedRow } = payload
